@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Optimización del tiempo docente — FUMC</title>
+<title>Efectividad en la Administración de la Planta Docente — FUMC</title>
 <script>/*!
  * Chart.js v4.4.4
  * https://www.chartjs.org
@@ -76,11 +76,18 @@ body{font-family:Verdana,Tahoma,Calibri,Arial,"Segoe UI",sans-serif;background:v
 header.top{background:var(--bg-header);color:var(--text-on-dark);padding:22px 26px;border-radius:var(--radius);margin-bottom:var(--gap);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;}
 header.top h1{font-size:19px;font-weight:700;letter-spacing:.2px;}
 header.top p{font-size:12.5px;color:rgba(255,255,255,.8);margin-top:3px;}
+.header-brand{display:flex;align-items:center;gap:14px;}
+.logo-box{background:#fff;border-radius:10px;padding:6px 10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 1px 3px rgba(0,0,0,.15);}
+.logo-box img{height:52px;width:auto;display:block;}
 .filters{display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
 .filter-group{display:flex;flex-direction:column;gap:3px;}
 .filter-group label{font-size:11px;color:rgba(255,255,255,.8);text-transform:uppercase;letter-spacing:.4px;}
 .filter-group select{padding:6px 10px;border-radius:6px;border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.14);color:#fff;font-size:13px;min-width:120px;}
 .filter-group select option{color:#2b3338;}
+.btn-quitar-filtros{padding:6px 12px;border-radius:6px;border:1px solid rgba(255,255,255,.5);background:transparent;color:#fff;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap;}
+.btn-quitar-filtros:hover{background:rgba(255,255,255,.14);}
+.btn-quitar-filtros:disabled{opacity:.45;cursor:default;}
+.btn-quitar-filtros:disabled:hover{background:transparent;}
 
 .tabs{display:flex;gap:6px;margin-bottom:var(--gap);flex-wrap:wrap;}
 .tab-btn{padding:9px 16px;border-radius:8px;border:1px solid var(--border);background:var(--bg-card);color:var(--text-secondary);font-size:13.5px;font-weight:700;cursor:pointer;}
@@ -92,6 +99,9 @@ header.top p{font-size:12.5px;color:rgba(255,255,255,.8);margin-top:3px;}
 .kpi-card{background:var(--bg-card);border-radius:var(--radius);padding:18px 22px;box-shadow:0 1px 3px rgba(20,30,50,.06);border:1px solid var(--border);}
 .kpi-label{font-size:12px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;}
 .kpi-value{font-size:26px;font-weight:700;}
+.kpi-value.positive{color:var(--positive);}
+.kpi-value.negative{color:var(--negative);}
+.kpi-value.neutral{color:var(--neutral);}
 .kpi-sub{font-size:12.5px;color:var(--text-secondary);margin-top:3px;}
 .kpi-change{font-size:12.5px;font-weight:600;margin-top:4px;}
 .kpi-change.positive{color:var(--positive);}
@@ -117,6 +127,22 @@ table.dt tbody tr:hover{background:#f8f9fc;}
 .tag.alerta{background:#fdeaea;color:var(--negative);}
 .tag.neutro{background:#eef0f4;color:var(--neutral);}
 
+.filtro-tabla{display:flex;flex-direction:column;gap:3px;}
+.filtro-tabla label{font-size:11px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.4px;}
+.filtro-tabla select{padding:6px 10px;border-radius:6px;border:1px solid var(--border);background:#fff;color:var(--text-primary);font-size:13px;min-width:180px;}
+.expand-toggle{background:none;border:none;cursor:pointer;color:var(--azul);font-size:11px;width:16px;display:inline-block;padding:0;margin-right:4px;}
+tr.fila-programa:has(.expand-toggle){cursor:pointer;}
+tr.fila-detalle td{white-space:normal;}
+tr.fila-detalle table.dt thead th{font-size:10.5px;}
+tr.fila-detalle table.dt tbody td{padding:5px 10px;}
+tr.fila-cruce-mismafac td:first-child{border-left:3px solid var(--azul);}
+tr.fila-cruce-otrafac td:first-child{border-left:3px solid var(--fucsia);}
+tr.fila-cruce-mismafac{background:rgba(0,144,189,.07);}
+tr.fila-cruce-otrafac{background:rgba(213,3,94,.06);}
+.leyenda-cruce{display:flex;gap:16px;font-size:11px;color:var(--text-secondary);margin:2px 0 8px;flex-wrap:wrap;}
+.leyenda-cruce span{display:inline-flex;align-items:center;gap:5px;}
+.leyenda-cruce i{width:10px;height:10px;border-radius:2px;display:inline-block;}
+
 .empty-msg{padding:30px;text-align:center;color:var(--text-secondary);font-size:13.5px;}
 footer.bottom{text-align:center;font-size:12px;color:var(--text-secondary);padding:18px 0 6px;}
 .note{background:#fff7e6;border:1px solid #f3d999;border-radius:8px;padding:10px 14px;font-size:12.5px;color:#7a5b12;margin-bottom:var(--gap);}
@@ -127,9 +153,12 @@ footer.bottom{text-align:center;font-size:12px;color:var(--text-secondary);paddi
   <div class="marca-franja"></div>
 
   <header class="top">
-    <div>
-      <h1>Optimización del tiempo docente</h1>
-      <p>Funciones misionales · Relación profesor-estudiante · Carga de prácticas</p>
+    <div class="header-brand">
+      <div class="logo-box"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAL4AAADICAYAAABWD1tBAABUTklEQVR42u2dd3gd1bX2f3tmTtVR77Lk3hs2NhiwwfReQmgJLSQBEtIrufemwb3fJaTdEBJSKKGG3ntvBgzu3ZabbFlW79LpM7O/P2bm6EiWZMlYNkhnPY9A1imzZ8+7135X3YKU9ClSSgEIQAGkEMLo431ZQBFQBkwERgOFpmkWAHmKomSbppmuKIrLNE23oiguwG1/r9nzxzRNCZiKopi9vZ70I/t5TQdipmnGFUWJAhEgappmFIgqihIBokk/EcMwYqqqRgzDiAFRVVUTr+u6HtM0zfl32P4+5zsSvwsh5BA9B8X+p0j6v3Ot5Gvu87fexiRS8O57knsCXUqp2eCeAswCZgPTbJDnK4riGSHTZAIxG/Q9/x/q4ydommZQShlUVTUIdAJBXddDmqaF7MUUtv/ecTAXk6PAhBBmCvjdJ0ZxtG/y5Egp3cBUYAFwvGmaRyuKMh5w9fVVST89tdNgFc6BPmx5EL5XDOD3oRLDXkTO4uhMWgytQBvQahhGm6qqrUl/a7PfE0z+EULE93eDI1Wzyx5gLwIWAWcDx9vUpTeN53xG6Qfgw3oK+/m3HMRCEz1+Pq3E7Z3C2UHaTdPsVBSlHPi6EMKUUgoxAgGv2NuekfS3McBZwLnAcUB2L1pIJoE8tVMemgUlB7CQRA/F09ezaQOKhRBhKaXQRph2T1AZKWUOcKZpmpcBJwOBfoCupvB4yOTTUivZC/XEtj/89i6ANgIArwohdBvMSCnnA9cAFwOFiqIkg92hLimgD5+FI+3/++2fJmB4avwegNellD7gC8DXgVN6aPYU2EeGeKPRqN/5hzYMAa/Y/F2XUmYCVwLfsb0zjug20FNgHxk7gAQ0IYQD/OGj8aWUqg14w+bv1wE3AGN6aHd1uFO8lPTK+4Xb7U4bNhrf9tJIIYRhU5rrTNP8iaIoZUmATxmoKQHI+NwDP5nWSCmFrutXAv8JTLcN1hTgU5Ks8ZOB//mkOsm0JhaLLQRuUVX1hCQNnzJWU7KPGIbx+dT4STkXhpSyAPiVzeOVlIZPyf40vqqqnz+Nn6TlpZTyK8AtQIl9U0YK8CkZVhy/B5cfBfwJuMR+WbfvIQX6lAwG+FL5HGh5x2NzObDCBr2TUpByS6ZkeGl8KaUmhNCllAHgduCrScZrSsOnZDAiemp87TMIeIfa6FLKucD9WEUfKW9NSg6axlc+Y6BPVD5JKa8DPrBB76QYpNKBU/JpJPCZ4/g2nzcBRUp5O3AnVjadmeLyKTlIVCfNVqym9hkCvSGlzDVN8xFFUU5L0vJK6rml5CBJmpTSLYSIKZ8B0Gs26I8APkgCvZaiNik5yBrfD3gOO8dP8twsAt7CSh3WU9QmJUOl8Ts6Og4v8B3Qx+PxLwKvAblYnpsU6FMyVOJNT0/3cbhAlqTprwXusv9sknJVpmRoxYXt2VEOI+hvsEHvtOpIGbEpGWqOL7A9O8phBP3f6MqoTIE+JUMtTh+kQ6vxk0D/zSTQJzdjGlEiZQqJh3rK7f/7Dhnwk0D/deDvIx30ppSIlKN2eAM/CfQXAHenQC9RhKAuGE1p/sMjQw98OyKrSymPBR6mq7nPiAS9blqgX13Txgn3fMB9qysRAowU+g+lDK1xm5SGMAN4HitqJkeqIWuYEk0RrKpp48onV9IZ1bn53XJW1bShCoGZAv+hEv+QAd/OsjTtAxOeBvKSKM6IBL2qCFbVtHLVkyvpiOlkel1EdZNfvbWZuCERqeyMQ/MsDGNogJ90igjA48BkuhLORjTor3xyFR0xHZ9LJWaYpHs0llW18NLWWovymCmtP9SiquqQaXynKPz/gOSEsxHJ6VWb3lz15Co6Yzo+Te0CuARNVfj3uiqkBCXl6hl654JpHnyO38Nt+QOsJv0jEvQOp19d05agNz6X2s2QNaTE71JZU9PGjuYgQpDi+kMsiqIcXK9OkgdnNvBXRnDCWTK9ucIBfbKmT94eFUFbVGdFdas9jylwDrEcPODbvF5KKf1YbksvI9Rt6dCb1TVtXP2UTW96aPp95g/JtqbOFCSHVsRBB77N603gDmCGzetHnAcnQW+qLZdle9QG/X6MVoGg3g5opZw7nxONn0RxLsc6aWREGrNGkqa/6uku781APDXC3ilSuD90wNc+Jegdf30JVu+bEZlenAz6K5MN2QG6JyXgUZXE7yn57Gt8YR+++3esCqoRF5lN5vRXPdW/IduPAqE43UsK+YeE4386P35SSsJXgfMZgUEqh9OvqenB6QfjmpGgKIKp+ekpaB4a8UopFeUAQe9QnCLgjyOR4nSjNweo6QUQNyW5PjfzS7LsLTSFzCEWN+A5ULA6FOd3WIchjyjgO/Rmba0F+gPS9FiaPhTTObYsh1EZ3kTKcn9iylSQ61NSnQMDvkNx4vH4ScBVjLBAVXJE9oonV9IRHZwh25PmCEVwzdwye27ZL+gV0ZXakIL/AWt8tzJI0DuBKremaX/usZJGDL1ZW9vGVU+toj1y4KDXFEFLJMbZkwo4fkwuprSiuP1dWxGwuqaNm98pT147KRmEmKbpBjyD1dTOAQ030NXBWB1JoHe8N+1RHZ/7wECvCEE4blIc8PLrk6baml72qUOca29q6ODaZ9ewtamTUNzgt6dPt2mPSNkGQ8Xxk7R9DvBfNq8XIwn0lqYfeES2L9DrpolEcvs5sxmd6UPSN7c3ZRfor3xyJfXBKGWZPu5etZsbX9uIIgQSmcrxGbBdpQya4yt2WsKNQAEjxGfvgH5NrcXpDwbodVPyt3OPYPHYXAzZP+gVIdjeHOQKG/R+t5XLn+93c8/qSm58PQX+QRq3GuAdEHAd92U4HB4HfGekeHEMW9uuq2u3OH108C7LbqCXkrgh+fu5R3DulELLO9QH6J0Ehohu8oNX1lPdESHg1hLX1k1pgX9lJT9LgD+V3TlA8Q8UvEIIIb1e739hFesOe5pjSguU25uCXPXkSlrD8QNyWXZpeolumPz9vNmcY4Ne68eYNW1j9t/r9rC0spkcrzuRz+OIbkry09zcs8oBv5XpmcJ+3zrc/v/+NX5SsGoCcCUjoMelUw3VFolz/fNraAjFSHN/GnojiZsmfzt3NudOKdov6C0uKogbJk9srMbn0jCk2ev7dFOS63dz98pK/uP1TSh24XoK/P0buAPR+E6w6sdYefbDWttLW9sbUvL9V9azob6dDI+2j7YdlKY3Tf4+CNCbUiKAXa1htjcF8WpKvxTGsDX/nSt3c/M75VbXhlT97oEDP0nbjwGutnExrLW9aRuzd67YzfNbasnxuQ8Y9IZpEjdN7hgE6JP34z1tYUJxI8Hf+xOH9vz1k53cu7oSVRGp4vW+p3a/Gt/R9j8YCdzecR1uqG/nDx9sJ8fn/lTem7hpGbLnDQL0yRI3zUEZq6YpyfK6+NVbW1i6pxlVSfXrGbTGl1IKO1iVk6Tth70nx5SSX7+9hVDcQB2Apu3Pe/PXc2YnvDeDAb3zzmyvC00RAzZXpaWpQMCNr22kNRJP2CwpSaKGhtGvH1+133QlkDPctb1ht/d7obyWJbubyfBqg/bgqEIQM0zitvfm/KkHpumd5lITctLI81tUSwxi4aa5VDY3dvK7D7YnfPwpGTjHN6SUmqqq19NfPH2YED9FCEJxg9uW7sSjKsgDAH1EN/BqCv/6whzOnVKEIQcPeotfWgDO9btZODqHYMzoN4+nN76f7XPx8No9rKlpS3h6UmJpAFVVewe+3R9HAmdgFY8Pa5pjmlbb7hfLa9lQ106aW2Uw1F4RgohhkubW+PfF8zhtQkHvwSnLZYQ0TaRhWumW+wHk9UeNxe9SB6X1ARSsMf3hw+3d6FNK+tf4ztO4zsHGcJ4Fx+340Loq3KoyKNALAbpp4lYE9144l3klWfvSG1NaQBeAIhCKglAVK8fYUu/W67L7mEwpmV2YwU8WTqA5HBuU1jekJMOj8d6uJpZVtSBSWr8b8NVetL0ihDCllGXAn7AOzBq2PXKcfJhPqlq4/eMK0tzaoAAiBITjJn877whOGpe3D+ilYSJUBaEIpGESq2wkUl5LtKIBoy2McKkofg9CsYxSTJkowxJCYEjJMaU5dMR0luxuIs2tDdhYVRRBZ8wgapqcO7moy/gd2VRHAT7Set0lLQ1/MVZh7rBuF2Jn9fLKtnqiukGaWx1wkruqCJrDMX5y3ETOmdzDe2N/h1AVohUNNN7/Ae1vrCe6qxEzFEUaEuHWcOUG8M8ZQ85lC8j+4nxrFzBMsLsuOJr//50yjZqOCC9urSPL6xqQm9U0JQG3ynsVTVS3RyjJ8CJlqryxL6pj2IGrK3p414bl8lcVQThu8E5FIz6XOmBtrwhBZ0xnwahsfnTcRCuhzUGUlIk9svb/XmXzov+h5n+fI7S+ChnVEW4Xit+NUATxhnZanl/Fjsv/RvkZvyO8fg+oikV9ekz+78+YydgsP5G4MSDwSsClKjQEo7yyrS6xw6WkR1qyXVYogSPtn2EdqXU8N+vq2qloCeHV1AHTCGkbkL88cQouVSRoD9JKD5YxnZ1f+Sd7fvoIMqqj5Weg+N2gCmthOA2kXBpalh8tJ43OJeWUn/Y72l7fYNkAhkwsMsOU5Phc/PLEyUQNc+CURVrVXu/sarK/K4V6esnHd6blQvt3Y1gTPhvkK6tbierGgCmAqgjaI3HOmlzAgtLsbh4caUqEItj9nQdoevBDXEWZlgbXDduLs+8gpGEidRM1Kw0zFmfnl++g8+PtoAqkaSauaUrJuZOLWDwml46oPqC24qaUeDWVDfXtNASjCCFSAa1eqI5Dc85N4vvDVhzcrKpuG5THxJQSj6bwzfljAQjG9G6GbOO979Nwz3u4irOQcWPAoVOpGyheF2ZMZ/e37sfoiFia3f688zXXHDkaOcCTExN0pzPKlsZO20UnU8Dv4c2RWLW0MxnmvnsnaBU3THa2BHEpyoDwqQhBZ9Tg2LIcjizJorYzktD2QlUwWoLU/PZF1AxfgqcPaly6iZrhI7R+Dw3/fBuEQNq0SLEX5+KxeUzMSSM8QK6vCIgZZgL4Kdx3pzrO7+fZvw9rmuM8/OZwnKZwDE0VA4rWWqcUmpw/tQiwMih9bjUB8uZnVhDZ2YDic8EBZkdK3URN89D40IeYwajF92172TStwySOG51DRDcHRHccN+a2puAwd1fs//H1RnUcoJ/NCJgeJ3+lrjNKW0RHG0BCmgDihkmuz8NpE/JpCcfpiDrJbNZ0tb26HqEpn06rSonwuojubCC4apdtO5jdlPVRo7IHrrrtfjx1ndERjvseGt+hOVLKUtM054wEfu9Apj0aJ24OzEsihFUDOyU/QEGahw317V0eHVVghmNEttaiuLUEPTlg1aQIZCROaP2ebgN2hjkpNw2fpg6o4MRx2zaHYwm6lgJ+d5AfZ58RZIwUxdAZMzAHSMWFsDT+7MIMADbUtePVuvSD0RbCaA8ngk8HY3Hqde297tZ5fjdpbiuDdCAPSiCI6kbCjz/Caf4+Xp1TGCnmj32HobgFhgEpQWlp/el2Z+MdzUHcNsjFEMyaSHbliO7806OqdhbpwG7WMnBlqirLEpdib+G6lFIDjh8JNKfb0lftLmRyYGvFpQrGZPkAqGgNJT4mATXDhxrwJAJPB2NtannpvaoiU0orc1AMbAlJO5CVojk28G2/PdFodAIwaSQYtsl36NYUK6gzgI84waBcvxuA+mCMzpjlEzANEyXNg2dcPmZMt5LOPg3oTYniVvFNH9VtvI5RHozrhOP6gIFs2keLOvGKEQ5/t+Jod4/HMwcrGc0YSfMScGmoA+ApTuKkWxH4XVYWR3skzu7WUAKoABmnzgDd+HSZYEIgYzruslzS5o9LGLvJo9zbHrEKVAbojXLSlJ1FMELFeSjdrLAFI4bfJ81Afprb8o4MkCsjuuiCISVra9q6ATPn4qOtiG1MP2DwC03BbI+Qc9FRqFl+O5e/e9bn2tp2YoY5sEtYKf+MyvClDFt7RpwUZID5I4bm0FXXmuv3kOF1WRVOYv+fMU1JVLemLNPr4sM9zcRNE9XOqHQVZ1H43dPQW4KWP3+w41IVzFAM9/h8Cr57muXTT6JNTvR2ye4mtAEat8LW8o5tkkI+ilN0koVVYjhyDFsbS1lejaKAx/Ll97PmJaAoEDFM2qNW94ICv4eN9R0srWyxKISdXlD4/TPIOncO8fp2hFsdFOilYSKjcUb/6QpchZkkJ9A7FGVrYycr9raS5lIHFG02JbhVhekFGSNIte0H+ADxeHwiVieFEaTxSXQqnlmQQdwYmMaP6SZ19mHMxele4qbJvasrHWpu/bhUxt93PRknTSde02aVG2pK39RHEQiXihGKYoZjjPnbNWSdM8eiOEnHlDlp/vev2UN7NI6qDIzf66ZJrt/N1LyArdlECvjWfxXHm6OPqNu3UXNEUcaANKdi19fuaLYM2vE5ftJcGm/tbOCdikYrb95uWaxmpzHpuR9Q8J3TMEMx9OaglampCKsUUVUQNqjNYAy9vh3P2HwmPf198q45PpHp6YjTuXlzQwePrt9Lptc1oKitIgRh3WRGfjqFAU+qAiuJ46Oq6vQRefc2AI4tyyHH70Y3+o+COs1kN9jR1COLM3Grljv0V29vpi0at0oFsVKJFZ+bMX++kimv/pTcy49DywtghmPorSH05iB6RxgA/9wxlP3xcqa9/wsyTpu5D+gdTa+bkv98YzNh3UBRBuaCdaLNi8flJbh+SlCcWtqpw/1OTWl2a6zk8HlTSsZl+5lTlMn7u5pI92h9an+JlYe/oa6duGFyZEkWBWlu2qM625qC/PTVjdx5wRyklEgEwtb+geMmEThuEnpTJ5GtNcQqmzGjcbS8dLwTCvBOKe66Ri+gd1ob/uKtzXy0p4nsQbQ2jBvWcaJnTixILARrfBInKuDE7xSh9GvnDBssmKai2QGsScPdsFVE/7d2xsR83t7ZgCL6ziY2JXg0hYrWEKtr2ji6NJujR2Xz9OYa8vxuntlSQ47fza2nTe9GT6zMSoGWGyBw7CQ4tpdFZZgImwZ1ozdCoArB7z7Yxt0rd5PtHTjoVUXQGo5z3tQixmX7MUwTVVG6LfyRSfAVoWGdU1s43A3b53c+SXO4kQxPJmmudLI82eT5Csjx5pHtyebcKUXc/vFOK0W5HxphHdxm8Or2eo4uzebiGSU8V16LISU5Xjf/WlVJWyTO78+YYZ1gIiXC8f1L2ZW1aataIUSC93ctMKtuV1WsloQ3v1POXSt3keV1D/rUdFURXDm71M7QVIibcZrCDTRGGmgKN9AeayOsh2iLtnJS2elMzJpiV3cN64WhaFjnWWUP91X+VuVrrGtYhd/lt087UfFqXjyql5m5c/nPo2/i/CnF/G15RaJfZe/bpBX6f3lrHT88dgInjsvjyOJM1tS0kebWyPa5eHpTDVubgtx80hQWjclN0uC2B8fRuHZVoXQOcpCWn16xG7+urW3jl29t4eOq5kHRG7BaGrZHdY4fk8MJY3MRwPrGNfx59a2E4iFCeidxM44pTRSh0hlrZ0LWZAv4mIhh3A3eNE1FAUoAD8O0P6bD13M8OWS4M8h0Z5HpziTNlYZAENHDvFv1BhubVvCNoyaQ7VWJ99OuTwJel8rOlhBPbKxGUwTfPGpsIgBm2H0ryxs7ufzJlXz7xXUs39uSoB6qrf1tbCPsA5tVIVDtRbG+rp0bX9/IhY8sY2V166BB79gjioDvHTM+EWl+etsjVHbsQjfjuBUPAVd6Yj6yPNlkuDOH+8bfjeqModvmO9w8lhKBwKN5MaSBIQ3MpGN1XIoLj+riwc0Pceui+XztyHH88aPt/Wp9KcGrKdy9ajcXzyjh7EmFnDohnzd3NJDlcxG3dwUpJU9urObF8lrmFGVywthcjizJYmyWjyyvG7cqiJuSlnCcvR1hVu5t44PKJlZUtxKMGWR4NCvnfpCg1xRBUyjGl2eXJnacjU3rWFW/jGxPLtI29GUiN9/6v0/zjyivzpjuXu3hKdneXEy5b3TWkAY+zc+GxtWsbviE7y44mic3VdEY1PFoSq/uPyfTcVtjJ/9YvosbF03kVydOYWV1KzHDREs6kCHLZ/nbV1S38tGeZlyqQrpHI+BS0RQFXUqCMZ2OmE5MN3GpCn6XSrbP6pY2WPejY4OUZfr4+QmTE3z9ya3/xpAGvR0PZ0oTj+ol3Z0xAvS9rfSBouF8h85DzvcV9NsnXhUK96y/k4DH4H9PnU7UMPpFgGFKMr0u/rF8F6tr2piSF+Dmk6fSETMQScvLMK2rprk1cvxuAm4N3ZA0hePUBqM0hWLEDUmaq+t153ODFWGfeqibkj+eOZPCgAchBB9Wv8uy2o9IcwW67XaOd8eQBn6Xn0x3dtcXDW8RCpA7rO/QhmBJ2ihUofYKflOa+DQ/O9q28Gj5I5w5sZBr5pbSFIwlamp74/qKEMQMg5+8uoG2SJzLZo7ih8eMpzEUTfD15F3C0eCKsApa3KrApQrbhSoPSMMng14RguZQnJtPnmo3sDUJxju5f9OduFV37wtfCAxTJ9ubS7o7faS4OhXFNM284WzROA+xNDAav5bW57GZpjQJuNJ5rPx+yls2c/NJMzmmLJOWcLzPwx1MKUlza2yo7+Anr23ElPBfiydz/fyx1AejKIroVXk6BzEnfj7tU7Qv0hiM8ovFk7l23hiiho6mKNy94Q6qOirxqN5eA3MCgW7qjEorQxHKPjvCsINDwr5VlKxhfac2KArTisnzFaCb8V41muUFUTAxuW3Vb9BlB3ddcCSjM710xPQ+we94cZ7dXMN/vLERgN+cNp0fHjuB5nAc02RQXdoGK5rt62+P6Nx6+gx+eNwEGkNhPKrGG7tf4rVdL5LuzrD5fe9IMDGZkDW5GzUcCRx/2PuwTGniUtyMyRhL3Iz1GZwxpYlP9VHZUcFvl/8PJeluHrhoHnl+Nx0xo0/w66Ykx+fm3lV7+OlrGzGk5JcnTuGPZ8xAEdAe0VEPcr2r4wJtDsdJc6s8eul8rpxdysb6VvL8PtY2rOLv6/6E3+XvNwHPxMStuJloA3+kpCwogG+436ijxebkz7e8HP08XEMapLsyWFH3Eb9ffgtT89J59JL5lKS7aYvouBSlj89Jcvwu7lu9h2ueXk19MMrVc8p46stHs3B0Di3hOGH7JEVVHBi8BCQWUDCm0xqJc96UQt772iJKM3y8u6ueGQVZbGnexK3Lfg2IPu0aB+RxI05hWjETsqZ02yGHt7pXhHrTTTf9ZxL4hy3PF0IQcKXzTtXr6FJH9JOWJJH4NB9bWjawp2MPF04+jbMmFfNxVRM7WkKkuXs/J0NKCLhVNtZ38MaOBsZm+Tm2LIdLZ46iNNPLztYQVW1horbLU1MUK1Jrjw+RlNNvG6uKEJatgHVcUXtUJ2aYzCvJ4vZzZvHdY8bzwpZa9rQH+eL0UjY0ruV/Pv5PIkYEt+rul7MrQiWkB1lYsphFo060o7gjog7JVG+66aZfYEVuh+1St1pjS9LdGayuX0F1556+vRzJ4Hf52dqyiW0t2zh9/PFcMWsie9s7WVndhqYovZ6XZUrwu1WaQjGe3VzL3vYw0/LTWTQ6l2vmjmZyXhoxXVIfjNESiROKGcRNiSGtgJJpt843TEnMMAnrBsGYQcywiknOnlzIradP56eLJtESjvOrdzYzLT/ApTNLWVr9Pr9dfhMxM7Zf0FvzohA3YnxpyjWUpY+xUhVGBvClkFKGAe9wv1NDGqhC5ZVdz/GX1b8nw53Zp8GXLKpQ6Yi1MyZjAj+d/3PGZU7iobV7uOX9rTSG4mR6tcTBDT05uETSFtEpDLi5aPoorjyilIk5aQA0hWMsrWxhRXUL5Y2dNARjtEfjRO3ms15NJcOjUZLuZWZBBseOzuGY0mw0RbChvoM/fridUDzOf580kyn5fh7Z8gCPlN+LS3GhKdr+QY8gbsbJ8+Vz24l3keYKJKLcI0AMIaU0GAF1ts5D7Yi18713vk5brBVNaAPyYqhCJaSH8Gl+rp52HeeM/wK1HQa3frCBpzbWEjMlGW4NxY7YJtuSToZlZ1Qn2+fm6FFZnDmpkOPH5jImc1/zyqn97WlIV7WHeWlrHQ+vq6IhFOFbR43nOwvG0xar58+r/szHNe8RsP3wA6kmU4VKW6yVL0+5hqunXzeSaE5C448I4DteG0Uo3L3+rzy1/REy3VkD0vqWBlcwTJ2QHuKowoV8c863KPaPYcXeDv78cTlLdjcTihn43ZpdldWVeWkZVALdkATjOqaETI/G6Ew/E3L9jMn0UxjwkOV14VYV4qZJe1SntiPKtqZO1ta2sb05SKZX5etHjuXGRVPxueDVXS/w4KZ7aI01k+5KH/C9JMttJ97JqMDokQZ8Y8RQHUsTWhx2T8dufvTeN+1dYLBGskIw3oFPS+PU0Wdz1fTL8Wu5bGmIcu/qbbyxo57qjqhVtKKquFTLiHWyMR2Xpm5KonoXvxdJNkLcNInETXTTJOBWmT8qkytmj+WymaX4XLC6fikPbX6QzS3r8ape3Ip7UKBXhUp7rI1TR5/Fj+b9fKSBHiAipJTtQPpIuWPnId+1/i88vf0xMgfI9ffR/tIgGO8kx1vASaWncs6Esyn2jyOmw5LdLbyyfS+rqlvY2xGhLaKjm04aspWiYC2iLm+QUwro0xSyfS6m5KVzwph8Th5XwpR8N6CztOYDXtjxPOsbVyGElU3ZVUY4eNfoHxf/k7L0MSMR+B1CStmE1VpkWKYl78v1rTLAlkgT333n60T0cL++7v6gowqFuBkjFA/hdwWYlTeX40cdz7ElR+PX8gFoDMKmhna2NbVSF4xQ2xmlI6pj2Pn7PpdKrs9Nrt/FuOwMpuVlMTbLjddljXZX+2beq/qAD/cuoapzF6pQ8LvSEot4sOJw+wsnXMb1s7834ri9jfFmIaWsxSo9HBHAT9b6T217mLvW/5UsT/YB8WOH/jg7QFgPYUiTTHc2EzInMSV3KjNypzM+cyzZnpL9mlK6bGVvZw3lzVvZ1LSZ8pYt7O2oJG5G8WhePKrngAHvjFWXOgFXOn9afCc5vtxE6/MRBvw6IaWsAMaOJOBLm++b0uQXH/6QjU3rSHMFDhj8yRQIBLoZJ2ZEiZs6mqIBCkcWHM0vF9zSVX+b6PJgIFBY37ia//fJz4mbcaJGBEWAW3XjVjyJHCL5KVuDWNy+nZ8d9WsWl546EimOg/FdCtCW9McRIc7q1hSNbx7xw0R11qf1YZvSxLTjBX5XGlmeLNJcafg1LyvqPmJd40o0RcE5qEFxyg4VwfM7Hyeot+PTPGR5Mkl3Z+JWPUgkhjQOAug12mKtnFh26kgFfTLG2xTTNFsZgeKk4I7NGM81079BR7zjoAFBIjGlmShzVISCIgQv73o2QTmSKdf21nLW1K8g3Ta0rc99erAn32vECFEaGM31s75rebNGdju1VkVRlMaRpvG7g9/g3PFf5ILxF9Maa7GpycEVp7xxTf1KKjsqEEJ04+mv736JiBEZkp6WQlgVVi7h4qfzf02WJ2e/iXojQOM3KkDTSF76wtb81836DvMLjqE12oI6BOBX7YSw9/a8mfAuKUKhPdbG8tqleDXfQS8CEQiQENZDfHfujUzOnoohjZFIcXpKkwLUjmjg25pPU1zceNSvmZ4zi45Y20EHv5P3vqxuKXEzjmJ7eNY2rKQ+VItLcR3UIhDnvjrjnXxj1vc5ofSURL5SSqhVgN09bL4RyfellGS4M/n1sb9lSvZ02qOtB5X2SCnxqB6qOnazo3VbIgtyRd3H3YB60O4H6Ix38I3Z3+P8CRdjSjMF+i6M704BP4kLm9K0wH/Mb5mdN5fWSIsNFnHQABkxIqxrXAVAKB5kc/OGAaUQD/waKrqpEzHC3HDEj7hgwiWYKXrTK/CrgShdTXNHrDienkxPFjcf9wdOG3MOrbFWO8fm0wNHYrUu3NS0HoDKjl3Uh+pwKe6DQnNUoRHWQ7hVNz8/+v9x3vgv2pw+RW/o8uFHgWoFqAdaUvPSnfZ4VA8/mvdffG3GDUTNKBE98qmpgpQSl+Jmd/tOJJKdbduI6uFPvagUYfXob4u1MDp9LLcsvI1jihclYgop6SYtQL1m/1KH1VhqxERv90d7nKSxSydfydTsGdy5/nZ2tG0l4EpHESrmAUR5JRJN0WiNtlAfrGVv5x5sx8sBG7CKUAjrYSQmF0y4hKunX4dfS7PpTQr0vWj8OqBFEUKYwLaE8yElCVAJLOozO38uvz/hDi6adDmGNOmMdyCEckDAUoRCzIyyvW0rdaEaFNRBM0xhF5HrUqct1kpp+mh+dcytfHP2D2zQmynQ7ysOtrcJIUzHbbElNS/9836f5ufamd/mxNLTeGLrg3xc8wG6NPBrflSh7nPiyv6gW9G2g9ZoK6qiDjhC6+QCxYwoESNMkb+YK6d+nbPHXZCIA1i5QClDth/ZAtZJ5hiGsUlVUxqiX95vdxeemDWZ/zz6f1jbsJIXdj7FmoaVtMfa8Khe3KrbOgu3n4Qyy8BV2NOxy4oX9KOZne4QTn/LUDyIKU1KAmWcWHoqZ4/7Atle67DKEZp7M2gxDGNTwr0Ti8Xmu1yu5alpGcB+aXdcdnJdKtp38FblK3xS8yF1oRripo5bceNSXahCRSASO4FEIqQgbsYYmzmB5kgTHbF2C/wi6cAIrICXYepEjRiGNAi40pmUNYWTR5/BscXHk+YK2OMxECPk7KqDIfF4/Ci3271C2N6GLGAHI6gg5WAvgFA8SHnLJlbWf8K6htXUBqsJ6cFEioAiVFShomDtHgF3OjEjSsyIJb7PkHqCMrkVD5meLCZkTuLIwgXMyZ9HWfqYpOunAH8Ahm0zMEEI0SqklM7p5u8DxwMGkOI9g1gAXfzb3k6lQXVnFbvbd7KrfSfVwSqaw020xVqJGhHiZrwbjXIpLut0Ek8WBb4iytLHMD5zIqXpY8jyZPe4XgrwB8JwbEwvEUKcIKW0qyQsi3eFDfzUQaiD1CWO+9Pi9VaQqix9DGXpY1g06qTEW2NGjJhpaXkr/x9citsqOFE9vfJ9J8VZQbEN15ROOkCNj41xSDrnFuCThE31WRmt7DquRgjRbw65aZoDet/BHJeiKChJvTSTr2sdt9PVz0cRig1wN7jo0/B1iseTDVsFpdtcJO/dipIyaAfkRuuOcTRb2xONRtd4PB7d/ttngucPBsSHCgDO0TrOuLbt3EVRQR7pgUC3SbPoyL7A3ge5yR4c9r1f0zRRFKXPeUhWDCnpU9urgB6NRtc40yqSJlAD1gHT7MVw2FSJA65gKMTDTz1HNBrjyksuJCszY58zWB1N+MxLr7G9YheXfuFcxo0uG9KzWts7Ovlw2Qre+/BjPlq+ii+cdTo/+ta1CZAeNPvBlCiKIBaLs3LtejZv205TcyuaqlBSVMTsmVOZNmliCtr7mUZAMU1zi6Ios4QQuqPxkVJqQghdSrnkswB80z7R+/lX3+SRp55HAhnpAa6+7KJugHaAtrF8K3c/9CjRWJyW1jZ+88ufHfwx2df6aPlK/vT3e6hvbCKQ5mfRMUdx6uJFB13rOtdbuXY99z78BJvKtyGlJM1vnVAeCoVJ8/s4+YTj+MZXriA9kDYSDmY+YOArivK+jXFNCKH3TDh/C7j+cNMcp9vYth0VBAJpqKrKuo1bME0TkaRRHeKwau1GFEUhLyeb6rp62js6yMzI6BUIzg7RkyObprkPtTJM0z6T1u6JaZrocZ20ND9Xnng8xx97NFMnTeiV45ummbiG873JtsH+Nb3C+0uX8Yc77iQajXL6SSdw8vHHUVpcRFzX2bJtO8+/+iaPPfMCQgh+/K3r9rlf05QJguV0d7A6MsvEffW0Wfoa+/4WaTJz+4zZHSIJ2yRzfGdVAHxkmmZYURTf4eL5zkPSDYO9tXUU5lv8efuu3dTU1TOquCjxgBVFwTQlq9dvJCsjg7GjS1m7cQsNTc028Lsf4NcXXzb7AKPqAEFKNDuyfcJxC1h0zFGJ9/fk2A6oen7f/rh68sJUFMHuPVXccff9GLrBtVd9iUvOP6fb+8aUjeLYo+dx5/0PM3n8OGfldRuToohuj9AZm9pjDKLHIth37NL+rt4paW9z9xnZfSSg2pj+KBnrmn3jppRSCCGqpJRrgGPtNxx635mN1ta2dmrrGlgwbw5TJ09g+eq1bNyylVHFRZh2r0lFCKrr6ti6YycLj57HzGlTWfLxcqpr65g4biyyx9pVFIXGpma27qygvb2T4qICZk+fiiIES1esIj83h4njxmIZ+zE++GQ5M6ZOpqggn701tWzYXM7c2TMpyMtl3aYtBIMhjj3qyO6gtbXqlm07qKquweVyMW3yRArz86hvbGJT+TYWLZiPpvVf3fX4cy9T39jMWaeeyCXnn5PQqkrSAssIBPjJt6/vtlMmA27Hrkp27akCKZk0fiyjS0cRCof5eMVqjj7yCAJpVke2yr3V7KjYzUmLjkUIwdYdFezeU4Xb5WLyxPEUFxb0C+ytOyqorKpGCMGYslFMHDcmscMdZvCblv5S1tjYFnZSJsmzrwI68LIN/MPiz3cmq76hkY5gkLzcHI6eOwevx82qdRs5/aQTUISwtnFVsGHzVlrb2pkzczqjSooxTZM9e2t6pTePPvMCz778OvWNTTi9vI+ZfyRf/uJ5/PbPf2fi+LH84eafW36vVWv42X//lm997UrmzpzBLbfdwa7KKi4+/2x+9r1vcvud91Jb18A9t/+Wwvx8DNNEVRS2bq/gzgceZu3GzcTiVqAqIz3At79+NZVV1dz78OP84w//yxEzp+9jDDv3XtfQyMq168nMCHDB2aclNLia9F41iTolUykhBHX1Dfzj/of5eMVqQuEwAB63m2u+fDEZgQD//Yfb+fWN3+ec004G4N6Hn+DtJR/hcrl4/6NPeP3dJSAlQlHIz83hgrNO4/KLLkjsDs51KvdW88/7/s2KteuJRKIA+HxeFhw5h2985QpKigoON/gdDL/cA+PdgO/QnReAmzlM0VtnpNW1dcTjcXKzsygtKWLs6DI2bN5CZ2eQQCANIax3rlq3Ab/Px4xplub2e70J4Au6HtKdDzzCw089x7jRZXzjK5dTWJDPzl27eeHVt7jltr+haVq394dCYXKzs9i8dTuvv7MEKSVnnXoiZ52yGF03UBQFl8tFJBpLgHLHrt388tY/0tLaximLFzJv9kyisTjvLPmIP//jXxQW5pOTnU0oEunXqN9Uvo3G5hZmTZvMhLFj7GOCRL/uXmdxNLe08uvf/ony7TtZeMx8jps/D1VT+Xj5Ku5/9EmKCwvJz81JABUgHo+Tk53Fbf+4h4z0AN+97itkZWSwduNm3l+6jHsffoL0QIDzzzwVwzBQVZXa+gZ+9Zv/Y8/eahYft4Cj581BmpKlK1axZOkyqmvr+M0vbiQ3J/twgl+1cf1CD4x3Ad+hO8B6YAMw+3B6d/ZU16DYGgdgzszpPPn8y5Tv2Mm8I2ahKAqdwRAbt2xl3OgySkuKaG/vICMzg+raum7G6sq163n6xVeZNH4s//0fP6KkqBCAkxcdy1Fzj+D//fEvRGOx7lxVgMulsWXbTqZPnsh3r/sKpSXFAITC4X22csMwuOehx2hoaua6q77El794fuKrzjplMb+57W8sW7UGdQA8v6q6Fj0ep7SkGE1VE9x8fwpDEYJ/P/ksm7ft4IvnnMH3rv9q4lpnnHQCdz3wCM+/+iZC6W6wqqpKOBxmwrix/OaXN5IRsBLgTjlhIWUlxfzr4cd5+Y23Of3E4/F43EgpuffhJ9hVWcUVF1/AdVd/ueteTz2Rv9x9H08+/woPPfEsP/jm1xLU9HB4c2w8r0+mOfQCatV+8cWeK+RQe3Sq9tbg9XooyLfOn547eyYSWL1+U+K923ZUUF1bx5xZ01EVBb/PR15ONvUNjbS2dyQe7uvvLCEai3HReWdRUlRIXNcxTRPdMDhixjROPv44QqHwPoDUdYPszHR++p3rKS0pxjAM6yH28N4AbN66ndXrNzFjyiQuOf8cpJQYhoGu66iqylcvvwSfz4dhGn2CwPl7a1sbUkqyMzO77J79GcRCUN/QxJKPlzOquJCrL7vIchLoOoZhVYtddekXKSkqIBaLd7sHgSAai3Pu6SeTEQgQ13V0w+rkdt6Zp1JcWEBtfSN7a+sQQrBrTxWfrFzN+LFlXHHJFxILX9et61x96UWUjSrmg2UrqKmrT9gehwH4AC/amO7GYJQ+mMazSRGvQ+/R0Q2qa+vITE8nL8dK0po2eQJF+fms3bCJuK4naI4pJfPmzLJ4rMdNQV4ure0dNDRafbI6g0G27awgLyebOTOmI20PjaIoiQdy1Nwj9vFMKEIhGo0yecJ48nJzEny8u+btOpZ8w5atdAaDzJ01A02ztLSqqmiahpSSUcVFjB8zmmgstt8D1qyxiMSiGohdBLB1ZwWNTc1MmzyJ7KxM6141DVVVMU0Tr9fDzGlTiESj3YOASFR7d5XS+l1TVYQQeDwesrMyicZihEIhALZs3UFrWzszp03B7/NhmqZ9ryqmKcnMSGfG1Mk0NTVTvn1ngsYdBpojgWd6YHtf4AshDJvurARW2UrIOHTIt8bW1NJCQ1MzuTnZZNrR2uzMTGZMncT2it1U19QlgF9ckM+0JF96UWEB4XCE6lrrPS1t7bR1dJKZkU5mZnp3rW5TofzcHLweD0Yy0IT1sNIDgf61lf11dQ2NKIpCUUF+n8AsyMvB0A36Yi3OVXJzshECGptbBhQYcz5X39iEbhgU5ufaHaG75/ZIoDA/z24h2Mft9HR1dn8RgIamJgzT7P1e7Xyjovx8DMOgsan5cDBlwx76KmCVTXOM/jR+Mt35d28rZag9Og6I2js6KMjLxaVpCUDOmzOLjs5OynfspLGpme0Vu5kxbTIZ6emJbbYoPx8pTaqqa7oWU6JXpOjjYffykJMe5IAMs4HkzAzQwBtdWoLH46Gyai+RSDRhTwx4DH1UsIuDFF12htLndwnrtBd5eDR9Mmb/3RvN6Qv4jtp7EgjRlbR2yEa7t6aWSDS2j0Y5Yvo00gMB1m3czMq16wmGQhw5e2a3RVNUkIeqaVTVWJ0RszIzSQ8EaOvooL2jozuAbHdgU0sr0WisW1R4sIPOz8vFNE3qGxv71KJNTS0oqtonZXdo1PTJkygqyGN31V42bCnvZkv0VBSmaSaQmJebg6qqNDQ324dEi300d31j06cGf25ONoqiUN/Q2Pvisq+jqWqCqh5i0Gs2dp/sy1ZVenlIppRSFULsAd5I2joOWWy5qrrWBnF+t78XFxUyZeJ41qzfxCtvvUdeTg6zpk1JilJCQV4uaT4fNbX16LpOeiCNCWNH09jcwobNWxNRYdM0MWzPz6q16y2jUxzAiO3PTJ88iTSfjzUbNmGaFpUwDBNdNxK++Z27K/G43X1qbyEsXp+VmcHCBfMJhSM89cIrCQ5t2ON2fpyoqVMvPXHc2IQLtr2jM3GvhmGNIR6Ps3HLVjxu9wFpYmd+pkwcT0Z6gA1bthK17QXDMNANA6EodAaDbCrfRnZWJpMnjOu2qA8RzQF4Qwixx8ayORCNn4y1u/bzvoMLfHtyqmtqcWlaF/BtQCiKYO6sGTS1tLJzdyUTx42hpLgoEWxxtFFmRjoNTc20trUDcOrihaiqwtMvvkJzSysuTbP88JrG1h0VvP7uEnw+L9IcPBicyqsZ0yYzc/oU1m8q54XX3rABqaBpFigfeOxp2js60bT+z9tyaM1F557F+DFlrFi7nr/efT+RaBTVMcrtn5bWNv718OP8vz/+lWAoRElRAQvmzaWyqppHnnre8lerKqptqD727ItUVlX3u/gGcq8Txo5m/pzZbN+5i8efexkhhGXcqioCePTpF9hVuZcF8+ZSWlK8jydsqB2DPbDb64W1PiZft43c14CNwPSh9uk7PvFINEpdQyOBtDRye9km58ycxnOvvkE8HmfW9KmoimIlk9nAT08PkJuTTcXuSmrrG8jLzWHBvCM59/RTePrFV/n5//6es049ieKiAnZU7ObJ51/G6/Hg9zlJXV3jUfugPt2SvmwQuzSNr11xKb/43z/wz/sfZs/eGubNmUU0GuPN9z5g9fqNjCoqYm9tXb/E0VnkuTnZ/Pjb13HLn+6wU653c8KxRzOmdBThaJQt27azdPkqtu6oYOLYMei65X686tIL2Vi+lSeef4nm1hYWLjgKTVX5cNkK3l6ylLKSIvbW1vfqSepvMSS/rigK13z5YrZs28GDjz9NXUMDx84/ElNKPvxkBW+9/wGjS0u46rIL+0be0LkwhWmamxRFec02avUBAz/JyNV1Xb9TVdU/HyqffjQao76hCUUR5OXuG/WbNGE8WRnpVFRWcdTc2d14peOqzMnO4pOVq+kMhhJQ/dbXrsLr8fDym+/wxzvuQijW9rzgyDl85UsX8V//+3t0o8u/7Xa5aO/otF2e3XNTNEUlFosTikRwu61yKsM0mT55Er/66ff55/3/5ukXX+XJ519GAj6vlx/e8HV276li9YMbE5/pueiTQWba33frL3/GfY8+yScr17BmwyZ7sVnUITcnm3NPP5mrL72IzIx0TNvTcvONP+COex7krSUf8erb71vzoyhcd+VlZGRk8Otb/w+XS+tm63R0BnG73b2jyZQEQ6HE64ZhMKZ0FDf97Af87Z4HefnNd3nhtbcSCmDOrOl8+2tXU1JYeKijthJQpJT/dFKQsVMU+qI0vWlgIYSQUsocrE5r2fv7zMGSDz5ZjktzsWDenF4Bsnr9Ruobmjj9pOP3KUoRQrCjYjfrN5dz5smL8Xo93Sa/qrqWzVu30dEZpKSwgPlzZ6NpGm+9/yGF+XnMtG2GYCjMG+8uYd4RsygbVbyP52nNhk2EwmEWHj2ProPcrEBSNBpj3aYtVNXU4na5mD19KmWjitlbU8vajVs45YTj8PQBsp6Ac2yXvTW1bN1RQWtbO5qmkpeTw9jRpYkEMpm0+B26tH5zObsqqwCYOmkCkyeMo62jg3c/+JjFxy0gKzMDgIrde9i0dRunn3i8lbqRlAYhhJUPVVVTw2knHp/YBZ3XDMNgU/k2KnbvATtJbda0KYkd4hCDHqyWmJOEEM0OhgcFfPvmVNu3/yfgBxyiDgyGYdDRGSQUDuN2uciz0xY+LYV6/pU3uPQL5/b5nr4kGAyBEKT5fYm/xWJxWtvbKMjL6wHW3quw+qvOsu7TnbAH6AFggEg0is/r7dMF3JsCGOh9hsJh/D7f4HmFbWDHYnE8HveA73cIjVoVuE0I8UMHu/szBPrBjRTAbUDQfv+QuDadBxgOR/iP//ktf7nrPu575AmefeWN7oEle1KT3XvJ3Nw0rS5mRpLnw6FQy1atpaMziGGYicxJxy9tfae0XYTW9+l2asPTL7/Gi6+9mViUjz/3Er/4zR/4cNlKq0DFHntyLruu6xi258gwrKS2tRs2c/ud9+5zD//69+NsKt/WzW0pnAxUWz397vZ/sLF8m5VqYY/LNLsyM7vbJ12uTsM0EzEOhOgxb9brt/zpDnZV7qGltY1/P/lsd1epLbqu9wrs5pZWbv79bbR3dGAYRiKqrijKofThSxubQeA2G7P9Xlzbj5fFcW3ullI+ANxgcyZtqO4gEo3idrn5j+/fgMvl6tvQSlowimLRC01TE649xQaPYZpEIhHS/H7S0nwJb4uqKoTCYVwuFy5Ns8sARMJtFwyF8Pt8CCH44jlnJiiHqqrMmDKJY+bNZXRpyT7aNBaPW21DXK7E3xwA6bpOOCkrMrGjhMKJhegsnGAoRJrfn3jPD2+4Fr/Pu09nh+Q5kFLSGQyRHkjrvgso1g7ldrsQikJHZxC/35egLT/59vVkZKSzZdsONpVvS+QXKYpCOBJBVVTcble3XUhRFHRdJzsrk599/wbSAwHLu5PYwVyJdI1DQHcMG5MP2FjtV9szQAA7Wv+PwFcBN0NYnSWEwOXSuoG+rqGBZ196nW9ccwUAtfUNPPPSa9zw1St5/LmXaG5ppaOzk5bWds46ZTEnHLcAIQQr1qzjpTfewevxUFyYb8d5rCXz2DMvUL6jgqzMDDLTA/h9Pi654BzC4Qj3PvIEdQ2NxONxfnjDtWwq30Y8HufUxYvYubuSN95dQlzXkabkmssvoSAvl+dfeYM91TVEY3Eampo5ceECzjx5cTdPieP22+eeFYHX66G2voGHnniWNL+PPXurKS4q5NorLsPn8/LUC6+weOEC3nj3A664+AsE0vy0trXzwGNP8b3rv8rajZt5/tU3UYQgMyOd6676MkII7n/0SXTDoDMY5Pvf+Br3P/oUNXX1SGkyZ+Z0LjjrdJ584WXOOHkxb733Abv37OWdD5Zy2onH89QLr7Bxy1YyM9LJyc5CU1W+fNEFPPj40+i6wZ7qGr55zRW88OqbXP2li3C7XDzy1PNsq9hFdlYG6WkB0gNpXHTeWUNJfRxtHwH+OBBtPyD/vO38V4QQO4CH7M8MWUDL4eMbNpezeet2mppbiMd1KvdWd+0KkSh7qqx/V+yqpLGpmW9//Wpu+OqVPPH8yzQ2N9PU3MK9Dz/B1Zd+kR9/61p03WD3nr2k+f28/s77rNu0hRu/8w2u+dLFLFu11jLOgH/c9280TeM/vn8DX7viUtL8PvZW19Dc0oppmvzlrvs4Zv5cfvzt65k2ZSJ/vet+wEqj3rO3huuv/jI//ObXePWtd9m2o2KfdIPeXIYyyShevmotp5ywkF/8+HtI0+SJ518CoHz7TjxuN+FwmNXrNyClZPnqtbYG7+Teh5/gK5ddxM9/9B1cLhf3PfIEbreLJR8vxzRNvnnNFbz13ofsqqziVz/5Ht/8yhV4PZbNsKOiEpemce7ppzB+7GhOPv443vlgKctWreHH376Oa6/6EqvWbWR7hXVq1LqNW6iorOKGa67E43ZTvn0nbpeLl998h01bt/Gz736Dqy+7iE9WrGZ31d5Doe0V4CEbo0pvAatBAz9Z60cikVuGmuurikIwGOLVt9/nuVffYMv2nbhd7m47gBAi4RJ0uV2ce8YppPn9jC4tYdzoMhoamlm2ag3Tp05m3JgyNE3jwnPPIDsrA8Mw+GjZSi654By8Xg8Z6QHOP/M0vF4P4UiEiso9fO3yS/B5vUwcNxa/z2d3eUhnR0Ul6YEAx8w/EkUIzjvjVDqDQVrb2vF5vZxx8gmkB9IozM9jxtQpVtlfH2DvTevHYjHmzZnJ5Anj8Pu8nLJ4USLZzuOx5mDhgqNYvnqdXWewgTNOOoGPV6xhTOkocrOzaG5p5bTFi1i9YRMtrW2UFBVw1aUXkh4IMHZ0Ge2dnTz1wisE0tI44+QTrO92u+3CGi0R8Hr/o0+48JwzLYro9/PFc89I7FZer4erLr2QgvxcpJT4fF4M02Tp8lVc9oVz8Xg8ZKanc/7Zpw21CzDB7SORyC0D1fYDpToJru/z+SqklH8FfjZUHh7dMMjJzuIn374u8bfKqr0JDtubxGK6dbe2QSaEoLW9g5yszES4XlM1AmlpxHWdWDxOeiCQ4N7pgTTcbjcdHZ34fV40TUsYkc6CEwKaW1vJTLf85U4Bus/no7W9A1VVicXjiTFaBq3o06viXDs5Pdp5j7TrjqN2tNayb62qsCNmTOXF19+ipq6eYCjEpPFjWbl2PTt3VXLnAw9jmCZxXWfurBm2gnAnjN1pkydw43e/wQuvvsnP/vtWzjvjVM44+QQM09hnfLF4nMzM9MQ4A2lpCa+T2+3a53nE43FM0ySQltZtXofYs+MkoP3VxuZ+uf2ggO9cREqpAL+zuX7eUEVzhYBoNIrL7UbgVAh15ZCrqko0Fk/kgCiK3ULVqfgXUFpcxJKPlyeA09rWRlNzC16Ph0BaGpVVe5kwdrS1sPZWE45EyM3Jpq2jk8bmFvJyshMBG8drUlpSxN7aWgustrHa0tZGYV6uVZKnqEkGsuj2O0BBfh5VNVbWaHKxeVV1LQV5eTQ2NXfrxNDtd1Uhruu43W7GjS7lrgcfYfKEcQghyMnOYkzZKH54w7VdgcBYLOHhcsYSjkQoKynmW1+7ipbWNn560y0smDcHr8ezj1JJDwSo2L0n0bCqsqo64dlJZLM6JZFS4vV48Ho87KmuZuzo0oTCMk05lKAXWGe4/c7G5oCDrMrAwSjsSL1oBm4ZKrojpSQYiiRSAsDKIXe5NB575gW27dzF/Y8+yfQpExMekWRXWyQapa29nQXz5tLY3MwLr73J5q3bufeRJwmGQhiGwTmnn8xTL77CqnUbWLF6Ha+8+W7Ck3HiwgX8/i//ZOXa9Tz78uuJfJ+W1lZGFReRlZnBPQ89xradFfzpH/cwY8okfD4vbe0d+4wjbntqHJ5fNqqY2dOm8utb/49PVq7mk5Wr+dWtf2LWtCnk5WTT0RnsVgur63qiWDwUCicqqebOnsl7H37CgnlzATj+mKNobG7hsWdeYPvOXfzr4Sf46133oyhKt8+98tZ7/Pb2f7Bl2w4++Hg5Bfl5eL1eOjqDCTeuc73zzjiFl994hxVr1rFq3Qaef/WNxOIIhSJdrk4pCYbDmKbJuWecwuPPvcTq9RtZtmotr7z5HkPo0HFozi02JvsMVvVKqQdzpZtuuombbrpJwUrw/wLWgXHmwfDwJGtHTVOZOG5sNw1/5OyZlG/fyabyrcycNoULzznD0mSKwpiyUjLSA4nPl40qISc7k3lzZrN242Z2VOxm8XELmDF1CqXFRYwqLmL0qBI+XLaSYDjMuaefTGlJMaUlxcycOgVNVVi2eh0ImD1jGm63i/y8PArz8zh67hx2Ve1l/aYtTBw/lssvuiChUa3rZiWoSemoYnKysrqB/8jZM1FVlTXrN1FdW8+xRx3JheecYWt4QXogjTFlpYnPpAcCjC0rBSGYOG4MPp+XrIwMCgvyOGru7ETR+9FHzqF820422lmRl114nh3wEkyaMA5NVRk3pozOYIg1GzZhmCZfuewiMtIDmFIycdxYPB4XPq+XcWPKKMjLZfzY0Xy4bCVt7R2ce8YplJYUUzaqBCEEE8ZaYxFC4Ha5GFtWxqjiQspKivnwk5WEoxHOOf0USkus+e4ZZDtIFGc9cP1NN90kAXnzzTcPHG8HoJFVIYQRj8dP0jTtbT6H/fQPZ8uLofADD8l3HsAcHcJ5NQBV1/WTXS7XO4Ph9gcM/B6pDA8AVx3soFZvPt+ebbK72t3JbkUXyf/u+ZnunzP32XF6Gp6JYFlSWkCf47DL+ZI7qvVV8dTz2sld2aTsqi1Ibu3ntE8UfcxRz3F1RXS7vy/52r29p/vvsjubtelnf2Ppb14Plv/DxtqDQoirDwT0nwb4Dr8vBDYBmYO1GVKSkgOkOABtwAyg1ub2g84cPiCgJgW1ag3D+Aldp6qkJCVDDXwF+IkQomagwaqDpvF7oTzPAecfKr7fVxfknoZyb587yEZWr9fo2Xi1J1Xa3xi77kX02qx1SJHVo3lVb12kD5M42HpeCHHBgVKcgwV8h/IUYx0qkZ2iPCkZQorTgtXhr+ZAKQ4HA6BJlKca+N6hoDy6rrOrsnv+RywWo7q2jp27Kqmpq08YZoaduusYXFt3VNDU3MKqdRt4e8lSS40kFW/LHinGTvrvMy+9xs7dlYn3G3bktrdIckdnZyLF2Hm9cm81u/dYY66pa2DbjoqENk382O9taW3jo2UrWbJ0GWs3bO5Sd4b1vrqGRh575sV9DMmeY98nddtO1Xb643f7u90hLhgKsX5TeeI7QuEw7330SaKYxRlnYr4OPcX5no015dOA/qBoZpvqaEKIh4H7bItbH0oq8dATz9Dc2pb427pNW3j17ffZW1tHXUNjIk1XVRQUpat/+67KKlpa22hr76DObo2RXLzds+uwZhelV9fW0dkZStThqnaaQc9DJAA+/GQl//3722lpa0+8fs9Dj3HfI1ani4amJnbZiyD52g69eHvJR7z9/kfU1DfQ2NScALSqWu8zDZNKO0Gv58FzybGQ5PRlJwnO6dupJPfCtzNGFSEIhSKJzmcAr7z5LrV1DYkjmJxxJubr0IDe8eLcJ4R42Mbap06SPFguSMOmPd8GjrIt7oOezmCaJi6Xi4njxrBq7QZOXbwQgDXrNzF/zmxGl5Z0a7W9dPkqxpSOIj2QRmlJEbNnTCUjPUDl3upE3klnZyfvfbSMnKxMigsLSPP7KMjPo6GpmQ8+XsG40aV43J4EsHZX7WXV2g1MnjAOr8dDSVGhFcixx9je0cmRs2eycXM5i445iuraOnKyshL562PLSinMzyMaiyUWYn1DI4sXHkNmRjpx3eC0kxYlorKOLF+9lobGZgry80gPWPkwW7btYMqkCaiKwt6aWkAwqriQzlCI9z/8BCEECxfMJyM9QPn2CjaXb2P6lEkIRTBudCmaprFl2w42bC5nysTxTJs8kflzZiYWT35uDnFdJ67rCCFoammhubmV2voGOoJBTjlhYaJjwxDZAKaN0U3At22MHZTM4IMCzKR0hhBwOVZudA8n8EG5DgBHzZ3NZptOBIMh6hubmDNrOi++/jbl23fS3NLKHfc8SHZmJtW1dfzPH/9CMBTmrfc/YnP5drweDwKroeptf/8XmqoSj8e56be3sbtqL23tHdz+z3vJysygqrqGj5atJDsrk9179nLPg4+Rl5PNmvWbuOW2vyW1/LbG1tzaygnHHs3WHbsA2LhlG9OnTMTv99EZDLGpfBtvvLOEcDjCrbf9naaWVkxTcsfdD2AYBpqq0tLaTjgSIRiy0geeffl1li5fTU52Fi++9hbBYChx4F3czln6eMVqq69oPM6f/naPlYMfCtHe0cHqdRt59Jnnyc/L4a33P+T/7rgLVVVZsnQZz7z0GumBAHtrrN3yYbstyQOPPsWOXZVomsbtd95HfUMjdfWN3HLb34jF47S2dfDP+x7GMIaM2Tr4iQBftrE1qLSEQ6HxkynPOinld4C7gTh9nup6YMCXUjJu7Gii8TihcJgt23dQVNB1Ykd6eoD3P1rGgnlzWLxwAQDrN5cT13W8Ho/VmMk0SfP7WL1+EwX5eZx5ymJbq67Dpbl4f+ky5s6ewUmLjgFg2ao1SCl56/0POeOUxSw8eh6mabJhyzZMOw9GUQThSNTKoJw1jRVr1xONxqis2sv5Z55KXX2TlSTn9eDxuInF48yYOolzTrMOgN61p4qaugbS0wO8/vb7bN66nQnjxnDGSSewYs16fvHj7+D1ePC43bz29vtWQ9ekgnVVUcjMzGDpitWMLi3h/DNPTbz2wGNPc8XFX2DiuDFMnTSByqpqItEoby9ZyrevvTrR7cxp1Nvc0srOyj3cdOMPLK4R13n7g4+ZO3MaR82ZzSknWDvt7/5yJw1NTRQV5A+F1tdt7HzDxpTWV6uQwwp8G5jOqXL3SClnYhWoH9SorsM1x48uY+2GzeypqubI2TMSOtcwDJpbWpk3ZyZxXU90ATbsttcJR6EiqK1rYHRpSWIrLx1Vgq7rNLW0MnPqJPvzKmWjRhEOR+gMhhJtxl2aRnFhfqLGFKwMUEVR8Hm9lBQV8MlKa8Hk5+Xi9/toaGomze9L8Han0zBYqb6mlMTjcU47aREnLjwGVVGob2om4Pfj9XjQdZ2C/DwCgTQMw0wogsSheFJSXVvHuDFlVoWY3TPUNCWF+XnE7c5yRYV5NDW34HJp5OVkE4/r3UorG5qaEy3K47pOSXEh2yt2EYvr+P1dY/Z53APu6HyAoL/NxtJBBf1QuR0NKaUK/Mg0zTcOtrHraJVjjjqSt5cspaG5hWl2pqawDc/cnCy2V+xOdEyrqq5NHN7W1YMHSooL2L5zFy7NKsDYvrMCl0sjPyebbTt22Z+32pWkpfkIpPmp2G1VK1navLpbgUxjUzPp9qEKs2dM46U33k50g8vJzqS5pXUfm8UxFJ0OxqZpkp2ZgdfjweVykZOZSUdnkI7OIJqmUVm1l/aOTlRNJRgKo7msewwGQ0igbFQJG7dsxaVpuF0uXC4NRQj27K3GpWk0tbSyp7qWgrxcorGYfU6Xlkjf1g1rcTU0NiGlxKVp7NhVSXZWltXA1+ga8xAVkzuK8g3gRzaWDnrF30EvGrd78Ujb63Ap1jHqkw9WcMs5erOkqIBINEpOVmZiy7dSmsOcfMJx/P4vd6KoKtFolLr6BlwuV0Lrg6Cjo5PTT1zE6+8s4fHnXsLv9VJRWUU8rrN44TH84a938uzLrxONxqy22IbJGSefwD/ve5hQOEJtXQPBUKibZ6Wmrp7sLKtXzdjRpYTCYcaNsXL+C/JyWb56LUWF+V2dIAyju7tSmrg0jTfe/YDqmjpcbjfnnHYSi46Zzz/ufYgjZkxjyScrrKJzIZg4fgz/+vfjlJUUs3NXJaefdDyZGem89+EnPPj40yDhlMULueDs03n82ZdYMG8OW3dUEIvFcLlcnHXKidz94GNMnzKJQMDP3FkzCIbCZGdmMHPaFP569wOMH1PGspVr+ME3v8auyqpuLlxrPg96kEoDtgKXOpv8weL1By2AtR9K4kR1ZwDvchALVxw+2dDYjNfrTmjZ+oZG3G43WZkZ6LrOqnUbGFVcxBPPvcTF55+Dz+fFbXc/iESiFOTnEo/rfLJyNenpAUqKCtE0jezMDIKhEMtXr6O4oIDs7Ex8Xi/pgTSaWlpYu2EL40aX4vd5yUpaeA2NTdbnszJtzlxPfm42LpeLaCxGU3ML6YEAkUiErMwM6hqaKC2xUnb31tSRm5NFLBZnk91GxOvxMGfWdBRFoXz7TurqG5k6eQKmYVJUaO0kazduprWtnbmzZiRSs517crlczJk5DY/HQ3VtHeXbdjJpwjhUVaEgLxdVVdldtZdt2yuYNGEco0qKqKmto2yU1T1iw+ZyGptbmDtrBpkZ6bR1dBAORxK7WFV1DQV5eft0hvuUvvpG4EQhxMZPG509LMDvAf5jgTcB5/zcIY3sLl+9jhWr13Hq4oWs31xOVXUt3/76Vb12OOhvYQ3070MtA73uYMfd3/f2fG2I792p6QgDpwohlg4l6Icc+PaEabbRewHWEUNOVbw4GIBI5v3Ov+O6zrKVa9hesZv83BxOO+n4hKbvLV/GMtBEt5K65KM0e16jt7/3NZ59X7fqoXseHpc8tt7Snvu6rpM63DOfJrmmt7/P93VkaG/fvb/7+xRuS6ew5AtCiOeGwpg95MDvAf6v227Ogwb+lHyuJRn01w6VB+dQeXX6dXNidWNzzh8dukpkJ6fm0OaUpOTAQH/DoQT9IdP4vWj+G4C/pTR/CvTAt4QQfz+UoOdwAK4X8JuHcvdJyWGX5Od9WEB/WIDfA/zX0nVki5kC/4gAvfOMrxNC3H04QH/YgN8D/Bdi9eT08zns2JCSAYvzbEO6rl/lcrmePlygP6zATwZ/LBY73uVyPQPkMsRtyFNyWMR5pk3xePxCt9u95HCC/rADv4fmPwJ4FJiaAv+wBP0W4EtCiLWHG/SfCYPSBr0qhFgLLAJepyuxLeWJ/PyKdEBvJysuskGvHm7QfyaAb4PfsCekCTgb+IsNfkGqbcnn1YgV9jP8i6IoZwkhmoY6DeFzB/wk8CuAKYT4HnA91rHsCkNYw5uSIaE2iv3srrefpSmlVD4roP9McPxeOL/AqqI3pJRzgfuBWaSCXZ8HapPczPUrQojVdj69ORSpxcNC4ydpfplUxri6sbFxIXCvPaGCITyGKCUHLIb9bFT7WR1ng14TQhifNdB/JjV+D+2f4IRSysuxDqArSmn/z6SWrwV+bLeZ4bPE5z93wO+F+owC/gRcksQnU27Pw8flnbl/AvihEGLvZ5XafO6A34f2/wrWqSwlPbROSg4NrXF222rgv4QQ938etPznEvhJ2l/Yh9EVAL/CSnNWknhmKt9naMRJI3dSyv8O/LcQot7pofpZ1/KfW+D3of2PA34DnNCLRkrJweXxAO/H4/H/crvdH37etPznHvi9cH9hGMYVqqr+JzC9h6chtQN8eg0PVhu/3wD/tjtpfC64/LADftICSGyzUkofcJ1pmj9RFKUstQA+PeBN09yjKMofgLuEEOFkuvl5vslhQwd60J8c4Dqb/49JWgCkjOB+jdbk+dlt8/i77OM0P7e0ZlgDvyf9sf+dCVwJfAcr69MRna6A2Ejn704TJ0e2AH8FHhJCtDmA/zzTmmEP/B4LIJEFaFOgLwBfB07pRcuNJGPYMVZ77n5vAfcAzwohwva8aYAxnAA/rIHf1wKw/zYfuAa4GOvUxpGwCHoFu2ma9YqiPIF16MKKpDkatoAfEcDvSYGSt2vbDjjTNM3LFEU5GQj0WAQyaRGIzyHQHbCLHpq90zTNtxVFeQx4NYm/7zNHw1lGHMe1vUAi2UiTUo4BzgLOBY6j6xC7z8tC6A/oYB2a9hHwIvCKEGJ3slMAyys2ouoeRqxxl6Thuj10KWURViXY2cDxwMRePm7SvU2GOETzKXuhLgq9u2q3A0uAl4EPhBC1PRf/SNHuKeD3vws423zyInBjeYMW2IvgKGACfZ/yIul+BFJfC0L0AejeAE7SLtPX84qbprlTUZRlNtg/AbYIIWL7u8eRKing970T0NNnbRt9ZcAUrOKY2cA00zSLgDxFUTxDOTbTNKOKojQAdcBmrLOF1wPlwJ6etaw2jWEka/YU8A98ESRTIqOP92Vh1QmU2dRoNFBommaBoih5QLZpmumKorhM03QriuICnAOsYqZpxhVFcf7fAbSYptmoKEq9DfJKm7rsAWqFEK19jMOJTZh8zpLGDrX8f9VE2FL/xWf9AAAAAElFTkSuQmCC" alt="Fundación Universitaria María Cano"></div>
+      <div>
+        <h1>Efectividad en la Administración de la Planta Docente</h1>
+        <p>Funciones misionales · Relación profesor-estudiante · Carga de prácticas</p>
+      </div>
     </div>
     <div class="filters">
       <div class="filter-group">
@@ -140,9 +169,26 @@ footer.bottom{text-align:center;font-size:12px;color:var(--text-secondary);paddi
         <label>Comparar con</label>
         <select id="f-periodo-comparar"></select>
       </div>
+      <div class="filter-group">
+        <label>Sede</label>
+        <select id="f-global-sede"></select>
+      </div>
+      <div class="filter-group">
+        <label>Facultad</label>
+        <select id="f-global-facultad"></select>
+      </div>
+      <div class="filter-group">
+        <label>Programa</label>
+        <select id="f-global-programa"></select>
+      </div>
+      <div class="filter-group">
+        <label>&nbsp;</label>
+        <button type="button" id="btn-quitar-filtros" class="btn-quitar-filtros">Quitar filtros</button>
+      </div>
     </div>
   </header>
 
+  <div id="filtro-global-aviso" class="note" style="display:none;"></div>
   <div id="sin-datos" class="note" style="display:none;"></div>
 
   <div class="tabs">
@@ -150,6 +196,7 @@ footer.bottom{text-align:center;font-size:12px;color:var(--text-secondary);paddi
     <button class="tab-btn" data-tab="misionales">Funciones misionales</button>
     <button class="tab-btn" data-tab="pe">Relación profesor-estudiante</button>
     <button class="tab-btn" data-tab="practicas">Prácticas</button>
+    <button class="tab-btn" data-tab="cruce">Cruce entre programas</button>
   </div>
 
   <!-- RESUMEN -->
@@ -176,6 +223,7 @@ footer.bottom{text-align:center;font-size:12px;color:var(--text-secondary);paddi
 
   <!-- FUNCIONES MISIONALES -->
   <div class="panel" id="panel-misionales">
+    <div class="kpi-row" id="kpi-misionales-horas" style="margin-bottom:14px;"></div>
     <div class="kpi-row" id="kpi-misionales"></div>
     <div class="grid-2b">
       <div class="card">
@@ -206,10 +254,16 @@ footer.bottom{text-align:center;font-size:12px;color:var(--text-secondary);paddi
         <canvas id="chart-mis-evol-pct"></canvas>
       </div>
     </div>
-    <div class="card">
+    <div class="card" style="margin-bottom:var(--gap);">
       <h3>Detalle por programa</h3>
       <div class="card-sub">Horas y porcentaje por función misional, con variación frente al periodo de comparación</div>
       <div class="table-wrap"><table class="dt" id="tabla-misionales"></table></div>
+    </div>
+    <div class="card">
+      <h3>Superávit / déficit de profesores y uso del tiempo</h3>
+      <div class="card-sub">Cruza la relación profesor-estudiante (¿sobran o faltan profesores frente a la relación ideal?) con cómo se reparten las horas de esos docentes. Un programa con superávit de profesores debería reflejar ese margen en más investigación, extensión o apoyo a otros programas — no solo acumularlo en apoyo administrativo.</div>
+      <div class="kpi-row" id="superavit-kpi" style="margin-bottom:14px;"></div>
+      <div class="table-wrap"><table class="dt" id="tabla-superavit"></table></div>
     </div>
   </div>
 
@@ -263,11 +317,36 @@ footer.bottom{text-align:center;font-size:12px;color:var(--text-secondary);paddi
     </div>
   </div>
 
+  <!-- CRUCE ENTRE PROGRAMAS -->
+  <div class="panel" id="panel-cruce">
+    <div class="kpi-row" id="kpi-cruce"></div>
+    <div class="card" style="margin-bottom:var(--gap);">
+      <h3>Horas por facultad: propio programa, otro programa de la misma facultad, otra facultad</h3>
+      <div class="card-sub" id="sub-cruce-facultad">Periodo actual</div>
+      <canvas id="chart-cruce-facultad"></canvas>
+    </div>
+    <div class="card" style="margin-bottom:var(--gap);">
+      <h3>Matriz de horas entre facultades</h3>
+      <div class="card-sub">Horas que dan los docentes de la facultad de cada fila a programas de la facultad de cada columna (incluye su propia facultad, en la diagonal)</div>
+      <div class="table-wrap"><table class="dt" id="tabla-cruce-matriz"></table></div>
+    </div>
+    <div class="card" style="margin-bottom:var(--gap);">
+      <h3>Detalle por facultad</h3>
+      <div class="card-sub">Haz clic en la flecha para ver TODOS los programas a los que dan clase los docentes de esa facultad (los suyos propios y los externos), con el % de sus horas totales que representa cada uno.</div>
+      <div class="table-wrap"><table class="dt" id="tabla-cruce-facultad"></table></div>
+    </div>
+    <div class="card">
+      <h3>Detalle por programa</h3>
+      <div class="card-sub">Qué % de las horas de los docentes de cada programa se queda en el propio programa. Haz clic en la flecha para ver el desglose completo de a qué otros programas dan sus horas externas.</div>
+      <div class="table-wrap"><table class="dt" id="tabla-cruce-programa"></table></div>
+    </div>
+  </div>
+
   <footer class="bottom">Tablero generado a partir de los resultados institucionales en la Fundación Universitaria María Cano de Funciones Misionales y Relación Profesor/Estudiante.<br>pp = puntos porcentuales (diferencia directa entre dos porcentajes, no cambio relativo).</footer>
 </div>
 
 <script>
-const DATA = {"generado": true, "periodos": {"2026-1": {"funciones_misionales": {"institucion": {"docencia": 3367.0, "investigacion": 737.5, "extension": 973.0, "apoyo_admin": 1173.25, "diplomado": 0.0, "cualificacion": 62.25, "num_docentes": 189, "horas_totales": 6313.0, "porcentajes": {"docencia": 53.33, "investigacion": 11.68, "extension": 15.41, "apoyo_admin": 18.58, "diplomado": 0.0, "cualificacion": 0.99}, "pct_doc_cm": 0.5333, "pct_ext_cm": 0.1541, "pct_inv_cm": 0.1168, "pct_gestion_cm": 0.1858, "pct_otros_cm": 0.0099, "pct_total_cm": 0.9999}, "por_facultad": {"Ciencias de la salud": {"docencia": 2716.5, "investigacion": 582.5, "extension": 869.0, "apoyo_admin": 954.0, "diplomado": 0.0, "cualificacion": 30.0, "num_docentes": 154, "horas_totales": 5152.0, "porcentajes": {"docencia": 52.73, "investigacion": 11.31, "extension": 16.87, "apoyo_admin": 18.52, "diplomado": 0.0, "cualificacion": 0.58}, "pct_doc_cm": 0.5273, "pct_ext_cm": 0.1687, "pct_inv_cm": 0.1131, "pct_gestion_cm": 0.1852, "pct_otros_cm": 0.0058, "pct_total_cm": 1.0001}, "Ciencias empresariales": {"docencia": 438.75, "investigacion": 94.5, "extension": 75.0, "apoyo_admin": 120.5, "diplomado": 0.0, "cualificacion": 32.25, "num_docentes": 24, "horas_totales": 761.0, "porcentajes": {"docencia": 57.65, "investigacion": 12.42, "extension": 9.86, "apoyo_admin": 15.83, "diplomado": 0.0, "cualificacion": 4.24}, "pct_doc_cm": 0.5765, "pct_ext_cm": 0.0986, "pct_inv_cm": 0.1242, "pct_gestion_cm": 0.1583, "pct_otros_cm": 0.0424, "pct_total_cm": 1.0}, "Ingenieria": {"docencia": 211.75, "investigacion": 60.5, "extension": 29.0, "apoyo_admin": 98.75, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 11, "horas_totales": 400.0, "porcentajes": {"docencia": 52.94, "investigacion": 15.12, "extension": 7.25, "apoyo_admin": 24.69, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.5294, "pct_ext_cm": 0.0725, "pct_inv_cm": 0.1512, "pct_gestion_cm": 0.2469, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}}, "por_programa": {"Fonoaudiología Popayán": {"docencia": 148.5, "investigacion": 10.5, "extension": 76.5, "apoyo_admin": 44.5, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 8, "horas_totales": 280.0, "porcentajes": {"docencia": 53.04, "investigacion": 3.75, "extension": 27.32, "apoyo_admin": 15.89, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.5304, "pct_ext_cm": 0.2732, "pct_inv_cm": 0.0375, "pct_gestion_cm": 0.1589, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}, "Administración de Empresas": {"docencia": 232.0, "investigacion": 79.0, "extension": 35.0, "apoyo_admin": 31.0, "diplomado": 0.0, "cualificacion": 17.0, "num_docentes": 13, "horas_totales": 394.0, "porcentajes": {"docencia": 58.88, "investigacion": 20.05, "extension": 8.88, "apoyo_admin": 7.87, "diplomado": 0.0, "cualificacion": 4.31}, "pct_doc_cm": 0.5888, "pct_ext_cm": 0.0888, "pct_inv_cm": 0.2005, "pct_gestion_cm": 0.0787, "pct_otros_cm": 0.0431, "pct_total_cm": 0.9999}, "Contaduría Pública": {"docencia": 206.75, "investigacion": 15.5, "extension": 40.0, "apoyo_admin": 89.5, "diplomado": 0.0, "cualificacion": 15.25, "num_docentes": 11, "horas_totales": 367.0, "porcentajes": {"docencia": 56.34, "investigacion": 4.22, "extension": 10.9, "apoyo_admin": 24.39, "diplomado": 0.0, "cualificacion": 4.16}, "pct_doc_cm": 0.5634, "pct_ext_cm": 0.109, "pct_inv_cm": 0.0422, "pct_gestion_cm": 0.2439, "pct_otros_cm": 0.0416, "pct_total_cm": 1.0001}, "Ingeniería de Software": {"docencia": 211.75, "investigacion": 60.5, "extension": 29.0, "apoyo_admin": 98.75, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 11, "horas_totales": 400.0, "porcentajes": {"docencia": 52.94, "investigacion": 15.12, "extension": 7.25, "apoyo_admin": 24.69, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.5294, "pct_ext_cm": 0.0725, "pct_inv_cm": 0.1512, "pct_gestion_cm": 0.2469, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}, "Fisioterapia Cali": {"docencia": 288.0, "investigacion": 65.5, "extension": 107.0, "apoyo_admin": 119.5, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 17, "horas_totales": 580.0, "porcentajes": {"docencia": 49.66, "investigacion": 11.29, "extension": 18.45, "apoyo_admin": 20.6, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.4966, "pct_ext_cm": 0.1845, "pct_inv_cm": 0.1129, "pct_gestion_cm": 0.206, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}, "Fisioterapia Medellín": {"docencia": 567.75, "investigacion": 184.0, "extension": 284.75, "apoyo_admin": 177.5, "diplomado": 0.0, "cualificacion": 10.0, "num_docentes": 33, "horas_totales": 1224.0, "porcentajes": {"docencia": 46.38, "investigacion": 15.03, "extension": 23.26, "apoyo_admin": 14.5, "diplomado": 0.0, "cualificacion": 0.82}, "pct_doc_cm": 0.4638, "pct_ext_cm": 0.2326, "pct_inv_cm": 0.1503, "pct_gestion_cm": 0.145, "pct_otros_cm": 0.0082, "pct_total_cm": 0.9999}, "Fisioterapia Neiva": {"docencia": 549.0, "investigacion": 52.0, "extension": 22.5, "apoyo_admin": 130.5, "diplomado": 0.0, "cualificacion": 20.0, "num_docentes": 23, "horas_totales": 774.0, "porcentajes": {"docencia": 70.93, "investigacion": 6.72, "extension": 2.91, "apoyo_admin": 16.86, "diplomado": 0.0, "cualificacion": 2.58}, "pct_doc_cm": 0.7093, "pct_ext_cm": 0.0291, "pct_inv_cm": 0.0672, "pct_gestion_cm": 0.1686, "pct_otros_cm": 0.0258, "pct_total_cm": 1.0}, "Fisioterapia Popayán": {"docencia": 332.5, "investigacion": 76.5, "extension": 123.0, "apoyo_admin": 154.0, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 20, "horas_totales": 686.0, "porcentajes": {"docencia": 48.47, "investigacion": 11.15, "extension": 17.93, "apoyo_admin": 22.45, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.4847, "pct_ext_cm": 0.1793, "pct_inv_cm": 0.1115, "pct_gestion_cm": 0.2245, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}, "Fonoaudiologia Medellin": {"docencia": 183.75, "investigacion": 75.0, "extension": 109.25, "apoyo_admin": 92.0, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 12, "horas_totales": 460.0, "porcentajes": {"docencia": 39.95, "investigacion": 16.3, "extension": 23.75, "apoyo_admin": 20.0, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.3995, "pct_ext_cm": 0.2375, "pct_inv_cm": 0.163, "pct_gestion_cm": 0.2, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}, "Fonoaudiología Neiva": {"docencia": 160.0, "investigacion": 4.0, "extension": 69.0, "apoyo_admin": 47.0, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 9, "horas_totales": 280.0, "porcentajes": {"docencia": 57.14, "investigacion": 1.43, "extension": 24.64, "apoyo_admin": 16.79, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.5714, "pct_ext_cm": 0.2464, "pct_inv_cm": 0.0143, "pct_gestion_cm": 0.1679, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}, "Nutrición y dietética Medellín": {"docencia": 70.0, "investigacion": 0.0, "extension": 5.5, "apoyo_admin": 34.5, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 6, "horas_totales": 110.0, "porcentajes": {"docencia": 63.64, "investigacion": 0.0, "extension": 5.0, "apoyo_admin": 31.36, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.6364, "pct_ext_cm": 0.05, "pct_inv_cm": 0.0, "pct_gestion_cm": 0.3136, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}, "Nutrición y dietética Popayán": {"docencia": 134.5, "investigacion": 18.0, "extension": 1.0, "apoyo_admin": 52.5, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 8, "horas_totales": 206.0, "porcentajes": {"docencia": 65.29, "investigacion": 8.74, "extension": 0.49, "apoyo_admin": 25.49, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.6529, "pct_ext_cm": 0.0049, "pct_inv_cm": 0.0874, "pct_gestion_cm": 0.2549, "pct_otros_cm": 0.0, "pct_total_cm": 1.0001}, "Psicología Medellín": {"docencia": 222.0, "investigacion": 87.0, "extension": 60.0, "apoyo_admin": 91.0, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 12, "horas_totales": 460.0, "porcentajes": {"docencia": 48.26, "investigacion": 18.91, "extension": 13.04, "apoyo_admin": 19.78, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.4826, "pct_ext_cm": 0.1304, "pct_inv_cm": 0.1891, "pct_gestion_cm": 0.1978, "pct_otros_cm": 0.0, "pct_total_cm": 0.9999}, "Terapia ocupacional": {"docencia": 60.5, "investigacion": 10.0, "extension": 10.5, "apoyo_admin": 11.0, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 6, "horas_totales": 92.0, "porcentajes": {"docencia": 65.76, "investigacion": 10.87, "extension": 11.41, "apoyo_admin": 11.96, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.6576, "pct_ext_cm": 0.1141, "pct_inv_cm": 0.1087, "pct_gestion_cm": 0.1196, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}}, "por_sede": {"Popayán": {"docencia": 615.5, "investigacion": 105.0, "extension": 200.5, "apoyo_admin": 251.0, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 36, "horas_totales": 1172.0, "porcentajes": {"docencia": 52.52, "investigacion": 8.96, "extension": 17.11, "apoyo_admin": 21.42, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.5252, "pct_ext_cm": 0.1711, "pct_inv_cm": 0.0896, "pct_gestion_cm": 0.2142, "pct_otros_cm": 0.0, "pct_total_cm": 1.0001}, "Medellín": {"docencia": 1754.5, "investigacion": 511.0, "extension": 574.0, "apoyo_admin": 625.25, "diplomado": 0.0, "cualificacion": 42.25, "num_docentes": 104, "horas_totales": 3507.0, "porcentajes": {"docencia": 50.03, "investigacion": 14.57, "extension": 16.37, "apoyo_admin": 17.83, "diplomado": 0.0, "cualificacion": 1.2}, "pct_doc_cm": 0.5003, "pct_ext_cm": 0.1637, "pct_inv_cm": 0.1457, "pct_gestion_cm": 0.1783, "pct_otros_cm": 0.012, "pct_total_cm": 1.0}, "Cali": {"docencia": 288.0, "investigacion": 65.5, "extension": 107.0, "apoyo_admin": 119.5, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 17, "horas_totales": 580.0, "porcentajes": {"docencia": 49.66, "investigacion": 11.29, "extension": 18.45, "apoyo_admin": 20.6, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.4966, "pct_ext_cm": 0.1845, "pct_inv_cm": 0.1129, "pct_gestion_cm": 0.206, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}, "Neiva": {"docencia": 709.0, "investigacion": 56.0, "extension": 91.5, "apoyo_admin": 177.5, "diplomado": 0.0, "cualificacion": 20.0, "num_docentes": 32, "horas_totales": 1054.0, "porcentajes": {"docencia": 67.27, "investigacion": 5.31, "extension": 8.68, "apoyo_admin": 16.84, "diplomado": 0.0, "cualificacion": 1.9}, "pct_doc_cm": 0.6727, "pct_ext_cm": 0.0868, "pct_inv_cm": 0.0531, "pct_gestion_cm": 0.1684, "pct_otros_cm": 0.019, "pct_total_cm": 1.0}}}, "proporcion_pe": {"ideal": 35, "institucion": {"estudiantes": 3264, "profesores_actuales": 94.5, "relacion_pe": 34.54, "diferencia_profesores": -1.24}, "por_programa": {"Administración de Empresas": {"sede": "Medellín", "facultad": "Ciencias Empresariales", "estudiantes": 330, "profesores_actuales": 8.5, "relacion_pe": 38.82, "diferencia_profesores": 0.93}, "Contaduría Pública": {"sede": "Medellín", "facultad": "Ciencias Empresariales", "estudiantes": 243, "profesores_actuales": 5, "relacion_pe": 48.6, "diferencia_profesores": 1.94}, "Fisioterapia Cali": {"sede": "Cali", "facultad": "Ciencias de la Salud", "estudiantes": 201, "profesores_actuales": 8, "relacion_pe": 25.12, "diferencia_profesores": -2.26}, "Fisioterapia Medellín": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "estudiantes": 656, "profesores_actuales": 18, "relacion_pe": 36.44, "diferencia_profesores": 0.74}, "Fisioterapia Neiva": {"sede": "Neiva", "facultad": "Ciencias de la Salud", "estudiantes": 392, "profesores_actuales": 11.5, "relacion_pe": 34.09, "diferencia_profesores": -0.3}, "Fisioterapia Popayán": {"sede": "Popayán", "facultad": "Ciencias de la Salud", "estudiantes": 340, "profesores_actuales": 10.5, "relacion_pe": 32.38, "diferencia_profesores": -0.79}, "Fonoaudiología Medellin ": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "estudiantes": 110, "profesores_actuales": 8.5, "relacion_pe": 12.94, "diferencia_profesores": -5.36}, "Fonoaudiología Neiva": {"sede": "Neiva", "facultad": "Ciencias de la Salud", "estudiantes": 160, "profesores_actuales": 4, "relacion_pe": 40, "diferencia_profesores": 0.57}, "Fonoaudiología Popayán": {"sede": "Popayán", "facultad": "Ciencias de la Salud", "estudiantes": 88, "profesores_actuales": 3, "relacion_pe": 29.33, "diferencia_profesores": -0.49}, "Ingeniería de Software": {"sede": "Medellín", "facultad": "Ingeniería", "estudiantes": 154, "profesores_actuales": 4, "relacion_pe": 38.5, "diferencia_profesores": 0.4}, "Nutrición y Dietética Medellín ": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "estudiantes": 113, "profesores_actuales": 2, "relacion_pe": 56.5, "diferencia_profesores": 1.23}, "Nutrición y dietética Popayán": {"sede": "Popayán", "facultad": "Ciencias de la Salud", "estudiantes": 224, "profesores_actuales": 3, "relacion_pe": 74.67, "diferencia_profesores": 3.4}, "Psicología Medellín": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "estudiantes": 204, "profesores_actuales": 7, "relacion_pe": 29.14, "diferencia_profesores": -1.17}, "Terapia ocupacional": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "estudiantes": 49, "profesores_actuales": 1.5, "relacion_pe": 32.67, "diferencia_profesores": -0.1}}, "por_facultad": {"Ciencias Empresariales": {"estudiantes": 573, "profesores_actuales": 13.5, "relacion_pe": 42.44, "diferencia_profesores": 2.87}, "Ciencias de la Salud": {"estudiantes": 2537, "profesores_actuales": 77.0, "relacion_pe": 32.95, "diferencia_profesores": -4.51}, "Ingeniería": {"estudiantes": 154, "profesores_actuales": 4, "relacion_pe": 38.5, "diferencia_profesores": 0.4}}, "por_sede": {"Medellín": {"estudiantes": 1859, "profesores_actuales": 54.5, "relacion_pe": 34.11, "diferencia_profesores": -1.39}, "Cali": {"estudiantes": 201, "profesores_actuales": 8, "relacion_pe": 25.12, "diferencia_profesores": -2.26}, "Neiva": {"estudiantes": 552, "profesores_actuales": 15.5, "relacion_pe": 35.61, "diferencia_profesores": 0.27}, "Popayán": {"estudiantes": 652, "profesores_actuales": 16.5, "relacion_pe": 39.52, "diferencia_profesores": 2.13}}}, "practicas": {"total_estudiantes": 776, "salud_estudiantes": 669, "no_salud_estudiantes": 107, "horas_requeridas": 2615.8, "por_programa": {"Administración de Empresas": {"sede": "Medellín", "facultad": "Ciencias Empresariales", "es_salud": false, "estudiantes": 65, "horas_requeridas": 65.0}, "Contaduría Pública": {"sede": "Medellín", "facultad": "Ciencias Empresariales", "es_salud": false, "estudiantes": 29, "horas_requeridas": 29.0}, "Fisioterapia Medellín": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 183, "horas_requeridas": 686.2}, "Fisioterapia Cali": {"sede": "Cali", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 71, "horas_requeridas": 266.2}, "Fisioterapia Neiva": {"sede": "Neiva", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 124, "horas_requeridas": 465.0}, "Fisioterapia Popayán": {"sede": "Popayán", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 107, "horas_requeridas": 401.2}, "Fonoaudiología Medellín": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 42, "horas_requeridas": 157.5}, "Fonoaudiología Neiva": {"sede": "Neiva", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 55, "horas_requeridas": 206.2}, "Fonoaudiología Popayán": {"sede": "Popayán", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 42, "horas_requeridas": 157.5}, "Ingeniería de Software": {"sede": "Medellín", "facultad": "Ingeniería", "es_salud": false, "estudiantes": 13, "horas_requeridas": 13.0}, "Nutrición y Dietetica Popayán": {"sede": "Popayán", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 0, "horas_requeridas": 0.0}, "Psicología": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 39, "horas_requeridas": 146.2}, "Terapia Ocupacional": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 6, "horas_requeridas": 22.5}}, "por_facultad": {"Ciencias Empresariales": {"estudiantes": 94, "horas_requeridas": 94.0, "pct_estudiantes": 12.11}, "Ciencias de la Salud": {"estudiantes": 669, "horas_requeridas": 2508.8, "pct_estudiantes": 86.21}, "Ingeniería": {"estudiantes": 13, "horas_requeridas": 13.0, "pct_estudiantes": 1.68}}}}, "2026-2": {"funciones_misionales": {"institucion": {"docencia": 3244.6499999999996, "investigacion": 757.75, "extension": 1002.0, "apoyo_admin": 1352.95, "diplomado": 3.5, "cualificacion": 99.0, "num_docentes": 177, "horas_totales": 6459.849999999999, "porcentajes": {"docencia": 50.23, "investigacion": 11.73, "extension": 15.51, "apoyo_admin": 20.94, "diplomado": 0.05, "cualificacion": 1.53}, "pct_doc_cm": 0.5023, "pct_ext_cm": 0.1551, "pct_inv_cm": 0.1173, "pct_gestion_cm": 0.2094, "pct_otros_cm": 0.0159, "pct_total_cm": 1.0}, "por_facultad": {"Ciencias empresariales": {"docencia": 405.5, "investigacion": 73.75, "extension": 36.25, "apoyo_admin": 244.45, "diplomado": 0.0, "cualificacion": 40.0, "num_docentes": 22, "horas_totales": 799.95, "porcentajes": {"docencia": 50.69, "investigacion": 9.22, "extension": 4.53, "apoyo_admin": 30.56, "diplomado": 0.0, "cualificacion": 5.0}, "pct_doc_cm": 0.5069, "pct_ext_cm": 0.0453, "pct_inv_cm": 0.0922, "pct_gestion_cm": 0.3056, "pct_otros_cm": 0.05, "pct_total_cm": 1.0}, "Ciencias de la salud": {"docencia": 2622.1499999999996, "investigacion": 594.0, "extension": 950.75, "apoyo_admin": 1030.5, "diplomado": 3.5, "cualificacion": 59.0, "num_docentes": 144, "horas_totales": 5259.9, "porcentajes": {"docencia": 49.85, "investigacion": 11.29, "extension": 18.08, "apoyo_admin": 19.59, "diplomado": 0.07, "cualificacion": 1.12}, "pct_doc_cm": 0.4985, "pct_ext_cm": 0.1808, "pct_inv_cm": 0.1129, "pct_gestion_cm": 0.1959, "pct_otros_cm": 0.0119, "pct_total_cm": 1.0}, "Ingenieria": {"docencia": 217.0, "investigacion": 90.0, "extension": 15.0, "apoyo_admin": 78.0, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 11, "horas_totales": 400.0, "porcentajes": {"docencia": 54.25, "investigacion": 22.5, "extension": 3.75, "apoyo_admin": 19.5, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.5425, "pct_ext_cm": 0.0375, "pct_inv_cm": 0.225, "pct_gestion_cm": 0.195, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}}, "por_programa": {"Administración de Empresas": {"docencia": 219.25, "investigacion": 60.75, "extension": 24.0, "apoyo_admin": 116.0, "diplomado": 0.0, "cualificacion": 20.0, "num_docentes": 12, "horas_totales": 440.0, "porcentajes": {"docencia": 49.83, "investigacion": 13.81, "extension": 5.45, "apoyo_admin": 26.36, "diplomado": 0.0, "cualificacion": 4.55}, "pct_doc_cm": 0.4983, "pct_ext_cm": 0.0545, "pct_inv_cm": 0.1381, "pct_gestion_cm": 0.2636, "pct_otros_cm": 0.0455, "pct_total_cm": 1.0}, "Contaduría Pública": {"docencia": 186.25, "investigacion": 13.0, "extension": 12.25, "apoyo_admin": 128.45, "diplomado": 0.0, "cualificacion": 20.0, "num_docentes": 10, "horas_totales": 359.95, "porcentajes": {"docencia": 51.74, "investigacion": 3.61, "extension": 3.4, "apoyo_admin": 35.69, "diplomado": 0.0, "cualificacion": 5.56}, "pct_doc_cm": 0.5174, "pct_ext_cm": 0.034, "pct_inv_cm": 0.0361, "pct_gestion_cm": 0.3569, "pct_otros_cm": 0.0556, "pct_total_cm": 1.0}, "Fisioterapia Cali": {"docencia": 292.0, "investigacion": 57.0, "extension": 120.0, "apoyo_admin": 111.0, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 16, "horas_totales": 580.0, "porcentajes": {"docencia": 50.34, "investigacion": 9.83, "extension": 20.69, "apoyo_admin": 19.14, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.5034, "pct_ext_cm": 0.2069, "pct_inv_cm": 0.0983, "pct_gestion_cm": 0.1914, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}, "Fisioterapia Medellín": {"docencia": 636.5, "investigacion": 195.5, "extension": 169.0, "apoyo_admin": 219.0, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 32, "horas_totales": 1220.0, "porcentajes": {"docencia": 52.17, "investigacion": 16.02, "extension": 13.85, "apoyo_admin": 17.95, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.5217, "pct_ext_cm": 0.1385, "pct_inv_cm": 0.1602, "pct_gestion_cm": 0.1795, "pct_otros_cm": 0.0, "pct_total_cm": 0.9999}, "Fisioterapia Neiva": {"docencia": 435.0, "investigacion": 38.0, "extension": 207.5, "apoyo_admin": 118.5, "diplomado": 3.5, "cualificacion": 37.5, "num_docentes": 22, "horas_totales": 840.0, "porcentajes": {"docencia": 51.79, "investigacion": 4.52, "extension": 24.7, "apoyo_admin": 14.11, "diplomado": 0.42, "cualificacion": 4.46}, "pct_doc_cm": 0.5179, "pct_ext_cm": 0.247, "pct_inv_cm": 0.0452, "pct_gestion_cm": 0.1411, "pct_otros_cm": 0.0488, "pct_total_cm": 1.0}, "Fisioterapia Popayán": {"docencia": 269.5, "investigacion": 73.5, "extension": 144.5, "apoyo_admin": 172.5, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 19, "horas_totales": 660.0, "porcentajes": {"docencia": 40.83, "investigacion": 11.14, "extension": 21.89, "apoyo_admin": 26.14, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.4083, "pct_ext_cm": 0.2189, "pct_inv_cm": 0.1114, "pct_gestion_cm": 0.2614, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}, "Fonoaudiología Medellín": {"docencia": 169.0, "investigacion": 77.5, "extension": 88.0, "apoyo_admin": 125.5, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 12, "horas_totales": 460.0, "porcentajes": {"docencia": 36.74, "investigacion": 16.85, "extension": 19.13, "apoyo_admin": 27.28, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.3674, "pct_ext_cm": 0.1913, "pct_inv_cm": 0.1685, "pct_gestion_cm": 0.2728, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}, "Fonoaudiología Neiva": {"docencia": 149.0, "investigacion": 9.0, "extension": 86.5, "apoyo_admin": 42.0, "diplomado": 0.0, "cualificacion": 13.5, "num_docentes": 8, "horas_totales": 300.0, "porcentajes": {"docencia": 49.67, "investigacion": 3.0, "extension": 28.83, "apoyo_admin": 14.0, "diplomado": 0.0, "cualificacion": 4.5}, "pct_doc_cm": 0.4967, "pct_ext_cm": 0.2883, "pct_inv_cm": 0.03, "pct_gestion_cm": 0.14, "pct_otros_cm": 0.045, "pct_total_cm": 1.0}, "Fonoaudiología Popayán": {"docencia": 140.0, "investigacion": 12.5, "extension": 53.0, "apoyo_admin": 54.5, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 8, "horas_totales": 260.0, "porcentajes": {"docencia": 53.85, "investigacion": 4.81, "extension": 20.38, "apoyo_admin": 20.96, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.5385, "pct_ext_cm": 0.2038, "pct_inv_cm": 0.0481, "pct_gestion_cm": 0.2096, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}, "Ingeniería de Software": {"docencia": 217.0, "investigacion": 90.0, "extension": 15.0, "apoyo_admin": 78.0, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 11, "horas_totales": 400.0, "porcentajes": {"docencia": 54.25, "investigacion": 22.5, "extension": 3.75, "apoyo_admin": 19.5, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.5425, "pct_ext_cm": 0.0375, "pct_inv_cm": 0.225, "pct_gestion_cm": 0.195, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}, "Nutrición y Dietética Medellín": {"docencia": 79.5, "investigacion": 6.0, "extension": 6.5, "apoyo_admin": 20.0, "diplomado": 0.0, "cualificacion": 8.0, "num_docentes": 4, "horas_totales": 120.0, "porcentajes": {"docencia": 66.25, "investigacion": 5.0, "extension": 5.42, "apoyo_admin": 16.67, "diplomado": 0.0, "cualificacion": 6.67}, "pct_doc_cm": 0.6625, "pct_ext_cm": 0.0542, "pct_inv_cm": 0.05, "pct_gestion_cm": 0.1667, "pct_otros_cm": 0.0667, "pct_total_cm": 1.0001}, "Nutrición y dietética Popayán": {"docencia": 163.5, "investigacion": 17.0, "extension": 25.0, "apoyo_admin": 54.5, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 8, "horas_totales": 260.0, "porcentajes": {"docencia": 62.88, "investigacion": 6.54, "extension": 9.62, "apoyo_admin": 20.96, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.6288, "pct_ext_cm": 0.0962, "pct_inv_cm": 0.0654, "pct_gestion_cm": 0.2096, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}, "Psicología Medellín": {"docencia": 243.14999999999998, "investigacion": 108.0, "extension": 26.25, "apoyo_admin": 102.5, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 12, "horas_totales": 479.9, "porcentajes": {"docencia": 50.67, "investigacion": 22.5, "extension": 5.47, "apoyo_admin": 21.36, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.5067, "pct_ext_cm": 0.0547, "pct_inv_cm": 0.225, "pct_gestion_cm": 0.2136, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}, "Terapia ocupacional Medellín": {"docencia": 45.0, "investigacion": 0.0, "extension": 24.5, "apoyo_admin": 10.5, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 3, "horas_totales": 80.0, "porcentajes": {"docencia": 56.25, "investigacion": 0.0, "extension": 30.63, "apoyo_admin": 13.12, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.5625, "pct_ext_cm": 0.3063, "pct_inv_cm": 0.0, "pct_gestion_cm": 0.1313, "pct_otros_cm": 0.0, "pct_total_cm": 1.0001}}, "por_sede": {"Medellín": {"docencia": 1795.65, "investigacion": 550.75, "extension": 365.5, "apoyo_admin": 799.95, "diplomado": 0.0, "cualificacion": 48.0, "num_docentes": 96, "horas_totales": 3559.8499999999995, "porcentajes": {"docencia": 50.44, "investigacion": 15.47, "extension": 10.27, "apoyo_admin": 22.47, "diplomado": 0.0, "cualificacion": 1.35}, "pct_doc_cm": 0.5044, "pct_ext_cm": 0.1027, "pct_inv_cm": 0.1547, "pct_gestion_cm": 0.2247, "pct_otros_cm": 0.0135, "pct_total_cm": 1.0}, "Cali": {"docencia": 292.0, "investigacion": 57.0, "extension": 120.0, "apoyo_admin": 111.0, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 16, "horas_totales": 580.0, "porcentajes": {"docencia": 50.34, "investigacion": 9.83, "extension": 20.69, "apoyo_admin": 19.14, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.5034, "pct_ext_cm": 0.2069, "pct_inv_cm": 0.0983, "pct_gestion_cm": 0.1914, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}, "Neiva": {"docencia": 584.0, "investigacion": 47.0, "extension": 294.0, "apoyo_admin": 160.5, "diplomado": 3.5, "cualificacion": 51.0, "num_docentes": 30, "horas_totales": 1140.0, "porcentajes": {"docencia": 51.23, "investigacion": 4.12, "extension": 25.79, "apoyo_admin": 14.08, "diplomado": 0.31, "cualificacion": 4.47}, "pct_doc_cm": 0.5123, "pct_ext_cm": 0.2579, "pct_inv_cm": 0.0412, "pct_gestion_cm": 0.1408, "pct_otros_cm": 0.0478, "pct_total_cm": 1.0}, "Popayán": {"docencia": 573.0, "investigacion": 103.0, "extension": 222.5, "apoyo_admin": 281.5, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 35, "horas_totales": 1180.0, "porcentajes": {"docencia": 48.56, "investigacion": 8.73, "extension": 18.86, "apoyo_admin": 23.86, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.4856, "pct_ext_cm": 0.1886, "pct_inv_cm": 0.0873, "pct_gestion_cm": 0.2386, "pct_otros_cm": 0.0, "pct_total_cm": 1.0001}}}, "proporcion_pe": {"ideal": 35, "institucion": {"estudiantes": 3192, "profesores_actuales": 93.0, "relacion_pe": 34.32, "diferencia_profesores": -1.8}, "por_programa": {"Administración de Empresas": {"sede": "Medellín", "facultad": "Ciencias Empresariales", "estudiantes": 284, "profesores_actuales": 8.5, "relacion_pe": 33.41, "diferencia_profesores": -0.39}, "Contaduría Pública": {"sede": "Medellín", "facultad": "Ciencias Empresariales", "estudiantes": 229, "profesores_actuales": 5, "relacion_pe": 45.8, "diferencia_profesores": 1.54}, "Fisioterapia Cali": {"sede": "Cali", "facultad": "Ciencias de la Salud", "estudiantes": 187, "profesores_actuales": 8, "relacion_pe": 23.38, "diferencia_profesores": -2.66}, "Fisioterapia Medellín": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "estudiantes": 667, "profesores_actuales": 18, "relacion_pe": 37.06, "diferencia_profesores": 1.06}, "Fisioterapia Neiva": {"sede": "Neiva", "facultad": "Ciencias de la Salud", "estudiantes": 397, "profesores_actuales": 10.5, "relacion_pe": 37.81, "diferencia_profesores": 0.84}, "Fisioterapia Popayán": {"sede": "Popayán", "facultad": "Ciencias de la Salud", "estudiantes": 323, "profesores_actuales": 10.5, "relacion_pe": 30.76, "diferencia_profesores": -1.27}, "Fonoaudiología Medellín": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "estudiantes": 113, "profesores_actuales": 8.5, "relacion_pe": 13.29, "diferencia_profesores": -5.27}, "Fonoaudiología Neiva": {"sede": "Neiva", "facultad": "Ciencias de la Salud", "estudiantes": 132, "profesores_actuales": 4, "relacion_pe": 33, "diferencia_profesores": -0.23}, "Fonoaudiología Popayán": {"sede": "Popayán", "facultad": "Ciencias de la Salud", "estudiantes": 95, "profesores_actuales": 3, "relacion_pe": 31.67, "diferencia_profesores": -0.29}, "Ingeniería de Software": {"sede": "Medellín", "facultad": "Ingeniería", "estudiantes": 142, "profesores_actuales": 4, "relacion_pe": 35.5, "diferencia_profesores": 0.06}, "Nutrición y Dietética Medellín ": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "estudiantes": 127, "profesores_actuales": 1.5, "relacion_pe": 84.67, "diferencia_profesores": 2.13}, "Nutrición y dietética Popayán": {"sede": "Popayán", "facultad": "Ciencias de la Salud", "estudiantes": 244, "profesores_actuales": 3, "relacion_pe": 81.33, "diferencia_profesores": 3.97}, "Psicología Medellín": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "estudiantes": 197, "profesores_actuales": 7, "relacion_pe": 28.14, "diferencia_profesores": -1.37}, "Terapia ocupacional Medellín": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "estudiantes": 55, "profesores_actuales": 1.5, "relacion_pe": 36.67, "diferencia_profesores": 0.07}}, "por_facultad": {"Ciencias Empresariales": {"estudiantes": 513, "profesores_actuales": 13.5, "relacion_pe": 38.0, "diferencia_profesores": 1.16}, "Ciencias de la Salud": {"estudiantes": 2537, "profesores_actuales": 75.5, "relacion_pe": 33.6, "diferencia_profesores": -3.01}, "Ingeniería": {"estudiantes": 142, "profesores_actuales": 4, "relacion_pe": 35.5, "diferencia_profesores": 0.06}}, "por_sede": {"Medellín": {"estudiantes": 1814, "profesores_actuales": 54.0, "relacion_pe": 33.59, "diferencia_profesores": -2.17}, "Cali": {"estudiantes": 187, "profesores_actuales": 8, "relacion_pe": 23.38, "diferencia_profesores": -2.66}, "Neiva": {"estudiantes": 529, "profesores_actuales": 14.5, "relacion_pe": 36.48, "diferencia_profesores": 0.61}, "Popayán": {"estudiantes": 662, "profesores_actuales": 16.5, "relacion_pe": 40.12, "diferencia_profesores": 2.41}}}, "practicas": {"total_estudiantes": 840, "salud_estudiantes": 764, "no_salud_estudiantes": 76, "horas_requeridas": 2941.0, "por_programa": {"Administración de Empresas": {"sede": "Medellín", "facultad": "Ciencias Empresariales", "es_salud": false, "estudiantes": 44, "horas_requeridas": 44.0}, "Contaduría Pública": {"sede": "Medellín", "facultad": "Ciencias Empresariales", "es_salud": false, "estudiantes": 24, "horas_requeridas": 24.0}, "Fisioterapia Medellín": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 190, "horas_requeridas": 712.5}, "Fisioterapia Cali": {"sede": "Cali", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 80, "horas_requeridas": 300.0}, "Fisioterapia Neiva": {"sede": "Neiva", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 144, "horas_requeridas": 540.0}, "Fisioterapia Popayán": {"sede": "Popayán", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 106, "horas_requeridas": 397.5}, "Fonoaudiología Medellín": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 41, "horas_requeridas": 153.8}, "Fonoaudiología Neiva": {"sede": "Neiva", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 67, "horas_requeridas": 251.2}, "Fonoaudiología Popayán": {"sede": "Popayán", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 50, "horas_requeridas": 187.5}, "Ingeniería de Software": {"sede": "Medellín", "facultad": "Ingeniería", "es_salud": false, "estudiantes": 8, "horas_requeridas": 8.0}, "Nutrición y Dietetica Popayán": {"sede": "Popayán", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 33, "horas_requeridas": 123.8}, "Psicología": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 36, "horas_requeridas": 135.0}, "Terapia Ocupacional": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 17, "horas_requeridas": 63.8}}, "por_facultad": {"Ciencias Empresariales": {"estudiantes": 68, "horas_requeridas": 68.0, "pct_estudiantes": 8.1}, "Ciencias de la Salud": {"estudiantes": 764, "horas_requeridas": 2865.0, "pct_estudiantes": 90.95}, "Ingeniería": {"estudiantes": 8, "horas_requeridas": 8.0, "pct_estudiantes": 0.95}}}}}};
+const DATA = {"generado": true, "periodos": {"2026-1": {"funciones_misionales": {"institucion": {"docencia": 3367.0, "investigacion": 737.5, "extension": 973.0, "apoyo_admin": 1173.25, "diplomado": 0.0, "cualificacion": 62.25, "num_docentes": 189, "horas_totales": 6313.0, "porcentajes": {"docencia": 53.33, "investigacion": 11.68, "extension": 15.41, "apoyo_admin": 18.58, "diplomado": 0.0, "cualificacion": 0.99}, "pct_doc_cm": 0.5333, "pct_ext_cm": 0.1541, "pct_inv_cm": 0.1168, "pct_gestion_cm": 0.1858, "pct_otros_cm": 0.0099, "pct_total_cm": 0.9999}, "por_facultad": {"Ciencias de la salud": {"docencia": 2716.5, "investigacion": 582.5, "extension": 869.0, "apoyo_admin": 954.0, "diplomado": 0.0, "cualificacion": 30.0, "num_docentes": 154, "horas_totales": 5152.0, "porcentajes": {"docencia": 52.73, "investigacion": 11.31, "extension": 16.87, "apoyo_admin": 18.52, "diplomado": 0.0, "cualificacion": 0.58}, "pct_doc_cm": 0.5273, "pct_ext_cm": 0.1687, "pct_inv_cm": 0.1131, "pct_gestion_cm": 0.1852, "pct_otros_cm": 0.0058, "pct_total_cm": 1.0001}, "Ciencias empresariales": {"docencia": 438.75, "investigacion": 94.5, "extension": 75.0, "apoyo_admin": 120.5, "diplomado": 0.0, "cualificacion": 32.25, "num_docentes": 24, "horas_totales": 761.0, "porcentajes": {"docencia": 57.65, "investigacion": 12.42, "extension": 9.86, "apoyo_admin": 15.83, "diplomado": 0.0, "cualificacion": 4.24}, "pct_doc_cm": 0.5765, "pct_ext_cm": 0.0986, "pct_inv_cm": 0.1242, "pct_gestion_cm": 0.1583, "pct_otros_cm": 0.0424, "pct_total_cm": 1.0}, "Ingenieria": {"docencia": 211.75, "investigacion": 60.5, "extension": 29.0, "apoyo_admin": 98.75, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 11, "horas_totales": 400.0, "porcentajes": {"docencia": 52.94, "investigacion": 15.12, "extension": 7.25, "apoyo_admin": 24.69, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.5294, "pct_ext_cm": 0.0725, "pct_inv_cm": 0.1512, "pct_gestion_cm": 0.2469, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}}, "por_programa": {"Fonoaudiología Popayán": {"docencia": 148.5, "investigacion": 10.5, "extension": 76.5, "apoyo_admin": 44.5, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 8, "horas_totales": 280.0, "porcentajes": {"docencia": 53.04, "investigacion": 3.75, "extension": 27.32, "apoyo_admin": 15.89, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.5304, "pct_ext_cm": 0.2732, "pct_inv_cm": 0.0375, "pct_gestion_cm": 0.1589, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}, "Administración de Empresas": {"docencia": 232.0, "investigacion": 79.0, "extension": 35.0, "apoyo_admin": 31.0, "diplomado": 0.0, "cualificacion": 17.0, "num_docentes": 13, "horas_totales": 394.0, "porcentajes": {"docencia": 58.88, "investigacion": 20.05, "extension": 8.88, "apoyo_admin": 7.87, "diplomado": 0.0, "cualificacion": 4.31}, "pct_doc_cm": 0.5888, "pct_ext_cm": 0.0888, "pct_inv_cm": 0.2005, "pct_gestion_cm": 0.0787, "pct_otros_cm": 0.0431, "pct_total_cm": 0.9999}, "Contaduría Pública": {"docencia": 206.75, "investigacion": 15.5, "extension": 40.0, "apoyo_admin": 89.5, "diplomado": 0.0, "cualificacion": 15.25, "num_docentes": 11, "horas_totales": 367.0, "porcentajes": {"docencia": 56.34, "investigacion": 4.22, "extension": 10.9, "apoyo_admin": 24.39, "diplomado": 0.0, "cualificacion": 4.16}, "pct_doc_cm": 0.5634, "pct_ext_cm": 0.109, "pct_inv_cm": 0.0422, "pct_gestion_cm": 0.2439, "pct_otros_cm": 0.0416, "pct_total_cm": 1.0001}, "Ingeniería de Software": {"docencia": 211.75, "investigacion": 60.5, "extension": 29.0, "apoyo_admin": 98.75, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 11, "horas_totales": 400.0, "porcentajes": {"docencia": 52.94, "investigacion": 15.12, "extension": 7.25, "apoyo_admin": 24.69, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.5294, "pct_ext_cm": 0.0725, "pct_inv_cm": 0.1512, "pct_gestion_cm": 0.2469, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}, "Fisioterapia Cali": {"docencia": 288.0, "investigacion": 65.5, "extension": 107.0, "apoyo_admin": 119.5, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 17, "horas_totales": 580.0, "porcentajes": {"docencia": 49.66, "investigacion": 11.29, "extension": 18.45, "apoyo_admin": 20.6, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.4966, "pct_ext_cm": 0.1845, "pct_inv_cm": 0.1129, "pct_gestion_cm": 0.206, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}, "Fisioterapia Medellín": {"docencia": 567.75, "investigacion": 184.0, "extension": 284.75, "apoyo_admin": 177.5, "diplomado": 0.0, "cualificacion": 10.0, "num_docentes": 33, "horas_totales": 1224.0, "porcentajes": {"docencia": 46.38, "investigacion": 15.03, "extension": 23.26, "apoyo_admin": 14.5, "diplomado": 0.0, "cualificacion": 0.82}, "pct_doc_cm": 0.4638, "pct_ext_cm": 0.2326, "pct_inv_cm": 0.1503, "pct_gestion_cm": 0.145, "pct_otros_cm": 0.0082, "pct_total_cm": 0.9999}, "Fisioterapia Neiva": {"docencia": 549.0, "investigacion": 52.0, "extension": 22.5, "apoyo_admin": 130.5, "diplomado": 0.0, "cualificacion": 20.0, "num_docentes": 23, "horas_totales": 774.0, "porcentajes": {"docencia": 70.93, "investigacion": 6.72, "extension": 2.91, "apoyo_admin": 16.86, "diplomado": 0.0, "cualificacion": 2.58}, "pct_doc_cm": 0.7093, "pct_ext_cm": 0.0291, "pct_inv_cm": 0.0672, "pct_gestion_cm": 0.1686, "pct_otros_cm": 0.0258, "pct_total_cm": 1.0}, "Fisioterapia Popayán": {"docencia": 332.5, "investigacion": 76.5, "extension": 123.0, "apoyo_admin": 154.0, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 20, "horas_totales": 686.0, "porcentajes": {"docencia": 48.47, "investigacion": 11.15, "extension": 17.93, "apoyo_admin": 22.45, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.4847, "pct_ext_cm": 0.1793, "pct_inv_cm": 0.1115, "pct_gestion_cm": 0.2245, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}, "Fonoaudiologia Medellin": {"docencia": 183.75, "investigacion": 75.0, "extension": 109.25, "apoyo_admin": 92.0, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 12, "horas_totales": 460.0, "porcentajes": {"docencia": 39.95, "investigacion": 16.3, "extension": 23.75, "apoyo_admin": 20.0, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.3995, "pct_ext_cm": 0.2375, "pct_inv_cm": 0.163, "pct_gestion_cm": 0.2, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}, "Fonoaudiología Neiva": {"docencia": 160.0, "investigacion": 4.0, "extension": 69.0, "apoyo_admin": 47.0, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 9, "horas_totales": 280.0, "porcentajes": {"docencia": 57.14, "investigacion": 1.43, "extension": 24.64, "apoyo_admin": 16.79, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.5714, "pct_ext_cm": 0.2464, "pct_inv_cm": 0.0143, "pct_gestion_cm": 0.1679, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}, "Nutrición y dietética Medellín": {"docencia": 70.0, "investigacion": 0.0, "extension": 5.5, "apoyo_admin": 34.5, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 6, "horas_totales": 110.0, "porcentajes": {"docencia": 63.64, "investigacion": 0.0, "extension": 5.0, "apoyo_admin": 31.36, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.6364, "pct_ext_cm": 0.05, "pct_inv_cm": 0.0, "pct_gestion_cm": 0.3136, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}, "Nutrición y dietética Popayán": {"docencia": 134.5, "investigacion": 18.0, "extension": 1.0, "apoyo_admin": 52.5, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 8, "horas_totales": 206.0, "porcentajes": {"docencia": 65.29, "investigacion": 8.74, "extension": 0.49, "apoyo_admin": 25.49, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.6529, "pct_ext_cm": 0.0049, "pct_inv_cm": 0.0874, "pct_gestion_cm": 0.2549, "pct_otros_cm": 0.0, "pct_total_cm": 1.0001}, "Psicología Medellín": {"docencia": 222.0, "investigacion": 87.0, "extension": 60.0, "apoyo_admin": 91.0, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 12, "horas_totales": 460.0, "porcentajes": {"docencia": 48.26, "investigacion": 18.91, "extension": 13.04, "apoyo_admin": 19.78, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.4826, "pct_ext_cm": 0.1304, "pct_inv_cm": 0.1891, "pct_gestion_cm": 0.1978, "pct_otros_cm": 0.0, "pct_total_cm": 0.9999}, "Terapia ocupacional": {"docencia": 60.5, "investigacion": 10.0, "extension": 10.5, "apoyo_admin": 11.0, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 6, "horas_totales": 92.0, "porcentajes": {"docencia": 65.76, "investigacion": 10.87, "extension": 11.41, "apoyo_admin": 11.96, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.6576, "pct_ext_cm": 0.1141, "pct_inv_cm": 0.1087, "pct_gestion_cm": 0.1196, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}}, "por_sede": {"Popayán": {"docencia": 615.5, "investigacion": 105.0, "extension": 200.5, "apoyo_admin": 251.0, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 36, "horas_totales": 1172.0, "porcentajes": {"docencia": 52.52, "investigacion": 8.96, "extension": 17.11, "apoyo_admin": 21.42, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.5252, "pct_ext_cm": 0.1711, "pct_inv_cm": 0.0896, "pct_gestion_cm": 0.2142, "pct_otros_cm": 0.0, "pct_total_cm": 1.0001}, "Medellín": {"docencia": 1754.5, "investigacion": 511.0, "extension": 574.0, "apoyo_admin": 625.25, "diplomado": 0.0, "cualificacion": 42.25, "num_docentes": 104, "horas_totales": 3507.0, "porcentajes": {"docencia": 50.03, "investigacion": 14.57, "extension": 16.37, "apoyo_admin": 17.83, "diplomado": 0.0, "cualificacion": 1.2}, "pct_doc_cm": 0.5003, "pct_ext_cm": 0.1637, "pct_inv_cm": 0.1457, "pct_gestion_cm": 0.1783, "pct_otros_cm": 0.012, "pct_total_cm": 1.0}, "Cali": {"docencia": 288.0, "investigacion": 65.5, "extension": 107.0, "apoyo_admin": 119.5, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 17, "horas_totales": 580.0, "porcentajes": {"docencia": 49.66, "investigacion": 11.29, "extension": 18.45, "apoyo_admin": 20.6, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.4966, "pct_ext_cm": 0.1845, "pct_inv_cm": 0.1129, "pct_gestion_cm": 0.206, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}, "Neiva": {"docencia": 709.0, "investigacion": 56.0, "extension": 91.5, "apoyo_admin": 177.5, "diplomado": 0.0, "cualificacion": 20.0, "num_docentes": 32, "horas_totales": 1054.0, "porcentajes": {"docencia": 67.27, "investigacion": 5.31, "extension": 8.68, "apoyo_admin": 16.84, "diplomado": 0.0, "cualificacion": 1.9}, "pct_doc_cm": 0.6727, "pct_ext_cm": 0.0868, "pct_inv_cm": 0.0531, "pct_gestion_cm": 0.1684, "pct_otros_cm": 0.019, "pct_total_cm": 1.0}}}, "cruce_facultades": {"institucion": {"horas_propio_programa": 5880.9, "horas_misma_facultad_otro_programa": 305.4, "horas_otra_facultad": 126.8, "pct_fuera_de_programa": 6.85}, "por_facultad": {"Ciencias de la salud": {"horas_propia_facultad": 5130.5, "horas_otra_facultad": 21.5, "horas_propio_programa": 4928.0, "destino": {"Ciencias de la salud": 5130.5, "Ciencias empresariales": 13.2, "Ingenieria": 8.2}, "pct_otra_facultad": 0.42}, "Ciencias empresariales": {"horas_propia_facultad": 712.5, "horas_otra_facultad": 48.5, "horas_propio_programa": 609.6, "destino": {"Ciencias empresariales": 712.5, "Ciencias de la salud": 44.2, "Ingenieria": 4.2}, "pct_otra_facultad": 6.37}, "Ingenieria": {"horas_propia_facultad": 343.2, "horas_otra_facultad": 56.8, "horas_propio_programa": 343.2, "destino": {"Ingenieria": 343.2, "Ciencias de la salud": 49.5, "Ciencias empresariales": 7.2}, "pct_otra_facultad": 14.2}}, "por_programa": {"Fonoaudiología Popayán": {"facultad": "Ciencias de la salud", "horas_propio_programa": 270.5, "horas_misma_facultad_otro_programa": 9.5, "horas_otra_facultad": 0.0, "destino": {"Nutrición y dietética Popayán": 7.0, "Fisioterapia Popayán": 2.5}, "pct_fuera_de_programa": 3.39}, "Administración de Empresas": {"facultad": "Ciencias empresariales", "horas_propio_programa": 294.9, "horas_misma_facultad_otro_programa": 65.4, "horas_otra_facultad": 33.8, "destino": {"Contaduría Pública": 65.4, "Fisioterapia Medellín": 20.5, "Fisioterapia Popayán": 5.0, "Fisioterapia Neiva": 2.2, "Psicología Medellín": 2.0, "Ingeniería de Software": 2.0, "Fisioterapia Cali": 1.0, "Fonoaudiologia Medellin": 1.0}, "pct_fuera_de_programa": 25.17}, "Contaduría Pública": {"facultad": "Ciencias empresariales", "horas_propio_programa": 314.8, "horas_misma_facultad_otro_programa": 37.5, "horas_otra_facultad": 14.8, "destino": {"Administración de Empresas": 37.5, "Psicología Medellín": 5.5, "Fisioterapia Medellín": 4.5, "Ingeniería de Software": 2.2, "Fisioterapia Popayán": 1.2, "Nutrición y dietética Popayán": 1.2}, "pct_fuera_de_programa": 14.25}, "Ingeniería de Software": {"facultad": "Ingenieria", "horas_propio_programa": 343.2, "horas_misma_facultad_otro_programa": 0.0, "horas_otra_facultad": 56.8, "destino": {"Fisioterapia Medellín": 30.5, "Nutrición y dietética Medellín": 9.2, "Psicología Medellín": 8.5, "Administración de Empresas": 4.2, "Contaduría Pública": 3.0, "Fisioterapia Popayán": 1.2}, "pct_fuera_de_programa": 14.2}, "Fisioterapia Cali": {"facultad": "Ciencias de la salud", "horas_propio_programa": 580.0, "horas_misma_facultad_otro_programa": 0.0, "horas_otra_facultad": 0.0, "destino": {}, "pct_fuera_de_programa": 0.0}, "Fisioterapia Medellín": {"facultad": "Ciencias de la salud", "horas_propio_programa": 1183.2, "horas_misma_facultad_otro_programa": 40.8, "horas_otra_facultad": 0.0, "destino": {"Psicología Medellín": 19.2, "Nutrición y dietética Medellín": 11.5, "Fonoaudiologia Medellin": 10.0}, "pct_fuera_de_programa": 3.33}, "Fisioterapia Neiva": {"facultad": "Ciencias de la salud", "horas_propio_programa": 764.0, "horas_misma_facultad_otro_programa": 10.0, "horas_otra_facultad": 0.0, "destino": {"Fonoaudiología Neiva": 10.0}, "pct_fuera_de_programa": 1.29}, "Fisioterapia Popayán": {"facultad": "Ciencias de la salud", "horas_propio_programa": 666.5, "horas_misma_facultad_otro_programa": 19.5, "horas_otra_facultad": 0.0, "destino": {"Nutrición y dietética Popayán": 19.5}, "pct_fuera_de_programa": 2.84}, "Fonoaudiologia Medellin": {"facultad": "Ciencias de la salud", "horas_propio_programa": 423.8, "horas_misma_facultad_otro_programa": 25.2, "horas_otra_facultad": 11.0, "destino": {"Fisioterapia Medellín": 12.0, "Nutrición y dietética Medellín": 9.5, "Administración de Empresas": 7.5, "Ingeniería de Software": 3.5, "Nutrición y dietética Popayán": 2.5, "Psicología Medellín": 1.2}, "pct_fuera_de_programa": 7.87}, "Fonoaudiología Neiva": {"facultad": "Ciencias de la salud", "horas_propio_programa": 276.0, "horas_misma_facultad_otro_programa": 4.0, "horas_otra_facultad": 0.0, "destino": {"Fisioterapia Neiva": 4.0}, "pct_fuera_de_programa": 1.43}, "Nutrición y dietética Medellín": {"facultad": "Ciencias de la salud", "horas_propio_programa": 98.5, "horas_misma_facultad_otro_programa": 11.5, "horas_otra_facultad": 0.0, "destino": {"Terapia ocupacional": 5.5, "Fisioterapia Medellín": 4.0, "Nutrición y dietética Popayán": 2.0}, "pct_fuera_de_programa": 10.45}, "Nutrición y dietética Popayán": {"facultad": "Ciencias de la salud", "horas_propio_programa": 179.0, "horas_misma_facultad_otro_programa": 27.0, "horas_otra_facultad": 0.0, "destino": {"Fisioterapia Popayán": 27.0}, "pct_fuera_de_programa": 13.11}, "Psicología Medellín": {"facultad": "Ciencias de la salud", "horas_propio_programa": 394.5, "horas_misma_facultad_otro_programa": 55.0, "horas_otra_facultad": 10.5, "destino": {"Fisioterapia Medellín": 30.5, "Fonoaudiologia Medellin": 8.0, "Nutrición y dietética Medellín": 7.0, "Ingeniería de Software": 4.8, "Terapia ocupacional": 3.5, "Contaduría Pública": 3.5, "Administración de Empresas": 2.2, "Nutrición y dietética Popayán": 2.0, "Fisioterapia Cali": 2.0, "Fisioterapia Popayán": 2.0}, "pct_fuera_de_programa": 14.24}, "Terapia ocupacional": {"facultad": "Ciencias de la salud", "horas_propio_programa": 92.0, "horas_misma_facultad_otro_programa": 0.0, "horas_otra_facultad": 0.0, "destino": {}, "pct_fuera_de_programa": 0.0}}}, "catalogo_programas": {"Fonoaudiología Popayán": {"facultad": "Ciencias de la salud", "sede": "Popayán"}, "Administración de Empresas": {"facultad": "Ciencias empresariales", "sede": "Medellín"}, "Contaduría Pública": {"facultad": "Ciencias empresariales", "sede": "Medellín"}, "Ingeniería de Software": {"facultad": "Ingenieria", "sede": "Medellín"}, "Fisioterapia Cali": {"facultad": "Ciencias de la salud", "sede": "Cali"}, "Fisioterapia Medellín": {"facultad": "Ciencias de la salud", "sede": "Medellín"}, "Fisioterapia Neiva": {"facultad": "Ciencias de la salud", "sede": "Neiva"}, "Fisioterapia Popayán": {"facultad": "Ciencias de la salud", "sede": "Popayán"}, "Fonoaudiologia Medellin": {"facultad": "Ciencias de la salud", "sede": "Medellín"}, "Fonoaudiología Neiva": {"facultad": "Ciencias de la salud", "sede": "Neiva"}, "Nutrición y dietética Medellín": {"facultad": "Ciencias de la salud", "sede": "Medellín"}, "Nutrición y dietética Popayán": {"facultad": "Ciencias de la salud", "sede": "Popayán"}, "Psicología Medellín": {"facultad": "Ciencias de la salud", "sede": "Medellín"}, "Terapia ocupacional": {"facultad": "Ciencias de la salud", "sede": "Medellín"}}, "proporcion_pe": {"ideal": 35, "institucion": {"estudiantes": 3263, "profesores_actuales": 94.5, "relacion_pe": 34.53, "diferencia_profesores": -1.27}, "por_programa": {"Administración de Empresas": {"sede": "Medellín", "facultad": "Ciencias Empresariales", "estudiantes": 330, "profesores_actuales": 8.5, "relacion_pe": 38.82, "diferencia_profesores": 0.93}, "Contaduría Pública": {"sede": "Medellín", "facultad": "Ciencias Empresariales", "estudiantes": 243, "profesores_actuales": 5, "relacion_pe": 48.6, "diferencia_profesores": 1.94}, "Fisioterapia Cali": {"sede": "Cali", "facultad": "Ciencias de la Salud", "estudiantes": 201, "profesores_actuales": 8, "relacion_pe": 25.12, "diferencia_profesores": -2.26}, "Fisioterapia Medellín": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "estudiantes": 656, "profesores_actuales": 18, "relacion_pe": 36.44, "diferencia_profesores": 0.74}, "Fisioterapia Neiva": {"sede": "Neiva", "facultad": "Ciencias de la Salud", "estudiantes": 392, "profesores_actuales": 11.5, "relacion_pe": 34.09, "diferencia_profesores": -0.3}, "Fisioterapia Popayán": {"sede": "Popayán", "facultad": "Ciencias de la Salud", "estudiantes": 340, "profesores_actuales": 10.5, "relacion_pe": 32.38, "diferencia_profesores": -0.79}, "Fonoaudiología Medellin ": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "estudiantes": 110, "profesores_actuales": 8.5, "relacion_pe": 12.94, "diferencia_profesores": -5.36}, "Fonoaudiología Neiva": {"sede": "Neiva", "facultad": "Ciencias de la Salud", "estudiantes": 160, "profesores_actuales": 4, "relacion_pe": 40, "diferencia_profesores": 0.57}, "Fonoaudiología Popayán": {"sede": "Popayán", "facultad": "Ciencias de la Salud", "estudiantes": 88, "profesores_actuales": 3, "relacion_pe": 29.33, "diferencia_profesores": -0.49}, "Ingeniería de Software": {"sede": "Medellín", "facultad": "Ingeniería", "estudiantes": 154, "profesores_actuales": 4, "relacion_pe": 38.5, "diferencia_profesores": 0.4}, "Nutrición y Dietética Medellín ": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "estudiantes": 113, "profesores_actuales": 2, "relacion_pe": 56.5, "diferencia_profesores": 1.23}, "Nutrición y dietética Popayán": {"sede": "Popayán", "facultad": "Ciencias de la Salud", "estudiantes": 224, "profesores_actuales": 3, "relacion_pe": 74.67, "diferencia_profesores": 3.4}, "Psicología Medellín": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "estudiantes": 203, "profesores_actuales": 7, "relacion_pe": 29, "diferencia_profesores": -1.2}, "Terapia ocupacional": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "estudiantes": 49, "profesores_actuales": 1.5, "relacion_pe": 32.67, "diferencia_profesores": -0.1}}, "por_facultad": {"Ciencias Empresariales": {"estudiantes": 573, "profesores_actuales": 13.5, "relacion_pe": 42.44, "diferencia_profesores": 2.87}, "Ciencias de la Salud": {"estudiantes": 2536, "profesores_actuales": 77.0, "relacion_pe": 32.94, "diferencia_profesores": -4.54}, "Ingeniería": {"estudiantes": 154, "profesores_actuales": 4, "relacion_pe": 38.5, "diferencia_profesores": 0.4}}, "por_sede": {"Medellín": {"estudiantes": 1858, "profesores_actuales": 54.5, "relacion_pe": 34.09, "diferencia_profesores": -1.41}, "Cali": {"estudiantes": 201, "profesores_actuales": 8, "relacion_pe": 25.12, "diferencia_profesores": -2.26}, "Neiva": {"estudiantes": 552, "profesores_actuales": 15.5, "relacion_pe": 35.61, "diferencia_profesores": 0.27}, "Popayán": {"estudiantes": 652, "profesores_actuales": 16.5, "relacion_pe": 39.52, "diferencia_profesores": 2.13}}}, "practicas": {"total_estudiantes": 776, "salud_estudiantes": 669, "no_salud_estudiantes": 107, "horas_requeridas": 2615.8, "por_programa": {"Administración de Empresas": {"sede": "Medellín", "facultad": "Ciencias Empresariales", "es_salud": false, "estudiantes": 65, "horas_requeridas": 65.0}, "Contaduría Pública": {"sede": "Medellín", "facultad": "Ciencias Empresariales", "es_salud": false, "estudiantes": 29, "horas_requeridas": 29.0}, "Fisioterapia Medellín": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 183, "horas_requeridas": 686.2}, "Fisioterapia Cali": {"sede": "Cali", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 71, "horas_requeridas": 266.2}, "Fisioterapia Neiva": {"sede": "Neiva", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 124, "horas_requeridas": 465.0}, "Fisioterapia Popayán": {"sede": "Popayán", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 107, "horas_requeridas": 401.2}, "Fonoaudiología Medellín": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 42, "horas_requeridas": 157.5}, "Fonoaudiología Neiva": {"sede": "Neiva", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 55, "horas_requeridas": 206.2}, "Fonoaudiología Popayán": {"sede": "Popayán", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 42, "horas_requeridas": 157.5}, "Ingeniería de Software": {"sede": "Medellín", "facultad": "Ingeniería", "es_salud": false, "estudiantes": 13, "horas_requeridas": 13.0}, "Nutrición y Dietetica Popayán": {"sede": "Popayán", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 0, "horas_requeridas": 0.0}, "Psicología": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 39, "horas_requeridas": 146.2}, "Terapia Ocupacional": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 6, "horas_requeridas": 22.5}}, "por_facultad": {"Ciencias Empresariales": {"estudiantes": 94, "horas_requeridas": 94.0, "pct_estudiantes": 12.11}, "Ciencias de la Salud": {"estudiantes": 669, "horas_requeridas": 2508.8, "pct_estudiantes": 86.21}, "Ingeniería": {"estudiantes": 13, "horas_requeridas": 13.0, "pct_estudiantes": 1.68}}, "por_sede": {"Medellín": {"estudiantes": 377, "horas_requeridas": 1119.5, "pct_estudiantes": 48.58}, "Cali": {"estudiantes": 71, "horas_requeridas": 266.2, "pct_estudiantes": 9.15}, "Neiva": {"estudiantes": 179, "horas_requeridas": 671.2, "pct_estudiantes": 23.07}, "Popayán": {"estudiantes": 149, "horas_requeridas": 558.8, "pct_estudiantes": 19.2}}}}, "2026-2": {"funciones_misionales": {"institucion": {"docencia": 3244.6499999999996, "investigacion": 757.75, "extension": 1002.0, "apoyo_admin": 1352.95, "diplomado": 3.5, "cualificacion": 99.0, "num_docentes": 177, "horas_totales": 6459.849999999999, "porcentajes": {"docencia": 50.23, "investigacion": 11.73, "extension": 15.51, "apoyo_admin": 20.94, "diplomado": 0.05, "cualificacion": 1.53}, "pct_doc_cm": 0.5023, "pct_ext_cm": 0.1551, "pct_inv_cm": 0.1173, "pct_gestion_cm": 0.2094, "pct_otros_cm": 0.0159, "pct_total_cm": 1.0}, "por_facultad": {"Ciencias empresariales": {"docencia": 405.5, "investigacion": 73.75, "extension": 36.25, "apoyo_admin": 244.45, "diplomado": 0.0, "cualificacion": 40.0, "num_docentes": 22, "horas_totales": 799.95, "porcentajes": {"docencia": 50.69, "investigacion": 9.22, "extension": 4.53, "apoyo_admin": 30.56, "diplomado": 0.0, "cualificacion": 5.0}, "pct_doc_cm": 0.5069, "pct_ext_cm": 0.0453, "pct_inv_cm": 0.0922, "pct_gestion_cm": 0.3056, "pct_otros_cm": 0.05, "pct_total_cm": 1.0}, "Ciencias de la salud": {"docencia": 2622.1499999999996, "investigacion": 594.0, "extension": 950.75, "apoyo_admin": 1030.5, "diplomado": 3.5, "cualificacion": 59.0, "num_docentes": 144, "horas_totales": 5259.9, "porcentajes": {"docencia": 49.85, "investigacion": 11.29, "extension": 18.08, "apoyo_admin": 19.59, "diplomado": 0.07, "cualificacion": 1.12}, "pct_doc_cm": 0.4985, "pct_ext_cm": 0.1808, "pct_inv_cm": 0.1129, "pct_gestion_cm": 0.1959, "pct_otros_cm": 0.0119, "pct_total_cm": 1.0}, "Ingenieria": {"docencia": 217.0, "investigacion": 90.0, "extension": 15.0, "apoyo_admin": 78.0, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 11, "horas_totales": 400.0, "porcentajes": {"docencia": 54.25, "investigacion": 22.5, "extension": 3.75, "apoyo_admin": 19.5, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.5425, "pct_ext_cm": 0.0375, "pct_inv_cm": 0.225, "pct_gestion_cm": 0.195, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}}, "por_programa": {"Administración de Empresas": {"docencia": 219.25, "investigacion": 60.75, "extension": 24.0, "apoyo_admin": 116.0, "diplomado": 0.0, "cualificacion": 20.0, "num_docentes": 12, "horas_totales": 440.0, "porcentajes": {"docencia": 49.83, "investigacion": 13.81, "extension": 5.45, "apoyo_admin": 26.36, "diplomado": 0.0, "cualificacion": 4.55}, "pct_doc_cm": 0.4983, "pct_ext_cm": 0.0545, "pct_inv_cm": 0.1381, "pct_gestion_cm": 0.2636, "pct_otros_cm": 0.0455, "pct_total_cm": 1.0}, "Contaduría Pública": {"docencia": 186.25, "investigacion": 13.0, "extension": 12.25, "apoyo_admin": 128.45, "diplomado": 0.0, "cualificacion": 20.0, "num_docentes": 10, "horas_totales": 359.95, "porcentajes": {"docencia": 51.74, "investigacion": 3.61, "extension": 3.4, "apoyo_admin": 35.69, "diplomado": 0.0, "cualificacion": 5.56}, "pct_doc_cm": 0.5174, "pct_ext_cm": 0.034, "pct_inv_cm": 0.0361, "pct_gestion_cm": 0.3569, "pct_otros_cm": 0.0556, "pct_total_cm": 1.0}, "Fisioterapia Cali": {"docencia": 292.0, "investigacion": 57.0, "extension": 120.0, "apoyo_admin": 111.0, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 16, "horas_totales": 580.0, "porcentajes": {"docencia": 50.34, "investigacion": 9.83, "extension": 20.69, "apoyo_admin": 19.14, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.5034, "pct_ext_cm": 0.2069, "pct_inv_cm": 0.0983, "pct_gestion_cm": 0.1914, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}, "Fisioterapia Medellín": {"docencia": 636.5, "investigacion": 195.5, "extension": 169.0, "apoyo_admin": 219.0, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 32, "horas_totales": 1220.0, "porcentajes": {"docencia": 52.17, "investigacion": 16.02, "extension": 13.85, "apoyo_admin": 17.95, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.5217, "pct_ext_cm": 0.1385, "pct_inv_cm": 0.1602, "pct_gestion_cm": 0.1795, "pct_otros_cm": 0.0, "pct_total_cm": 0.9999}, "Fisioterapia Neiva": {"docencia": 435.0, "investigacion": 38.0, "extension": 207.5, "apoyo_admin": 118.5, "diplomado": 3.5, "cualificacion": 37.5, "num_docentes": 22, "horas_totales": 840.0, "porcentajes": {"docencia": 51.79, "investigacion": 4.52, "extension": 24.7, "apoyo_admin": 14.11, "diplomado": 0.42, "cualificacion": 4.46}, "pct_doc_cm": 0.5179, "pct_ext_cm": 0.247, "pct_inv_cm": 0.0452, "pct_gestion_cm": 0.1411, "pct_otros_cm": 0.0488, "pct_total_cm": 1.0}, "Fisioterapia Popayán": {"docencia": 269.5, "investigacion": 73.5, "extension": 144.5, "apoyo_admin": 172.5, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 19, "horas_totales": 660.0, "porcentajes": {"docencia": 40.83, "investigacion": 11.14, "extension": 21.89, "apoyo_admin": 26.14, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.4083, "pct_ext_cm": 0.2189, "pct_inv_cm": 0.1114, "pct_gestion_cm": 0.2614, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}, "Fonoaudiología Medellín": {"docencia": 169.0, "investigacion": 77.5, "extension": 88.0, "apoyo_admin": 125.5, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 12, "horas_totales": 460.0, "porcentajes": {"docencia": 36.74, "investigacion": 16.85, "extension": 19.13, "apoyo_admin": 27.28, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.3674, "pct_ext_cm": 0.1913, "pct_inv_cm": 0.1685, "pct_gestion_cm": 0.2728, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}, "Fonoaudiología Neiva": {"docencia": 149.0, "investigacion": 9.0, "extension": 86.5, "apoyo_admin": 42.0, "diplomado": 0.0, "cualificacion": 13.5, "num_docentes": 8, "horas_totales": 300.0, "porcentajes": {"docencia": 49.67, "investigacion": 3.0, "extension": 28.83, "apoyo_admin": 14.0, "diplomado": 0.0, "cualificacion": 4.5}, "pct_doc_cm": 0.4967, "pct_ext_cm": 0.2883, "pct_inv_cm": 0.03, "pct_gestion_cm": 0.14, "pct_otros_cm": 0.045, "pct_total_cm": 1.0}, "Fonoaudiología Popayán": {"docencia": 140.0, "investigacion": 12.5, "extension": 53.0, "apoyo_admin": 54.5, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 8, "horas_totales": 260.0, "porcentajes": {"docencia": 53.85, "investigacion": 4.81, "extension": 20.38, "apoyo_admin": 20.96, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.5385, "pct_ext_cm": 0.2038, "pct_inv_cm": 0.0481, "pct_gestion_cm": 0.2096, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}, "Ingeniería de Software": {"docencia": 217.0, "investigacion": 90.0, "extension": 15.0, "apoyo_admin": 78.0, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 11, "horas_totales": 400.0, "porcentajes": {"docencia": 54.25, "investigacion": 22.5, "extension": 3.75, "apoyo_admin": 19.5, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.5425, "pct_ext_cm": 0.0375, "pct_inv_cm": 0.225, "pct_gestion_cm": 0.195, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}, "Nutrición y Dietética Medellín": {"docencia": 79.5, "investigacion": 6.0, "extension": 6.5, "apoyo_admin": 20.0, "diplomado": 0.0, "cualificacion": 8.0, "num_docentes": 4, "horas_totales": 120.0, "porcentajes": {"docencia": 66.25, "investigacion": 5.0, "extension": 5.42, "apoyo_admin": 16.67, "diplomado": 0.0, "cualificacion": 6.67}, "pct_doc_cm": 0.6625, "pct_ext_cm": 0.0542, "pct_inv_cm": 0.05, "pct_gestion_cm": 0.1667, "pct_otros_cm": 0.0667, "pct_total_cm": 1.0001}, "Nutrición y dietética Popayán": {"docencia": 163.5, "investigacion": 17.0, "extension": 25.0, "apoyo_admin": 54.5, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 8, "horas_totales": 260.0, "porcentajes": {"docencia": 62.88, "investigacion": 6.54, "extension": 9.62, "apoyo_admin": 20.96, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.6288, "pct_ext_cm": 0.0962, "pct_inv_cm": 0.0654, "pct_gestion_cm": 0.2096, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}, "Psicología Medellín": {"docencia": 243.14999999999998, "investigacion": 108.0, "extension": 26.25, "apoyo_admin": 102.5, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 12, "horas_totales": 479.9, "porcentajes": {"docencia": 50.67, "investigacion": 22.5, "extension": 5.47, "apoyo_admin": 21.36, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.5067, "pct_ext_cm": 0.0547, "pct_inv_cm": 0.225, "pct_gestion_cm": 0.2136, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}, "Terapia ocupacional Medellín": {"docencia": 45.0, "investigacion": 0.0, "extension": 24.5, "apoyo_admin": 10.5, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 3, "horas_totales": 80.0, "porcentajes": {"docencia": 56.25, "investigacion": 0.0, "extension": 30.63, "apoyo_admin": 13.12, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.5625, "pct_ext_cm": 0.3063, "pct_inv_cm": 0.0, "pct_gestion_cm": 0.1313, "pct_otros_cm": 0.0, "pct_total_cm": 1.0001}}, "por_sede": {"Medellín": {"docencia": 1795.65, "investigacion": 550.75, "extension": 365.5, "apoyo_admin": 799.95, "diplomado": 0.0, "cualificacion": 48.0, "num_docentes": 96, "horas_totales": 3559.8499999999995, "porcentajes": {"docencia": 50.44, "investigacion": 15.47, "extension": 10.27, "apoyo_admin": 22.47, "diplomado": 0.0, "cualificacion": 1.35}, "pct_doc_cm": 0.5044, "pct_ext_cm": 0.1027, "pct_inv_cm": 0.1547, "pct_gestion_cm": 0.2247, "pct_otros_cm": 0.0135, "pct_total_cm": 1.0}, "Cali": {"docencia": 292.0, "investigacion": 57.0, "extension": 120.0, "apoyo_admin": 111.0, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 16, "horas_totales": 580.0, "porcentajes": {"docencia": 50.34, "investigacion": 9.83, "extension": 20.69, "apoyo_admin": 19.14, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.5034, "pct_ext_cm": 0.2069, "pct_inv_cm": 0.0983, "pct_gestion_cm": 0.1914, "pct_otros_cm": 0.0, "pct_total_cm": 1.0}, "Neiva": {"docencia": 584.0, "investigacion": 47.0, "extension": 294.0, "apoyo_admin": 160.5, "diplomado": 3.5, "cualificacion": 51.0, "num_docentes": 30, "horas_totales": 1140.0, "porcentajes": {"docencia": 51.23, "investigacion": 4.12, "extension": 25.79, "apoyo_admin": 14.08, "diplomado": 0.31, "cualificacion": 4.47}, "pct_doc_cm": 0.5123, "pct_ext_cm": 0.2579, "pct_inv_cm": 0.0412, "pct_gestion_cm": 0.1408, "pct_otros_cm": 0.0478, "pct_total_cm": 1.0}, "Popayán": {"docencia": 573.0, "investigacion": 103.0, "extension": 222.5, "apoyo_admin": 281.5, "diplomado": 0.0, "cualificacion": 0.0, "num_docentes": 35, "horas_totales": 1180.0, "porcentajes": {"docencia": 48.56, "investigacion": 8.73, "extension": 18.86, "apoyo_admin": 23.86, "diplomado": 0.0, "cualificacion": 0.0}, "pct_doc_cm": 0.4856, "pct_ext_cm": 0.1886, "pct_inv_cm": 0.0873, "pct_gestion_cm": 0.2386, "pct_otros_cm": 0.0, "pct_total_cm": 1.0001}}}, "cruce_facultades": {"institucion": {"horas_propio_programa": 5914.0, "horas_misma_facultad_otro_programa": 343.9, "horas_otra_facultad": 202.0, "pct_fuera_de_programa": 8.45}, "por_facultad": {"Ciencias empresariales": {"horas_propia_facultad": 668.0, "horas_otra_facultad": 132.0, "horas_propio_programa": 496.0, "destino": {"Ciencias empresariales": 668.0, "Ciencias de la salud": 96.8, "Ingenieria": 31.2, "Otros (apoyo, idiomas, especializaciones)": 4.0}, "pct_otra_facultad": 16.5}, "Ciencias de la salud": {"horas_propia_facultad": 5245.6, "horas_otra_facultad": 14.2, "horas_propio_programa": 5073.8, "destino": {"Ciencias de la salud": 5245.6, "Ciencias empresariales": 14.2}, "pct_otra_facultad": 0.27}, "Ingenieria": {"horas_propia_facultad": 344.2, "horas_otra_facultad": 55.8, "horas_propio_programa": 344.2, "destino": {"Ingenieria": 344.2, "Ciencias de la salud": 42.5, "Ciencias empresariales": 13.2}, "pct_otra_facultad": 13.95}}, "por_programa": {"Administración de Empresas": {"facultad": "Ciencias empresariales", "horas_propio_programa": 230.5, "horas_misma_facultad_otro_programa": 99.2, "horas_otra_facultad": 110.2, "destino": {"Contaduría Pública": 99.2, "Fisioterapia Medellín": 41.2, "Ingeniería de Software": 17.0, "Psicología Medellín": 11.8, "Fisioterapia Popayán": 6.8, "Terapia ocupacional Medellín": 6.8, "Fonoaudiología Medellín": 6.0, "Fisioterapia Neiva": 4.0, "Nutrición y Dietética Medellín": 3.8, "Fisioterapia Cali": 3.0, "Fonoaudiologia Cali": 2.0, "Fonoaudiología Neiva": 2.0, "Fonoaudiología Popayán": 2.0, "Nutrición y dietética Popayán": 2.0, "Esp. Salud Y Seguridad En El Trabajo": 1.0, "Esp. Aipi": 1.0}, "pct_fuera_de_programa": 47.6}, "Contaduría Pública": {"facultad": "Ciencias empresariales", "horas_propio_programa": 265.4, "horas_misma_facultad_otro_programa": 72.8, "horas_otra_facultad": 21.8, "destino": {"Administración de Empresas": 72.8, "Ingeniería de Software": 14.2, "Fisioterapia Popayán": 3.8, "Nutrición y dietética Popayán": 2.5, "Fisioterapia Medellín": 1.2}, "pct_fuera_de_programa": 26.28}, "Fisioterapia Cali": {"facultad": "Ciencias de la salud", "horas_propio_programa": 580.0, "horas_misma_facultad_otro_programa": 0.0, "horas_otra_facultad": 0.0, "destino": {}, "pct_fuera_de_programa": 0.0}, "Fisioterapia Medellín": {"facultad": "Ciencias de la salud", "horas_propio_programa": 1169.5, "horas_misma_facultad_otro_programa": 50.5, "horas_otra_facultad": 0.0, "destino": {"Psicología Medellín": 19.5, "Nutrición y Dietética Medellín": 18.5, "Fonoaudiología Medellín": 12.5}, "pct_fuera_de_programa": 4.14}, "Fisioterapia Neiva": {"facultad": "Ciencias de la salud", "horas_propio_programa": 799.5, "horas_misma_facultad_otro_programa": 40.5, "horas_otra_facultad": 0.0, "destino": {"Fonoaudiología Neiva": 40.5}, "pct_fuera_de_programa": 4.82}, "Fisioterapia Popayán": {"facultad": "Ciencias de la salud", "horas_propio_programa": 660.0, "horas_misma_facultad_otro_programa": 0.0, "horas_otra_facultad": 0.0, "destino": {}, "pct_fuera_de_programa": 0.0}, "Fonoaudiología Medellín": {"facultad": "Ciencias de la salud", "horas_propio_programa": 424.5, "horas_misma_facultad_otro_programa": 27.2, "horas_otra_facultad": 8.2, "destino": {"Fisioterapia Medellín": 12.0, "Nutrición y Dietética Medellín": 9.5, "Administración de Empresas": 8.2, "Fonoaudiología Neiva": 3.0, "Psicología Medellín": 1.5, "Fisioterapia Cali": 1.2}, "pct_fuera_de_programa": 7.7}, "Fonoaudiología Neiva": {"facultad": "Ciencias de la salud", "horas_propio_programa": 294.0, "horas_misma_facultad_otro_programa": 6.0, "horas_otra_facultad": 0.0, "destino": {"Fisioterapia Neiva": 6.0}, "pct_fuera_de_programa": 2.0}, "Fonoaudiología Popayán": {"facultad": "Ciencias de la salud", "horas_propio_programa": 260.0, "horas_misma_facultad_otro_programa": 0.0, "horas_otra_facultad": 0.0, "destino": {}, "pct_fuera_de_programa": 0.0}, "Ingeniería de Software": {"facultad": "Ingenieria", "horas_propio_programa": 344.2, "horas_misma_facultad_otro_programa": 0.0, "horas_otra_facultad": 55.8, "destino": {"Fisioterapia Medellín": 27.0, "Psicología Medellín": 8.5, "Nutrición y Dietética Medellín": 7.0, "Contaduría Pública": 7.0, "Administración de Empresas": 6.2}, "pct_fuera_de_programa": 13.95}, "Nutrición y Dietética Medellín": {"facultad": "Ciencias de la salud", "horas_propio_programa": 120.0, "horas_misma_facultad_otro_programa": 0.0, "horas_otra_facultad": 0.0, "destino": {}, "pct_fuera_de_programa": 0.0}, "Nutrición y dietética Popayán": {"facultad": "Ciencias de la salud", "horas_propio_programa": 260.0, "horas_misma_facultad_otro_programa": 0.0, "horas_otra_facultad": 0.0, "destino": {}, "pct_fuera_de_programa": 0.0}, "Psicología Medellín": {"facultad": "Ciencias de la salud", "horas_propio_programa": 426.2, "horas_misma_facultad_otro_programa": 47.6, "horas_otra_facultad": 6.0, "destino": {"Fisioterapia Medellín": 31.7, "Terapia ocupacional Medellín": 12.4, "Administración de Empresas": 6.0, "Nutrición y Dietética Medellín": 3.5}, "pct_fuera_de_programa": 11.17}, "Terapia ocupacional Medellín": {"facultad": "Ciencias de la salud", "horas_propio_programa": 80.0, "horas_misma_facultad_otro_programa": 0.0, "horas_otra_facultad": 0.0, "destino": {}, "pct_fuera_de_programa": 0.0}}}, "catalogo_programas": {"Administración de Empresas": {"facultad": "Ciencias empresariales", "sede": "Medellín"}, "Contaduría Pública": {"facultad": "Ciencias empresariales", "sede": "Medellín"}, "Fisioterapia Cali": {"facultad": "Ciencias de la salud", "sede": "Cali"}, "Fisioterapia Medellín": {"facultad": "Ciencias de la salud", "sede": "Medellín"}, "Fisioterapia Neiva": {"facultad": "Ciencias de la salud", "sede": "Neiva"}, "Fisioterapia Popayán": {"facultad": "Ciencias de la salud", "sede": "Popayán"}, "Fonoaudiología Medellín": {"facultad": "Ciencias de la salud", "sede": "Medellín"}, "Fonoaudiología Neiva": {"facultad": "Ciencias de la salud", "sede": "Neiva"}, "Fonoaudiología Popayán": {"facultad": "Ciencias de la salud", "sede": "Popayán"}, "Ingeniería de Software": {"facultad": "Ingenieria", "sede": "Medellín"}, "Nutrición y Dietética Medellín": {"facultad": "Ciencias de la salud", "sede": "Medellín"}, "Nutrición y dietética Popayán": {"facultad": "Ciencias de la salud", "sede": "Popayán"}, "Psicología Medellín": {"facultad": "Ciencias de la salud", "sede": "Medellín"}, "Terapia ocupacional Medellín": {"facultad": "Ciencias de la salud", "sede": "Medellín"}}, "proporcion_pe": {"ideal": 35, "institucion": {"estudiantes": 3353, "profesores_actuales": 94.5, "relacion_pe": 35.48, "diferencia_profesores": 1.3}, "por_programa": {"Administración de Empresas": {"sede": "Medellín", "facultad": "Ciencias Empresariales", "estudiantes": 350, "profesores_actuales": 8.5, "relacion_pe": 41.18, "diferencia_profesores": 1.5}, "Contaduría Pública": {"sede": "Medellín", "facultad": "Ciencias Empresariales", "estudiantes": 263, "profesores_actuales": 5, "relacion_pe": 52.6, "diferencia_profesores": 2.51}, "Fisioterapia Cali": {"sede": "Cali", "facultad": "Ciencias de la Salud", "estudiantes": 201, "profesores_actuales": 8, "relacion_pe": 25.12, "diferencia_profesores": -2.26}, "Fisioterapia Medellín": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "estudiantes": 676, "profesores_actuales": 18, "relacion_pe": 37.56, "diferencia_profesores": 1.31}, "Fisioterapia Neiva": {"sede": "Neiva", "facultad": "Ciencias de la Salud", "estudiantes": 392, "profesores_actuales": 11.5, "relacion_pe": 34.09, "diferencia_profesores": -0.3}, "Fisioterapia Popayán": {"sede": "Popayán", "facultad": "Ciencias de la Salud", "estudiantes": 340, "profesores_actuales": 10.5, "relacion_pe": 32.38, "diferencia_profesores": -0.79}, "Fonoaudiología Medellin ": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "estudiantes": 130, "profesores_actuales": 8.5, "relacion_pe": 15.29, "diferencia_profesores": -4.79}, "Fonoaudiología Neiva": {"sede": "Neiva", "facultad": "Ciencias de la Salud", "estudiantes": 160, "profesores_actuales": 4, "relacion_pe": 40, "diferencia_profesores": 0.57}, "Fonoaudiología Popayán": {"sede": "Popayán", "facultad": "Ciencias de la Salud", "estudiantes": 88, "profesores_actuales": 3, "relacion_pe": 29.33, "diferencia_profesores": -0.49}, "Ingeniería de Software": {"sede": "Medellín", "facultad": "Ingeniería", "estudiantes": 154, "profesores_actuales": 4, "relacion_pe": 38.5, "diferencia_profesores": 0.4}, "Nutrición y Dietética Medellín ": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "estudiantes": 113, "profesores_actuales": 2, "relacion_pe": 56.5, "diferencia_profesores": 1.23}, "Nutrición y dietética Popayán": {"sede": "Popayán", "facultad": "Ciencias de la Salud", "estudiantes": 224, "profesores_actuales": 3, "relacion_pe": 74.67, "diferencia_profesores": 3.4}, "Psicología Medellín": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "estudiantes": 203, "profesores_actuales": 7, "relacion_pe": 29, "diferencia_profesores": -1.2}, "Terapia ocupacional": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "estudiantes": 59, "profesores_actuales": 1.5, "relacion_pe": 39.33, "diferencia_profesores": 0.19}}, "por_facultad": {"Ciencias Empresariales": {"estudiantes": 613, "profesores_actuales": 13.5, "relacion_pe": 45.41, "diferencia_profesores": 4.01}, "Ciencias de la Salud": {"estudiantes": 2586, "profesores_actuales": 77.0, "relacion_pe": 33.58, "diferencia_profesores": -3.11}, "Ingeniería": {"estudiantes": 154, "profesores_actuales": 4, "relacion_pe": 38.5, "diferencia_profesores": 0.4}}, "por_sede": {"Medellín": {"estudiantes": 1948, "profesores_actuales": 54.5, "relacion_pe": 35.74, "diferencia_profesores": 1.16}, "Cali": {"estudiantes": 201, "profesores_actuales": 8, "relacion_pe": 25.12, "diferencia_profesores": -2.26}, "Neiva": {"estudiantes": 552, "profesores_actuales": 15.5, "relacion_pe": 35.61, "diferencia_profesores": 0.27}, "Popayán": {"estudiantes": 652, "profesores_actuales": 16.5, "relacion_pe": 39.52, "diferencia_profesores": 2.13}}}, "practicas": {"total_estudiantes": 840, "salud_estudiantes": 764, "no_salud_estudiantes": 76, "horas_requeridas": 2941.0, "por_programa": {"Administración de Empresas": {"sede": "Medellín", "facultad": "Ciencias Empresariales", "es_salud": false, "estudiantes": 44, "horas_requeridas": 44.0}, "Contaduría Pública": {"sede": "Medellín", "facultad": "Ciencias Empresariales", "es_salud": false, "estudiantes": 24, "horas_requeridas": 24.0}, "Fisioterapia Medellín": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 190, "horas_requeridas": 712.5}, "Fisioterapia Cali": {"sede": "Cali", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 80, "horas_requeridas": 300.0}, "Fisioterapia Neiva": {"sede": "Neiva", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 144, "horas_requeridas": 540.0}, "Fisioterapia Popayán": {"sede": "Popayán", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 106, "horas_requeridas": 397.5}, "Fonoaudiología Medellín": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 41, "horas_requeridas": 153.8}, "Fonoaudiología Neiva": {"sede": "Neiva", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 67, "horas_requeridas": 251.2}, "Fonoaudiología Popayán": {"sede": "Popayán", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 50, "horas_requeridas": 187.5}, "Ingeniería de Software": {"sede": "Medellín", "facultad": "Ingeniería", "es_salud": false, "estudiantes": 8, "horas_requeridas": 8.0}, "Nutrición y Dietetica Popayán": {"sede": "Popayán", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 33, "horas_requeridas": 123.8}, "Psicología": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 36, "horas_requeridas": 135.0}, "Terapia Ocupacional": {"sede": "Medellín", "facultad": "Ciencias de la Salud", "es_salud": true, "estudiantes": 17, "horas_requeridas": 63.8}}, "por_facultad": {"Ciencias Empresariales": {"estudiantes": 68, "horas_requeridas": 68.0, "pct_estudiantes": 8.1}, "Ciencias de la Salud": {"estudiantes": 764, "horas_requeridas": 2865.0, "pct_estudiantes": 90.95}, "Ingeniería": {"estudiantes": 8, "horas_requeridas": 8.0, "pct_estudiantes": 0.95}}, "por_sede": {"Medellín": {"estudiantes": 360, "horas_requeridas": 1141.0, "pct_estudiantes": 42.86}, "Cali": {"estudiantes": 80, "horas_requeridas": 300.0, "pct_estudiantes": 9.52}, "Neiva": {"estudiantes": 211, "horas_requeridas": 791.2, "pct_estudiantes": 25.12}, "Popayán": {"estudiantes": 189, "horas_requeridas": 708.8, "pct_estudiantes": 22.5}}}}}};
 
 // Paleta institucional FUMC: azul #0090BD, verde #45AC34, fucsia #D5035E,
 // gris #5D6770, y dos tintes (azul y fucsia claros) para las dos categorías
@@ -372,6 +451,26 @@ function etiquetasLineaMultiple(color, formatter){
   };
 }
 
+function round1(v){ return Math.round((v||0)*10)/10; }
+// Los 3 archivos de origen no siempre escriben el nombre de un mismo
+// programa exactamente igual (tildes, mayúsculas, espacios extra, o con/sin
+// la sede al final, ej. "Terapia ocupacional" en Proporción P/E vs "Terapia
+// ocupacional Medellín" en Funciones Misionales). Esta función normaliza y
+// busca la clave más parecida en otro diccionario para poder cruzar datos
+// de archivos distintos por nombre de programa.
+function normalizarJS(s){
+  return (s||"").toString().trim().toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+    .replace(/\s+/g," ");
+}
+function buscarClaveParecida(nombre, diccionario){
+  const n = normalizarJS(nombre);
+  const claves = Object.keys(diccionario);
+  let match = claves.find(k=>normalizarJS(k)===n);
+  if(match) return match;
+  match = claves.find(k=>{ const kn=normalizarJS(k); return kn.includes(n) || n.includes(kn); });
+  return match || null;
+}
 function fmt(v, dec=1){
   if(v===null||v===undefined||isNaN(v)) return "—";
   return Number(v).toLocaleString("es-CO",{minimumFractionDigits:0,maximumFractionDigits:dec});
@@ -392,6 +491,217 @@ function deltaTag(actual, previo, invertido=false, unidad=""){
   return `<span class="kpi-change ${clase}"${titulo}>${signo}${fmt(diff,1)}${unidad} vs periodo anterior</span>`;
 }
 
+// ---------------- FILTRO GLOBAL (Sede / Facultad / Programa) ----------------
+// Aplica sobre TODO el tablero (no solo la sección Cruce, que ya tenía su
+// propio filtro local de Facultad/Programa — ese se deja intacto y sigue
+// funcionando como un "acercamiento" adicional dentro de esa sección, ya
+// sobre los datos que este filtro global haya dejado). La estrategia es
+// reconstruir, para cada periodo, una copia de funciones_misionales /
+// proporcion_pe / practicas / cruce_facultades que solo incluya los
+// programas que pasan el filtro, recalculando institución/facultad/sede a
+// partir de esos programas — así el resto del código (todas las gráficas y
+// tablas) no necesita saber que existe un filtro: solo hay que hacer que
+// lean de datosActivos() en vez de DATA.periodos directamente.
+const CATS_HORAS_KEYS = ["docencia","investigacion","extension","apoyo_admin","diplomado","cualificacion"];
+
+function filtroVacio(f){ return !f.facultad && !f.programa && !f.sede; }
+function pasaFiltro(nombre, facultad, sede, filtro){
+  if(filtro.programa && normalizarJS(nombre) !== normalizarJS(filtro.programa)) return false;
+  if(filtro.facultad && normalizarJS(facultad||"") !== normalizarJS(filtro.facultad)) return false;
+  if(filtro.sede && normalizarJS(sede||"") !== normalizarJS(filtro.sede)) return false;
+  return true;
+}
+
+// Catálogo unificado programa -> {facultad, sede}, construido una sola vez
+// a partir de TODOS los periodos y TODAS las fuentes (funciones misionales,
+// P/E, prácticas, cruce). Se usa para poblar las opciones de los selects y
+// para completar la sede de Cruce entre programas, que no la trae de forma
+// nativa (viene del mismo listado de docentes que Funciones Misionales, así
+// que los nombres de programa coinciden exactamente).
+const catalogoUnificado = {};
+(function construirCatalogoUnificado(){
+  const set = (nombre, facultad, sede) => {
+    if(!nombre) return;
+    const k = normalizarJS(nombre);
+    if(!catalogoUnificado[k]) catalogoUnificado[k] = {facultad:"", sede:""};
+    if(facultad && !catalogoUnificado[k].facultad) catalogoUnificado[k].facultad = facultad;
+    if(sede && !catalogoUnificado[k].sede) catalogoUnificado[k].sede = sede;
+  };
+  Object.values(DATA.periodos || {}).forEach(d=>{
+    if(d.catalogo_programas) Object.entries(d.catalogo_programas).forEach(([p,i])=>set(p, i.facultad, i.sede));
+    if(d.proporcion_pe) Object.entries(d.proporcion_pe.por_programa||{}).forEach(([p,i])=>set(p, i.facultad, i.sede));
+    if(d.practicas) Object.entries(d.practicas.por_programa||{}).forEach(([p,i])=>set(p, i.facultad, i.sede));
+    if(d.cruce_facultades) Object.entries(d.cruce_facultades.por_programa||{}).forEach(([p,i])=>set(p, i.facultad, ""));
+  });
+})();
+function infoUnificada(nombre){ return catalogoUnificado[normalizarJS(nombre)] || {facultad:"", sede:""}; }
+
+function nuevaBolsaFM(){
+  const b = {}; CATS_HORAS_KEYS.forEach(k=>b[k]=0); b.num_docentes=0; b.horas_totales=0; return b;
+}
+function cerrarBolsaFM(b){
+  const total = b.horas_totales || 1e-9;
+  b.porcentajes = {}; CATS_HORAS_KEYS.forEach(k=>{ b.porcentajes[k]=Math.round(b[k]/total*10000)/100; });
+  b.pct_doc_cm = Math.round(b.docencia/total*10000)/10000;
+  b.pct_ext_cm = Math.round(b.extension/total*10000)/10000;
+  b.pct_inv_cm = Math.round(b.investigacion/total*10000)/10000;
+  b.pct_gestion_cm = Math.round(b.apoyo_admin/total*10000)/10000;
+  b.pct_otros_cm = Math.round((b.diplomado+b.cualificacion)/total*10000)/10000;
+  b.pct_total_cm = Math.round((b.pct_doc_cm+b.pct_ext_cm+b.pct_inv_cm+b.pct_gestion_cm+b.pct_otros_cm)*10000)/10000;
+  return b;
+}
+function filtrarFM(fm, filtro){
+  if(!fm || filtroVacio(filtro)) return fm;
+  const programasF = Object.keys(fm.por_programa).filter(p=>{
+    const info = infoUnificada(p);
+    return pasaFiltro(p, info.facultad, info.sede, filtro);
+  });
+  const por_programa = {}; programasF.forEach(p=>por_programa[p]=fm.por_programa[p]);
+  const por_facultad = {}, por_sede = {};
+  const institucion = nuevaBolsaFM();
+  programasF.forEach(p=>{
+    const reg = fm.por_programa[p];
+    const info = infoUnificada(p);
+    const fKey = info.facultad || "(sin especificar)";
+    const sKey = info.sede || "(sin especificar)";
+    const bf = por_facultad[fKey] || (por_facultad[fKey]=nuevaBolsaFM());
+    const bs = por_sede[sKey] || (por_sede[sKey]=nuevaBolsaFM());
+    [institucion, bf, bs].forEach(b=>{
+      CATS_HORAS_KEYS.forEach(k=>{ b[k]+=reg[k]||0; });
+      b.num_docentes += reg.num_docentes||0;
+      b.horas_totales += reg.horas_totales||0;
+    });
+  });
+  cerrarBolsaFM(institucion);
+  Object.values(por_facultad).forEach(cerrarBolsaFM);
+  Object.values(por_sede).forEach(cerrarBolsaFM);
+  return {institucion, por_facultad, por_programa, por_sede};
+}
+
+function filtrarPE(pe, filtro){
+  if(!pe || filtroVacio(filtro)) return pe;
+  const programasF = Object.keys(pe.por_programa).filter(p=>{
+    const r = pe.por_programa[p];
+    return pasaFiltro(p, r.facultad, r.sede, filtro);
+  });
+  const por_programa = {}; programasF.forEach(p=>por_programa[p]=pe.por_programa[p]);
+  function resumen(lista){
+    let estudiantes=0, profesores=0, diferencia=0;
+    lista.forEach(p=>{ estudiantes+=p.estudiantes||0; profesores+=p.profesores_actuales||0; diferencia+=p.diferencia_profesores||0; });
+    return {estudiantes, profesores_actuales:profesores,
+      relacion_pe: profesores?Math.round(estudiantes/profesores*100)/100:0,
+      diferencia_profesores: Math.round(diferencia*100)/100};
+  }
+  const lista = programasF.map(p=>por_programa[p]);
+  const institucion = resumen(lista);
+  const por_facultad = {}, por_sede = {};
+  programasF.forEach(p=>{
+    const reg = por_programa[p];
+    (por_facultad[reg.facultad] = por_facultad[reg.facultad]||[]).push(reg);
+    (por_sede[reg.sede] = por_sede[reg.sede]||[]).push(reg);
+  });
+  Object.keys(por_facultad).forEach(k=>por_facultad[k]=resumen(por_facultad[k]));
+  Object.keys(por_sede).forEach(k=>por_sede[k]=resumen(por_sede[k]));
+  return {ideal: pe.ideal, institucion, por_programa, por_facultad, por_sede};
+}
+
+function filtrarPracticas(pr, filtro){
+  if(!pr || filtroVacio(filtro)) return pr;
+  const programasF = Object.keys(pr.por_programa).filter(p=>{
+    const r = pr.por_programa[p];
+    return pasaFiltro(p, r.facultad, r.sede, filtro);
+  });
+  const por_programa = {}; programasF.forEach(p=>por_programa[p]=pr.por_programa[p]);
+  let total_estudiantes=0, horas_requeridas=0, salud_estudiantes=0, no_salud_estudiantes=0;
+  const por_facultad = {}, por_sede = {};
+  programasF.forEach(p=>{
+    const reg = por_programa[p];
+    total_estudiantes += reg.estudiantes||0;
+    horas_requeridas += reg.horas_requeridas||0;
+    if(reg.es_salud) salud_estudiantes += reg.estudiantes||0; else no_salud_estudiantes += reg.estudiantes||0;
+    const bf = por_facultad[reg.facultad] || (por_facultad[reg.facultad]={estudiantes:0,horas_requeridas:0});
+    bf.estudiantes += reg.estudiantes||0; bf.horas_requeridas += reg.horas_requeridas||0;
+    const bs = por_sede[reg.sede] || (por_sede[reg.sede]={estudiantes:0,horas_requeridas:0});
+    bs.estudiantes += reg.estudiantes||0; bs.horas_requeridas += reg.horas_requeridas||0;
+  });
+  Object.values(por_facultad).forEach(b=>{ b.horas_requeridas=round1(b.horas_requeridas); b.pct_estudiantes = total_estudiantes ? Math.round(b.estudiantes/total_estudiantes*10000)/100 : 0; });
+  Object.values(por_sede).forEach(b=>{ b.horas_requeridas=round1(b.horas_requeridas); b.pct_estudiantes = total_estudiantes ? Math.round(b.estudiantes/total_estudiantes*10000)/100 : 0; });
+  return {total_estudiantes, salud_estudiantes, no_salud_estudiantes, horas_requeridas: round1(horas_requeridas), por_programa, por_facultad, por_sede};
+}
+
+function filtrarCruce(cr, filtro){
+  if(!cr || filtroVacio(filtro)) return cr;
+  const programasF = Object.keys(cr.por_programa).filter(p=>{
+    const r = cr.por_programa[p];
+    const info = infoUnificada(p);
+    return pasaFiltro(p, r.facultad, info.sede, filtro);
+  });
+  const por_programa = {}; programasF.forEach(p=>por_programa[p]=cr.por_programa[p]);
+  function facultadDeProgramaOrig(nombre){
+    const reg = cr.por_programa[nombre];
+    return reg ? reg.facultad : "Otros (apoyo, idiomas, especializaciones)";
+  }
+  const institucion = {horas_propio_programa:0, horas_misma_facultad_otro_programa:0, horas_otra_facultad:0};
+  const por_facultad = {};
+  programasF.forEach(p=>{
+    const reg = por_programa[p];
+    institucion.horas_propio_programa += reg.horas_propio_programa||0;
+    institucion.horas_misma_facultad_otro_programa += reg.horas_misma_facultad_otro_programa||0;
+    institucion.horas_otra_facultad += reg.horas_otra_facultad||0;
+
+    const F = reg.facultad;
+    const bf = por_facultad[F] || (por_facultad[F] = {horas_propia_facultad:0, horas_otra_facultad:0, horas_propio_programa:0, destino:{}});
+    const propiaFacTotal = (reg.horas_propio_programa||0) + (reg.horas_misma_facultad_otro_programa||0);
+    bf.horas_propio_programa += reg.horas_propio_programa||0;
+    bf.horas_propia_facultad += propiaFacTotal;
+    bf.horas_otra_facultad += reg.horas_otra_facultad||0;
+    bf.destino[F] = (bf.destino[F]||0) + propiaFacTotal;
+    Object.entries(reg.destino||{}).forEach(([destProg,h])=>{
+      const destFac = facultadDeProgramaOrig(destProg);
+      if(destFac === F) return;
+      bf.destino[destFac] = (bf.destino[destFac]||0) + h;
+    });
+  });
+  Object.values(por_facultad).forEach(bf=>{
+    bf.horas_propia_facultad = round1(bf.horas_propia_facultad);
+    bf.horas_otra_facultad = round1(bf.horas_otra_facultad);
+    bf.horas_propio_programa = round1(bf.horas_propio_programa);
+    const total = bf.horas_propia_facultad + bf.horas_otra_facultad;
+    bf.pct_otra_facultad = total ? Math.round(bf.horas_otra_facultad/total*10000)/100 : 0;
+    const destinoOrdenado = {};
+    Object.entries(bf.destino).sort((a,b)=>b[1]-a[1]).forEach(([k,v])=>{ destinoOrdenado[k]=round1(v); });
+    bf.destino = destinoOrdenado;
+  });
+  institucion.horas_propio_programa = round1(institucion.horas_propio_programa);
+  institucion.horas_misma_facultad_otro_programa = round1(institucion.horas_misma_facultad_otro_programa);
+  institucion.horas_otra_facultad = round1(institucion.horas_otra_facultad);
+  const totalInst = institucion.horas_propio_programa + institucion.horas_misma_facultad_otro_programa + institucion.horas_otra_facultad || 1e-9;
+  institucion.pct_fuera_de_programa = Math.round((institucion.horas_misma_facultad_otro_programa+institucion.horas_otra_facultad)/totalInst*10000)/100;
+  return {institucion, por_facultad, por_programa};
+}
+
+function filtrarPeriodoData(d, filtro){
+  if(!d || filtroVacio(filtro)) return d;
+  return {
+    ...d,
+    funciones_misionales: filtrarFM(d.funciones_misionales, filtro),
+    proporcion_pe: filtrarPE(d.proporcion_pe, filtro),
+    practicas: filtrarPracticas(d.practicas, filtro),
+    cruce_facultades: filtrarCruce(d.cruce_facultades, filtro),
+  };
+}
+
+let filtroGlobal = {facultad:"", programa:"", sede:""};
+let cachePeriodosFiltrados = null;
+function reconstruirCacheFiltrado(){
+  if(filtroVacio(filtroGlobal)){ cachePeriodosFiltrados = null; return; }
+  cachePeriodosFiltrados = {};
+  Object.entries(DATA.periodos || {}).forEach(([p,d])=>{
+    cachePeriodosFiltrados[p] = filtrarPeriodoData(d, filtroGlobal);
+  });
+}
+function datosActivos(){ return cachePeriodosFiltrados || DATA.periodos; }
+
 const periodosDisponibles = Object.keys(DATA.periodos || {}).sort();
 
 if(periodosDisponibles.length === 0){
@@ -408,7 +718,7 @@ if(periodosDisponibles.length === 0){
   // por defecto, el periodo "actual" es el más reciente que tenga datos de
   // funciones misionales (el archivo más completo); si ninguno los tiene,
   // se usa simplemente el más reciente disponible.
-  const conMisionales = periodosDisponibles.filter(p=>DATA.periodos[p].funciones_misionales);
+  const conMisionales = periodosDisponibles.filter(p=>datosActivos()[p].funciones_misionales);
   const periodoPorDefecto = conMisionales.length ? conMisionales[conMisionales.length-1] : periodosDisponibles[periodosDisponibles.length-1];
   selActual.value = periodoPorDefecto;
   const idxDefecto = periodosDisponibles.indexOf(periodoPorDefecto);
@@ -417,7 +727,7 @@ if(periodosDisponibles.length === 0){
   let charts = {};
   function destruirCharts(){ Object.values(charts).forEach(c=>c && c.destroy()); charts = {}; }
 
-  function periodoData(p){ return p ? DATA.periodos[p] : null; }
+  function periodoData(p){ return p ? datosActivos()[p] : null; }
 
   function render(){
     destruirCharts();
@@ -427,12 +737,17 @@ if(periodosDisponibles.length === 0){
     const dC = periodoData(pComparar);
     renderResumen(pActual, pComparar, dA, dC);
     renderMisionales(pActual, pComparar, dA, dC);
+    renderSuperavit(pActual, pComparar, dA, dC);
     renderPE(pActual, pComparar, dA, dC);
     renderPracticas(dA, dC, pActual, pComparar);
+    renderCruce(pActual, pComparar, dA, dC);
   }
 
-  function kpiCard(label, valor, sub, cambioHtml){
-    return `<div class="kpi-card"><div class="kpi-label">${label}</div><div class="kpi-value">${valor}</div>${sub?`<div class="kpi-sub">${sub}</div>`:""}${cambioHtml||""}</div>`;
+  // claseValor (opcional) colorea el número principal de la tarjeta con el
+  // mismo criterio de "bien/neutro/alerta" que ya se usa en las etiquetas
+  // de las tablas (positive=verde, negative=rojo, neutral=gris).
+  function kpiCard(label, valor, sub, cambioHtml, claseValor){
+    return `<div class="kpi-card"><div class="kpi-label">${label}</div><div class="kpi-value${claseValor?" "+claseValor:""}">${valor}</div>${sub?`<div class="kpi-sub">${sub}</div>`:""}${cambioHtml||""}</div>`;
   }
 
   // ---------------- RESUMEN ----------------
@@ -446,21 +761,21 @@ if(periodosDisponibles.length === 0){
     const prC = dC && dC.practicas ? dC.practicas : null;
 
     let html = "";
-    html += kpiCard("Horas totales (misionales)", fmA?fmt(fmA.horas_totales,0):"—", fmA?`${fmA.num_docentes} docentes`:"", fmA&&fmC?deltaTag(fmA.horas_totales, fmC.horas_totales):"");
-    html += kpiCard("Horas de práctica", prA?fmt(prA.horas_requeridas,0):"—", "acompañamiento estimado", prA&&prC?deltaTag(prA.horas_requeridas, prC.horas_requeridas):"");
+    html += kpiCard(`Horas totales (misionales) ${pActual}`, fmA?fmt(fmA.horas_totales,0):"—", fmA?`${fmA.num_docentes} docentes`:"", fmA&&fmC?deltaTag(fmA.horas_totales, fmC.horas_totales):"");
+    html += kpiCard(`Horas de práctica ${pActual}`, prA?fmt(prA.horas_requeridas,0):"—", "acompañamiento estimado", prA&&prC?deltaTag(prA.horas_requeridas, prC.horas_requeridas):"");
     const horasTotalCombinadoA = (fmA && prA) ? fmA.horas_totales + prA.horas_requeridas : null;
     const horasTotalCombinadoC = (fmC && prC) ? fmC.horas_totales + prC.horas_requeridas : null;
-    html += kpiCard("Horas totales (misionales + práctica)", horasTotalCombinadoA!==null?fmt(horasTotalCombinadoA,0):"—", "misionales + acompañamiento de prácticas", (horasTotalCombinadoA!==null&&horasTotalCombinadoC!==null)?deltaTag(horasTotalCombinadoA, horasTotalCombinadoC):"");
-    html += kpiCard("% Docencia (interno)", fmA?fmtPct(fmA.porcentajes.docencia):"—", "sobre horas totales asignadas", fmA&&fmC?deltaTag(fmA.porcentajes.docencia, fmC.porcentajes.docencia,false,"pp"):"");
-    html += kpiCard("Relación profesor-estudiante", peA?fmt(peA.relacion_pe,1):"—", peA?`ideal institucional: ${fmt(dA.proporcion_pe.ideal,0)} · entre más bajo, mejor`:"", peA&&peC?deltaTag(peA.relacion_pe, peC.relacion_pe,true):"");
-    html += kpiCard("Estudiantes en práctica", prA?fmt(prA.total_estudiantes,0):"—", prA?`${fmt(prA.salud_estudiantes,0)} salud · ${fmt(prA.no_salud_estudiantes,0)} otros`:"", prA&&prC?deltaTag(prA.total_estudiantes, prC.total_estudiantes):"");
+    html += kpiCard(`Horas totales (misionales + práctica) ${pActual}`, horasTotalCombinadoA!==null?fmt(horasTotalCombinadoA,0):"—", "misionales + acompañamiento de prácticas", (horasTotalCombinadoA!==null&&horasTotalCombinadoC!==null)?deltaTag(horasTotalCombinadoA, horasTotalCombinadoC):"");
+    html += kpiCard(`% Docencia (interno) ${pActual}`, fmA?fmtPct(fmA.porcentajes.docencia):"—", "sobre horas totales asignadas", fmA&&fmC?deltaTag(fmA.porcentajes.docencia, fmC.porcentajes.docencia,false,"pp"):"");
+    html += kpiCard(`Relación profesor-estudiante ${pActual}`, peA?fmt(peA.relacion_pe,1):"—", peA?`ideal institucional: ${fmt(dA.proporcion_pe.ideal,0)} · entre más bajo, mejor`:"", peA&&peC?deltaTag(peA.relacion_pe, peC.relacion_pe,true):"");
+    html += kpiCard(`Estudiantes en práctica ${pActual}`, prA?fmt(prA.total_estudiantes,0):"—", prA?`${fmt(prA.salud_estudiantes,0)} salud · ${fmt(prA.no_salud_estudiantes,0)} otros`:"", prA&&prC?deltaTag(prA.total_estudiantes, prC.total_estudiantes):"");
     kpiEl.innerHTML = html;
 
     // Horas por periodo (todas las funciones misionales disponibles, orden cronológico)
-    const labels = periodosDisponibles.filter(p=>DATA.periodos[p].funciones_misionales);
+    const labels = periodosDisponibles.filter(p=>datosActivos()[p].funciones_misionales);
     const datasets = CATS.map(c=>({
       label:c.label, backgroundColor:c.color,
-      data: labels.map(p=>DATA.periodos[p].funciones_misionales.institucion[c.key]),
+      data: labels.map(p=>datosActivos()[p].funciones_misionales.institucion[c.key]),
       datalabels: etiquetasHorasApiladas(80)
     }));
     charts.resumenHoras = new Chart(document.getElementById("chart-resumen-horas"), {
@@ -470,23 +785,23 @@ if(periodosDisponibles.length === 0){
     });
 
     // evolución % cuadro maestro (todos los periodos disponibles)
-    const labelsCM = periodosDisponibles.filter(p=>DATA.periodos[p].funciones_misionales);
+    const labelsCM = periodosDisponibles.filter(p=>datosActivos()[p].funciones_misionales);
     charts.resumenEvolucion = new Chart(document.getElementById("chart-resumen-evolucion"), {
       type:"line",
       data:{labels:labelsCM, datasets:[
-        {label:"% Docencia", data:labelsCM.map(p=>DATA.periodos[p].funciones_misionales.institucion.pct_doc_cm*100), borderColor:"#0090BD", backgroundColor:"#0090BD20", tension:.25, borderWidth:2, datalabels:{display:true,color:"#0090BD",align:"top",font:{size:10,weight:600},formatter:v=>fmtPct(v,0)}},
-        {label:"% Gestión", data:labelsCM.map(p=>DATA.periodos[p].funciones_misionales.institucion.pct_gestion_cm*100), borderColor:"#D5035E", backgroundColor:"#D5035E20", tension:.25, borderWidth:2, datalabels:{display:true,color:"#D5035E",align:"bottom",font:{size:10,weight:600},formatter:v=>fmtPct(v,0)}},
-        {label:"% Otros", data:labelsCM.map(p=>DATA.periodos[p].funciones_misionales.institucion.pct_otros_cm*100), borderColor:"#5D6770", backgroundColor:"#5D677020", tension:.25, borderWidth:2, datalabels:{display:true,color:"#5D6770",align:"top",font:{size:10,weight:600},formatter:v=>fmtPct(v,0)}},
+        {label:"% Docencia", data:labelsCM.map(p=>datosActivos()[p].funciones_misionales.institucion.pct_doc_cm*100), borderColor:"#0090BD", backgroundColor:"#0090BD20", tension:.25, borderWidth:2, datalabels:{display:true,color:"#0090BD",align:"top",font:{size:10,weight:600},formatter:v=>fmtPct(v,0)}},
+        {label:"% Gestión", data:labelsCM.map(p=>datosActivos()[p].funciones_misionales.institucion.pct_gestion_cm*100), borderColor:"#D5035E", backgroundColor:"#D5035E20", tension:.25, borderWidth:2, datalabels:{display:true,color:"#D5035E",align:"bottom",font:{size:10,weight:600},formatter:v=>fmtPct(v,0)}},
+        {label:"% Otros", data:labelsCM.map(p=>datosActivos()[p].funciones_misionales.institucion.pct_otros_cm*100), borderColor:"#5D6770", backgroundColor:"#5D677020", tension:.25, borderWidth:2, datalabels:{display:true,color:"#5D6770",align:"top",font:{size:10,weight:600},formatter:v=>fmtPct(v,0)}},
       ]},
       options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom",labels:{boxWidth:11,font:{size:11}}}},scales:{y:{beginAtZero:true,ticks:{callback:v=>fmtPct(v,0)}}}}
     });
 
-    const labelsPE = periodosDisponibles.filter(p=>DATA.periodos[p].proporcion_pe);
+    const labelsPE = periodosDisponibles.filter(p=>datosActivos()[p].proporcion_pe);
     charts.resumenPE = new Chart(document.getElementById("chart-resumen-pe"), {
       type:"bar",
       data:{labels:labelsPE, datasets:[
-        {label:"Relación real", data:labelsPE.map(p=>DATA.periodos[p].proporcion_pe.institucion.relacion_pe), backgroundColor:"#0090BD", datalabels:{display:true,color:"#ffffff",font:{size:10,weight:600},formatter:v=>fmt(v,1)}},
-        {label:"Ideal", data:labelsPE.map(p=>DATA.periodos[p].proporcion_pe.ideal), backgroundColor:"#c9cfdb", type:"line", borderColor:"#5D6770", borderDash:[6,4], fill:false, borderWidth:2, pointRadius:0, datalabels:{display:false}}
+        {label:"Relación real", data:labelsPE.map(p=>datosActivos()[p].proporcion_pe.institucion.relacion_pe), backgroundColor:"#0090BD", datalabels:{display:true,color:"#ffffff",font:{size:10,weight:600},formatter:v=>fmt(v,1)}},
+        {label:"Ideal", data:labelsPE.map(p=>datosActivos()[p].proporcion_pe.ideal), backgroundColor:"#c9cfdb", type:"line", borderColor:"#5D6770", borderDash:[6,4], fill:false, borderWidth:2, pointRadius:0, datalabels:{display:false}}
       ]},
       options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom",labels:{boxWidth:11,font:{size:11}}}},scales:{y:{beginAtZero:true}}}
     });
@@ -495,20 +810,42 @@ if(periodosDisponibles.length === 0){
   // ---------------- FUNCIONES MISIONALES ----------------
   function renderMisionales(pActual, pComparar, dA, dC){
     const kpiEl = document.getElementById("kpi-misionales");
+    const kpiHorasEl = document.getElementById("kpi-misionales-horas");
     const fmA = dA && dA.funciones_misionales;
     const fmC = dC && dC.funciones_misionales;
     if(!fmA){
       kpiEl.innerHTML = `<div class="empty-msg">No hay datos de funciones misionales para ${pActual}.</div>`;
+      kpiHorasEl.innerHTML = "";
       document.getElementById("tabla-misionales").innerHTML = "";
       if(charts.misFacultad) charts.misFacultad.destroy();
       if(charts.misCuadro) charts.misCuadro.destroy();
       return;
     }
     const inst = fmA.institucion;
+
+    // Fila de tarjetas con el valor EN HORAS (además del % de abajo) de las
+    // 4 funciones misionales principales, con su propio comparativo contra
+    // el periodo anterior — para que se vea de un vistazo si, por ejemplo,
+    // Docencia bajó en horas aunque el total institucional haya subido por
+    // Apoyo administrativo (caso real que preguntó el usuario).
+    const LABELS_HORAS = {docencia:"Horas de docencia", investigacion:"Horas de investigación", extension:"Horas de extensión", apoyo_admin:"Horas de apoyo administrativo"};
+    const CATS_PRINCIPALES = CATS.filter(c=>["docencia","investigacion","extension","apoyo_admin"].includes(c.key));
+    let htmlHoras = "";
+    CATS_PRINCIPALES.forEach(c=>{
+      const horasPrev = fmC ? fmC.institucion[c.key] : null;
+      htmlHoras += kpiCard(
+        `${LABELS_HORAS[c.key]} ${pActual}`,
+        fmt(inst[c.key],0),
+        `${fmtPct(inst.porcentajes[c.key])} de las horas totales`,
+        fmC?deltaTag(inst[c.key], horasPrev):""
+      );
+    });
+    kpiHorasEl.innerHTML = htmlHoras;
+
     let html = "";
     CATS.forEach(c=>{
       const prevPct = fmC ? fmC.institucion.porcentajes[c.key] : null;
-      html += kpiCard(c.label, fmtPct(inst.porcentajes[c.key]), `${fmt(inst[c.key],0)} horas`, fmC?deltaTag(inst.porcentajes[c.key], prevPct,false,"pp"):"");
+      html += kpiCard(`${c.label} ${pActual}`, fmtPct(inst.porcentajes[c.key]), `${fmt(inst[c.key],0)} horas`, fmC?deltaTag(inst.porcentajes[c.key], prevPct,false,"pp"):"");
     });
     kpiEl.innerHTML = html;
 
@@ -596,14 +933,14 @@ if(periodosDisponibles.length === 0){
 
     // Evolución a través de TODOS los periodos disponibles (no solo los 2
     // elegidos en los filtros de arriba), por facultad.
-    const periodosConMisionales = periodosDisponibles.filter(p=>DATA.periodos[p].funciones_misionales);
-    const facultadesTodas = [...new Set(periodosConMisionales.flatMap(p=>Object.keys(DATA.periodos[p].funciones_misionales.por_facultad)))].sort();
+    const periodosConMisionales = periodosDisponibles.filter(p=>datosActivos()[p].funciones_misionales);
+    const facultadesTodas = [...new Set(periodosConMisionales.flatMap(p=>Object.keys(datosActivos()[p].funciones_misionales.por_facultad)))].sort();
     charts.misEvolHoras = new Chart(document.getElementById("chart-mis-evol-horas"), {
       type:"bar",
       data:{labels:periodosConMisionales, datasets:facultadesTodas.map(f=>({
         label:f, backgroundColor:colorFacultad(f),
         data:periodosConMisionales.map(p=>{
-          const bf = DATA.periodos[p].funciones_misionales.por_facultad[f];
+          const bf = datosActivos()[p].funciones_misionales.por_facultad[f];
           return bf ? bf.horas_totales : null;
         }),
         datalabels:{display:true,color:colorEtiqueta,font:{size:10,weight:600},formatter:v=>v==null?"":fmt(v,0)}
@@ -615,7 +952,7 @@ if(periodosDisponibles.length === 0){
       data:{labels:periodosConMisionales, datasets:facultadesTodas.map((f,i)=>({
         label:f, borderColor:colorFacultad(f), backgroundColor:colorFacultad(f)+"20", borderWidth:2, tension:.25,
         data:periodosConMisionales.map(p=>{
-          const bf = DATA.periodos[p].funciones_misionales.por_facultad[f];
+          const bf = datosActivos()[p].funciones_misionales.por_facultad[f];
           return bf ? bf.pct_doc_cm*100 : null;
         }),
         datalabels:etiquetasLineaMultiple(colorFacultad(f), v=>fmtPct(v,0))
@@ -647,6 +984,72 @@ if(periodosDisponibles.length === 0){
     document.getElementById("tabla-misionales").innerHTML = thead+tbody;
   }
 
+  // ---------------- SUPERÁVIT / DÉFICIT DE PROFESORES ----------------
+  // Cruza Proporción Docente-Estudiante (¿sobran o faltan profesores frente
+  // al ideal, según "# Profesores - Diferencia para ideal"?) con Funciones
+  // Misionales (en qué se les va el tiempo) y, si está disponible, con
+  // Cruce entre programas (% de horas que dan fuera de su propio programa).
+  // Diferencia positiva = faltan profesores (déficit); negativa = sobran
+  // profesores (superávit) — así viene calculada en el archivo origen.
+  function renderSuperavit(pActual, pComparar, dA, dC){
+    const kpiEl = document.getElementById("superavit-kpi");
+    const tablaEl = document.getElementById("tabla-superavit");
+    const peA = dA && dA.proporcion_pe;
+    const fmA = dA && dA.funciones_misionales;
+    const crA = dA && dA.cruce_facultades;
+    if(!peA || !fmA){
+      kpiEl.innerHTML = `<div class="empty-msg">Para este cruce se necesitan datos de Proporción Docente-Estudiante y de Funciones Misionales en ${pActual}.</div>`;
+      tablaEl.innerHTML = "";
+      return;
+    }
+    const filas = Object.entries(peA.por_programa).map(([nombrePE, pe])=>{
+      const claveFM = buscarClaveParecida(nombrePE, fmA.por_programa);
+      const claveCR = crA ? buscarClaveParecida(nombrePE, crA.por_programa) : null;
+      // el nombre de la facultad de Proporción P/E puede venir con distinta
+      // capitalización que en Funciones Misionales/Cruce (ej. "Ciencias
+      // Empresariales" vs "Ciencias empresariales"); se prefiere la grafía
+      // del cruce, que es la que usa el resto del tablero, cuando hay match.
+      return {
+        nombre: claveFM || nombrePE,
+        facultad: (claveCR && crA.por_programa[claveCR].facultad) || pe.facultad,
+        diferencia: pe.diferencia_profesores,
+        profesores: pe.profesores_actuales,
+        fm: claveFM ? fmA.por_programa[claveFM] : null,
+        cr: claveCR ? crA.por_programa[claveCR] : null,
+      };
+    }).sort((a,b)=>a.diferencia-b.diferencia); // superávit (más negativo) primero, déficit al final
+
+    const UMBRAL = 0.5; // margen para considerar "balanceado" y no solo redondeo
+    const nSuperavit = filas.filter(f=>f.diferencia < -UMBRAL).length;
+    const nDeficit = filas.filter(f=>f.diferencia > UMBRAL).length;
+    const nBalanceado = filas.length - nSuperavit - nDeficit;
+    kpiEl.innerHTML = [
+      kpiCard(`Programas con superávit de profesores ${pActual}`, fmt(nSuperavit,0), "más profesores de los que pide la relación ideal"),
+      kpiCard(`Programas con déficit de profesores ${pActual}`, fmt(nDeficit,0), "menos profesores de los que pide la relación ideal"),
+      kpiCard(`Programas balanceados ${pActual}`, fmt(nBalanceado,0), `diferencia menor a ${UMBRAL} profesores`),
+    ].join("");
+
+    let thead = `<thead><tr><th>Programa</th><th>Facultad</th><th>Profesores actuales</th><th>Diferencia vs ideal</th><th>% Docencia</th><th>% Investigación</th><th>% Extensión</th><th>% Apoyo admin.</th><th>% horas fuera de su programa</th></tr></thead>`;
+    let tbody = "<tbody>";
+    filas.forEach(f=>{
+      const esSuperavit = f.diferencia < -UMBRAL;
+      const esDeficit = f.diferencia > UMBRAL;
+      const clase = esSuperavit ? "bien" : (esDeficit ? "alerta" : "neutro");
+      const etiqueta = esSuperavit ? `${fmt(Math.abs(f.diferencia),1)} superávit`
+        : (esDeficit ? `${fmt(f.diferencia,1)} déficit` : "balanceado");
+      tbody += `<tr><td>${f.nombre}</td><td>${f.facultad||""}</td><td>${fmt(f.profesores,1)}</td>`;
+      tbody += `<td><span class="tag ${clase}">${etiqueta}</span></td>`;
+      tbody += `<td>${f.fm?fmtPct(f.fm.porcentajes.docencia):"—"}</td>`;
+      tbody += `<td>${f.fm?fmtPct(f.fm.porcentajes.investigacion):"—"}</td>`;
+      tbody += `<td>${f.fm?fmtPct(f.fm.porcentajes.extension):"—"}</td>`;
+      tbody += `<td>${f.fm?fmtPct(f.fm.porcentajes.apoyo_admin):"—"}</td>`;
+      tbody += `<td>${f.cr?fmtPct(f.cr.pct_fuera_de_programa):"—"}</td>`;
+      tbody += "</tr>";
+    });
+    tbody += "</tbody>";
+    tablaEl.innerHTML = thead+tbody;
+  }
+
   // ---------------- P/E ----------------
   function renderPE(pActual, pComparar, dA, dC){
     const kpiEl = document.getElementById("kpi-pe");
@@ -658,10 +1061,10 @@ if(periodosDisponibles.length === 0){
       return;
     }
     let html = "";
-    html += kpiCard("Relación real (institución)", fmt(peA.institucion.relacion_pe,1), `ideal: ${fmt(peA.ideal,0)} · entre más bajo, mejor`, peC?deltaTag(peA.institucion.relacion_pe, peC.institucion.relacion_pe,true):"");
-    html += kpiCard("Estudiantes", fmt(peA.institucion.estudiantes,0), "", peC?deltaTag(peA.institucion.estudiantes, peC.institucion.estudiantes):"");
-    html += kpiCard("Profesores (IND + 11 meses)", fmt(peA.institucion.profesores_actuales,1), "", peC?deltaTag(peA.institucion.profesores_actuales, peC.institucion.profesores_actuales):"");
-    html += kpiCard("Brecha de profesores para el ideal", fmt(peA.institucion.diferencia_profesores,1), peA.institucion.diferencia_profesores>0?"faltan profesores":"holgura frente al ideal", peC?deltaTag(peA.institucion.diferencia_profesores, peC.institucion.diferencia_profesores,true):"");
+    html += kpiCard(`Relación real (institución) ${pActual}`, fmt(peA.institucion.relacion_pe,1), `ideal: ${fmt(peA.ideal,0)} · entre más bajo, mejor`, peC?deltaTag(peA.institucion.relacion_pe, peC.institucion.relacion_pe,true):"");
+    html += kpiCard(`Estudiantes ${pActual}`, fmt(peA.institucion.estudiantes,0), "", peC?deltaTag(peA.institucion.estudiantes, peC.institucion.estudiantes):"");
+    html += kpiCard(`Profesores (IND + 11 meses) ${pActual}`, fmt(peA.institucion.profesores_actuales,1), "", peC?deltaTag(peA.institucion.profesores_actuales, peC.institucion.profesores_actuales):"");
+    html += kpiCard(`Brecha de profesores para el ideal ${pActual}`, fmt(peA.institucion.diferencia_profesores,1), peA.institucion.diferencia_profesores>0?"faltan profesores":"holgura frente al ideal", peC?deltaTag(peA.institucion.diferencia_profesores, peC.institucion.diferencia_profesores,true):"");
     kpiEl.innerHTML = html;
 
     // Segunda fila: % de variación de estudiantes frente al periodo de
@@ -677,7 +1080,7 @@ if(periodosDisponibles.length === 0){
       let htmlVar = "";
       const varInst = pctVariacion(peA.institucion.estudiantes, peC.institucion.estudiantes);
       htmlVar += kpiCard(
-        "% variación estudiantes (institución)",
+        `% variación estudiantes (institución) ${pActual}`,
         varInst===null?"—":`${varInst>=0?"+":""}${fmt(varInst,1)}%`,
         `${fmt(peA.institucion.estudiantes,0)} vs ${fmt(peC.institucion.estudiantes,0)} periodo anterior`,
         varInst===null?"":`<span class="kpi-change ${varInst>0?"positive":(varInst<0?"negative":"neutral")}">vs ${pComparar}</span>`
@@ -687,7 +1090,7 @@ if(periodosDisponibles.length === 0){
         const bC = peC.por_facultad[f];
         const varF = bC ? pctVariacion(bA.estudiantes, bC.estudiantes) : null;
         htmlVar += kpiCard(
-          `% variación estudiantes — ${f}`,
+          `% variación estudiantes — ${f} ${pActual}`,
           varF===null?"—":`${varF>=0?"+":""}${fmt(varF,1)}%`,
           bC?`${fmt(bA.estudiantes,0)} vs ${fmt(bC.estudiantes,0)} periodo anterior`:"nuevo en este periodo",
           varF===null?"":`<span class="kpi-change ${varF>0?"positive":(varF<0?"negative":"neutral")}">vs ${pComparar}</span>`
@@ -722,20 +1125,20 @@ if(periodosDisponibles.length === 0){
     });
 
     // Evolución de la relación P/E por facultad, TODOS los periodos disponibles.
-    const periodosConPE = periodosDisponibles.filter(p=>DATA.periodos[p].proporcion_pe);
-    const facultadesPEtodas = [...new Set(periodosConPE.flatMap(p=>Object.keys(DATA.periodos[p].proporcion_pe.por_facultad)))].sort();
+    const periodosConPE = periodosDisponibles.filter(p=>datosActivos()[p].proporcion_pe);
+    const facultadesPEtodas = [...new Set(periodosConPE.flatMap(p=>Object.keys(datosActivos()[p].proporcion_pe.por_facultad)))].sort();
     charts.peEvolucion = new Chart(document.getElementById("chart-pe-evolucion"), {
       type:"line",
       data:{labels:periodosConPE, datasets:[
         ...facultadesPEtodas.map((f,i)=>({
           label:f, borderColor:colorFacultad(f), backgroundColor:colorFacultad(f)+"20", borderWidth:2, tension:.25,
           data:periodosConPE.map(p=>{
-            const bf = DATA.periodos[p].proporcion_pe.por_facultad[f];
+            const bf = datosActivos()[p].proporcion_pe.por_facultad[f];
             return bf ? bf.relacion_pe : null;
           }),
           datalabels:etiquetasLineaMultiple(colorFacultad(f), v=>fmt(v,1))
         })),
-        {label:"Ideal", borderColor:"#5D6770", borderDash:[6,4], borderWidth:2, pointRadius:0, fill:false, data:periodosConPE.map(p=>DATA.periodos[p].proporcion_pe.ideal), datalabels:{display:false}}
+        {label:"Ideal", borderColor:"#5D6770", borderDash:[6,4], borderWidth:2, pointRadius:0, fill:false, data:periodosConPE.map(p=>datosActivos()[p].proporcion_pe.ideal), datalabels:{display:false}}
       ]},
       options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom",labels:{boxWidth:11,font:{size:11}}}},scales:{y:{beginAtZero:true}}}
     });
@@ -764,13 +1167,13 @@ if(periodosDisponibles.length === 0){
       return;
     }
     let html = "";
-    html += kpiCard("Estudiantes en práctica", fmt(prA.total_estudiantes,0), "", prC?deltaTag(prA.total_estudiantes, prC.total_estudiantes):"");
+    html += kpiCard(`Estudiantes en práctica ${pActual}`, fmt(prA.total_estudiantes,0), "", prC?deltaTag(prA.total_estudiantes, prC.total_estudiantes):"");
     const facultadesPr = Object.keys(prA.por_facultad||{}).sort();
     facultadesPr.forEach(f=>{
       const bf = prA.por_facultad[f];
-      html += kpiCard(f, fmt(bf.estudiantes,0), `${fmtPct(bf.pct_estudiantes)} del total de estudiantes`, prC?deltaTag(bf.estudiantes, prC.por_facultad && prC.por_facultad[f] ? prC.por_facultad[f].estudiantes : null):"");
+      html += kpiCard(`${f} ${pActual}`, fmt(bf.estudiantes,0), `${fmtPct(bf.pct_estudiantes)} del total de estudiantes`, prC?deltaTag(bf.estudiantes, prC.por_facultad && prC.por_facultad[f] ? prC.por_facultad[f].estudiantes : null):"");
     });
-    html += kpiCard("Horas de acompañamiento estimadas", fmt(prA.horas_requeridas,0), "salud: 15h/4 est. · otros: 1h/est.", prC?deltaTag(prA.horas_requeridas, prC.horas_requeridas):"");
+    html += kpiCard(`Horas de acompañamiento estimadas ${pActual}`, fmt(prA.horas_requeridas,0), "salud: 15h/4 est. · otros: 1h/est.", prC?deltaTag(prA.horas_requeridas, prC.horas_requeridas):"");
     kpiEl.innerHTML = html;
 
     // Segunda fila: % de variación de estudiantes frente al periodo de
@@ -786,7 +1189,7 @@ if(periodosDisponibles.length === 0){
       let htmlVar = "";
       const varInstPr = pctVariacionPr(prA.total_estudiantes, prC.total_estudiantes);
       htmlVar += kpiCard(
-        "% variación estudiantes (institución)",
+        `% variación estudiantes (institución) ${pActual}`,
         varInstPr===null?"—":`${varInstPr>=0?"+":""}${fmt(varInstPr,1)}%`,
         `${fmt(prA.total_estudiantes,0)} vs ${fmt(prC.total_estudiantes,0)} periodo anterior`,
         varInstPr===null?"":`<span class="kpi-change ${varInstPr>0?"positive":(varInstPr<0?"negative":"neutral")}">vs ${pComparar}</span>`
@@ -796,7 +1199,7 @@ if(periodosDisponibles.length === 0){
         const bC = prC.por_facultad && prC.por_facultad[f];
         const varF = bC ? pctVariacionPr(bA.estudiantes, bC.estudiantes) : null;
         htmlVar += kpiCard(
-          `% variación estudiantes — ${f}`,
+          `% variación estudiantes — ${f} ${pActual}`,
           varF===null?"—":`${varF>=0?"+":""}${fmt(varF,1)}%`,
           bC?`${fmt(bA.estudiantes,0)} vs ${fmt(bC.estudiantes,0)} periodo anterior`:"nuevo en este periodo",
           varF===null?"":`<span class="kpi-change ${varF>0?"positive":(varF<0?"negative":"neutral")}">vs ${pComparar}</span>`
@@ -808,12 +1211,12 @@ if(periodosDisponibles.length === 0){
     }
 
     // comparación salud/no-salud entre TODOS los periodos que tengan datos de prácticas (no solo actual/comparación)
-    const labelsPr = periodosDisponibles.filter(p=>DATA.periodos[p].practicas);
+    const labelsPr = periodosDisponibles.filter(p=>datosActivos()[p].practicas);
     charts.pracSalud = new Chart(document.getElementById("chart-prac-salud"), {
       type:"bar",
       data:{labels:labelsPr, datasets:[
-        {label:"Programas de salud", backgroundColor:"#0090BD", data:labelsPr.map(p=>DATA.periodos[p].practicas.salud_estudiantes), datalabels:{display:true,color:"#ffffff",font:{size:10,weight:600},formatter:v=>fmt(v,0)}},
-        {label:"Programas no salud", backgroundColor:"#45AC34", data:labelsPr.map(p=>DATA.periodos[p].practicas.no_salud_estudiantes), datalabels:{display:true,color:"#ffffff",font:{size:10,weight:600},formatter:v=>fmt(v,0)}},
+        {label:"Programas de salud", backgroundColor:"#0090BD", data:labelsPr.map(p=>datosActivos()[p].practicas.salud_estudiantes), datalabels:{display:true,color:"#ffffff",font:{size:10,weight:600},formatter:v=>fmt(v,0)}},
+        {label:"Programas no salud", backgroundColor:"#45AC34", data:labelsPr.map(p=>datosActivos()[p].practicas.no_salud_estudiantes), datalabels:{display:true,color:"#ffffff",font:{size:10,weight:600},formatter:v=>fmt(v,0)}},
       ]},
       options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom",labels:{boxWidth:11,font:{size:11}}}},scales:{y:{beginAtZero:true}}}
     });
@@ -849,10 +1252,348 @@ if(periodosDisponibles.length === 0){
     document.getElementById("tabla-practicas").innerHTML = thead+tbody;
   }
 
+  // ---------------- CRUCE ENTRE PROGRAMAS Y FACULTADES ----------------
+  // A partir de las horas que Funciones Misionales asigna a cada docente
+  // por bloque de programa (no solo el total), se calcula cuánto de esas
+  // horas se queda en el propio programa del docente, cuánto va a otro
+  // programa de su misma facultad, y cuánto sale hacia otra facultad.
+  function renderCruce(pActual, pComparar, dA, dC){
+    const kpiEl = document.getElementById("kpi-cruce");
+    const crA = dA && dA.cruce_facultades;
+    const crC = dC && dC.cruce_facultades;
+    if(!crA){
+      kpiEl.innerHTML = `<div class="empty-msg">No hay datos de cruce entre programas para ${pActual}.</div>`;
+      document.getElementById("tabla-cruce-matriz").innerHTML = "";
+      document.getElementById("tabla-cruce-facultad").innerHTML = "";
+      document.getElementById("tabla-cruce-programa").innerHTML = "";
+      if(charts.cruceFacultad) charts.cruceFacultad.destroy();
+      return;
+    }
+
+    const facultadesTodas = Object.keys(crA.por_facultad).sort();
+    const programasTodos = Object.entries(crA.por_programa).sort((a,b)=>b[1].pct_fuera_de_programa-a[1].pct_fuera_de_programa);
+
+    // El foco (institución / facultad / programa) que antes controlaba esta
+    // sección con un filtro local propio ahora se deriva directo del filtro
+    // global de Sede/Facultad/Programa del encabezado, que ya viene
+    // aplicado sobre crA (ver filtrarCruce). Se busca la clave exacta de
+    // por_facultad/por_programa de forma insensible a tildes/mayúsculas,
+    // porque el nombre "bonito" que muestra el select global puede venir
+    // con una grafía ligeramente distinta a la que usa esta sección.
+    function buscarClaveCruce(nombre, diccionario){
+      if(!nombre) return "";
+      const claves = Object.keys(diccionario);
+      return claves.find(k=>normalizarJS(k)===normalizarJS(nombre)) || "";
+    }
+    const focusPrograma = buscarClaveCruce(filtroGlobal.programa, crA.por_programa);
+    const focusFacultad = focusPrograma
+      ? crA.por_programa[focusPrograma].facultad
+      : buscarClaveCruce(filtroGlobal.facultad, crA.por_facultad);
+    const facultades = focusFacultad ? [focusFacultad] : facultadesTodas;
+    const contextoTexto = focusPrograma ? `Programa: ${focusPrograma}` : (focusFacultad ? `Facultad: ${focusFacultad}` : "Institución completa");
+
+    // Colorea el % de horas fuera del programa/facultad con el mismo criterio
+    // de las etiquetas de las tablas (bien/neutro/alerta), según el nivel.
+    function claseFueraPrograma(pct){
+      if(!pct) return "positive";
+      return pct>=25 ? "negative" : "neutral";
+    }
+    function claseFueraFacultad(pct){
+      if(!pct) return "positive";
+      return pct>=15 ? "negative" : "neutral";
+    }
+
+    // --- KPIs: institución, o el foco elegido (facultad o programa) ---
+    let html = "";
+    if(focusPrograma && crA.por_programa[focusPrograma]){
+      const regP = crA.por_programa[focusPrograma];
+      const regPC = crC && crC.por_programa[focusPrograma];
+      html += kpiCard(`Horas en su propio programa ${pActual}`, fmt(regP.horas_propio_programa,0), contextoTexto, regPC?deltaTag(regP.horas_propio_programa, regPC.horas_propio_programa):"");
+      html += kpiCard(`Horas a otro programa, misma facultad ${pActual}`, fmt(regP.horas_misma_facultad_otro_programa,0), "", regPC?deltaTag(regP.horas_misma_facultad_otro_programa, regPC.horas_misma_facultad_otro_programa):"");
+      html += kpiCard(`Horas a otra facultad ${pActual}`, fmt(regP.horas_otra_facultad,0), "", regPC?deltaTag(regP.horas_otra_facultad, regPC.horas_otra_facultad):"");
+      html += kpiCard(`% horas fuera de su programa ${pActual}`, fmtPct(regP.pct_fuera_de_programa), "", regPC?deltaTag(regP.pct_fuera_de_programa, regPC.pct_fuera_de_programa,false,"pp"):"", claseFueraPrograma(regP.pct_fuera_de_programa));
+    } else if(focusFacultad && crA.por_facultad[focusFacultad]){
+      const regF = crA.por_facultad[focusFacultad];
+      const regFC = crC && crC.por_facultad[focusFacultad];
+      const otroMismaFac = round1(regF.horas_propia_facultad - regF.horas_propio_programa);
+      const otroMismaFacC = regFC ? round1(regFC.horas_propia_facultad - regFC.horas_propio_programa) : null;
+      html += kpiCard(`Horas en su propio programa ${pActual}`, fmt(regF.horas_propio_programa,0), contextoTexto, regFC?deltaTag(regF.horas_propio_programa, regFC.horas_propio_programa):"");
+      html += kpiCard(`Horas a otro programa, misma facultad ${pActual}`, fmt(otroMismaFac,0), "", regFC?deltaTag(otroMismaFac, otroMismaFacC):"");
+      html += kpiCard(`Horas a otra facultad ${pActual}`, fmt(regF.horas_otra_facultad,0), "", regFC?deltaTag(regF.horas_otra_facultad, regFC.horas_otra_facultad):"");
+      html += kpiCard(`% horas fuera de la facultad ${pActual}`, fmtPct(regF.pct_otra_facultad), "", regFC?deltaTag(regF.pct_otra_facultad, regFC.pct_otra_facultad,false,"pp"):"", claseFueraFacultad(regF.pct_otra_facultad));
+    } else {
+      const inst = crA.institucion;
+      const instC = crC && crC.institucion;
+      html += kpiCard(`Horas en su propio programa ${pActual}`, fmt(inst.horas_propio_programa,0), "horas de docentes dedicadas a su propio programa", instC?deltaTag(inst.horas_propio_programa, instC.horas_propio_programa):"");
+      html += kpiCard(`Horas a otro programa, misma facultad ${pActual}`, fmt(inst.horas_misma_facultad_otro_programa,0), "apoyo entre programas de una misma facultad", instC?deltaTag(inst.horas_misma_facultad_otro_programa, instC.horas_misma_facultad_otro_programa):"");
+      html += kpiCard(`Horas a otra facultad ${pActual}`, fmt(inst.horas_otra_facultad,0), "horas que cruzan de facultad", instC?deltaTag(inst.horas_otra_facultad, instC.horas_otra_facultad):"");
+      html += kpiCard(`% horas fuera del propio programa ${pActual}`, fmtPct(inst.pct_fuera_de_programa), "institución", instC?deltaTag(inst.pct_fuera_de_programa, instC.pct_fuera_de_programa,false,"pp"):"", claseFueraPrograma(inst.pct_fuera_de_programa));
+    }
+    kpiEl.innerHTML = html;
+
+    document.getElementById("sub-cruce-facultad").textContent = `${contextoTexto} — periodo ${pActual}. "Otra facultad" son horas que un docente de esa facultad da a programas de una facultad distinta a la suya.`;
+
+    // renderCruce puede volver a llamarse a sí misma cuando cambia un
+    // filtro (fuera del ciclo normal de destruirCharts() del render()
+    // general), así que hay que destruir el gráfico anterior aquí mismo o
+    // Chart.js lanza un error de "canvas ya en uso" que corta la función a
+    // mitad de camino y deja las tablas de abajo con datos viejos.
+    if(charts.cruceFacultad){ charts.cruceFacultad.destroy(); charts.cruceFacultad = null; }
+    charts.cruceFacultad = new Chart(document.getElementById("chart-cruce-facultad"), {
+      type:"bar",
+      data:{labels:facultades, datasets:[
+        {
+          label:"Propio programa",
+          backgroundColor: facultades.map(f=>colorFacultad(f)),
+          data: facultades.map(f=>crA.por_facultad[f].horas_propio_programa),
+          datalabels: etiquetasHorasApiladas(30)
+        },
+        {
+          label:"Otro programa, misma facultad",
+          backgroundColor: facultades.map(f=>colorFacultad(f)+"70"),
+          data: facultades.map(f=>round1(crA.por_facultad[f].horas_propia_facultad - crA.por_facultad[f].horas_propio_programa)),
+          datalabels: etiquetasHorasApiladas(30)
+        },
+        {
+          label:"Otra facultad",
+          backgroundColor: "#5D6770",
+          data: facultades.map(f=>crA.por_facultad[f].horas_otra_facultad),
+          datalabels: etiquetasHorasApiladas(15)
+        },
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,indexAxis:"y",scales:{x:{stacked:true,beginAtZero:true},y:{stacked:true}},plugins:{legend:{position:"bottom",labels:{boxWidth:11,font:{size:11}}}}}
+    });
+
+    // matriz facultad de origen -> facultad de destino (incluye la propia
+    // facultad en la diagonal, que ya trae sumadas propio-programa + otro
+    // programa de la misma facultad); las filas respetan el filtro, las
+    // columnas siempre muestran todos los destinos posibles.
+    const columnasDestino = [...new Set(facultadesTodas.concat(
+      facultadesTodas.flatMap(f=>Object.keys(crA.por_facultad[f].destino))
+    ))];
+    const columnas = facultadesTodas.concat(columnasDestino.filter(c=>!facultadesTodas.includes(c)));
+    let theadM = `<thead><tr><th>Facultad (docentes de...)</th>${columnas.map(c=>`<th>${c}</th>`).join("")}</tr></thead>`;
+    let tbodyM = "<tbody>";
+    facultades.forEach(origen=>{
+      tbodyM += `<tr><td>${origen}</td>`;
+      columnas.forEach(destino=>{
+        const v = crA.por_facultad[origen].destino[destino] || 0;
+        const esPropia = destino === origen;
+        tbodyM += `<td${esPropia?' style="font-weight:700;"':''}>${v ? fmt(v,0) : "—"}</td>`;
+      });
+      tbodyM += "</tr>";
+    });
+    tbodyM += "</tbody>";
+    document.getElementById("tabla-cruce-matriz").innerHTML = theadM+tbodyM;
+
+    // --- Detalle por facultad: para cada facultad (filtrada), el
+    // desplegable muestra TODOS los programas a los que dan clase sus
+    // docentes — los suyos propios (horas_propio_programa de cada uno de
+    // sus programas) más todo lo que aparece en el "destino" de cada uno
+    // de esos programas — no solo lo externo, a diferencia de la tabla de
+    // abajo. Esto se arma aquí mismo con los datos de por_programa, sin
+    // necesidad de que el script de Python calcule nada nuevo.
+    function desgloseCompletoFacultad(facultad){
+      const acumulado = {};
+      programasTodos.forEach(([nombre, reg])=>{
+        if(reg.facultad !== facultad) return;
+        if(reg.horas_propio_programa) acumulado[nombre] = (acumulado[nombre]||0) + reg.horas_propio_programa;
+        Object.entries(reg.destino).forEach(([dest,h])=>{ acumulado[dest] = (acumulado[dest]||0) + h; });
+      });
+      return Object.entries(acumulado).sort((a,b)=>b[1]-a[1]);
+    }
+    // Facultad a la que pertenece un programa destino, para colorear cada
+    // fila del desglose según si el destino sigue dentro de la misma
+    // facultad de origen o se va a otra. "Otros (apoyo...)" cuenta como su
+    // propia facultad (no hay forma de saber su origen real).
+    function facultadDePrograma(nombrePrograma){
+      const reg = crA.por_programa[nombrePrograma];
+      return reg ? reg.facultad : null;
+    }
+      function claseFilaDestino(nombreDestino, facultadOrigen){
+      const facDestino = facultadDePrograma(nombreDestino);
+      // Si el programa destino no aparece como "propio" de ningún docente en
+      // por_programa, es un bloque huérfano (apoyo, idiomas, especialización,
+      // sede sin docentes propios) — el script de Python ya lo agrupa bajo
+      // "Otros (apoyo, idiomas, especializaciones)", una facultad que nunca
+      // coincide con la de origen, así que en las cifras SIEMPRE cuenta como
+      // "otra facultad". Coloreamos igual para que el color no contradiga el
+      // número.
+      if(!facDestino) return "fila-cruce-otrafac";
+      return facDestino === facultadOrigen ? "fila-cruce-mismafac" : "fila-cruce-otrafac";
+    }
+    const leyendaCruce = `<div class="leyenda-cruce"><span><i style="background:var(--azul)"></i>Se queda en la misma facultad</span><span><i style="background:var(--fucsia)"></i>Sale a otra facultad</span></div>`;
+    let theadF = `<thead><tr><th></th><th>Facultad</th><th>Horas propio programa</th><th>Horas otro programa (misma facultad)</th><th>Horas otra facultad</th><th>% fuera de la facultad</th><th>Principal destino externo</th></tr></thead>`;
+    let tbodyF = "<tbody>";
+    facultades.forEach(f=>{
+      const reg = crA.por_facultad[f];
+      const desglose = desgloseCompletoFacultad(f);
+      const destinosExternos = Object.entries(reg.destino).filter(([d])=>d!==f).sort((a,b)=>b[1]-a[1]);
+      const principal = destinosExternos.length ? `${destinosExternos[0][0]} (${fmt(destinosExternos[0][1],0)} h)` : "—";
+      const clase = reg.pct_otra_facultad >= 15 ? "alerta" : (reg.pct_otra_facultad > 0 ? "neutro" : "bien");
+      const toggle = desglose.length ? `<button class="expand-toggle" type="button" title="Ver todos los programas a los que dan clase">▸</button>` : "";
+      const facAttr = f.replace(/"/g,"&quot;");
+      tbodyF += `<tr class="fila-programa" data-facultad="${facAttr}"><td>${toggle}</td><td>${f}</td><td>${fmt(reg.horas_propio_programa,0)}</td><td>${fmt(round1(reg.horas_propia_facultad-reg.horas_propio_programa),0)}</td><td>${fmt(reg.horas_otra_facultad,0)}</td><td><span class="tag ${clase}">${fmtPct(reg.pct_otra_facultad)}</span></td><td>${principal}</td></tr>`;
+      if(desglose.length){
+        const totalDesglose = desglose.reduce((s,[,h])=>s+h,0) || 1e-9;
+        const filasDetalle = desglose.map(([dest,h])=>`<tr class="${claseFilaDestino(dest,f)}"><td>${dest}</td><td>${fmt(h,0)}</td><td>${fmtPct(h/totalDesglose*100)}</td></tr>`).join("");
+        tbodyF += `<tr class="fila-detalle" data-facultad="${facAttr}" style="display:none;">
+          <td></td>
+          <td colspan="6">
+            <div style="padding:8px 4px 12px;">
+              <div style="font-size:11px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.3px;margin-bottom:6px;">Todos los programas a los que dan clase los docentes de ${f} (${fmt(totalDesglose,0)} horas en total, incluye sus propios programas)</div>
+              ${leyendaCruce}
+              <table class="dt"><thead><tr><th>Programa destino</th><th>Horas</th><th>% de las horas totales de esta facultad</th></tr></thead><tbody>${filasDetalle}</tbody></table>
+            </div>
+          </td>
+        </tr>`;
+      }
+    });
+    tbodyF += "</tbody>";
+    document.getElementById("tabla-cruce-facultad").innerHTML = theadF+tbodyF;
+
+    // --- Detalle por programa: filtrado por facultad y/o programa elegidos ---
+    const programasFiltrados = programasTodos.filter(([nombre, reg])=>
+      (!focusFacultad || reg.facultad===focusFacultad) && (!focusPrograma || nombre===focusPrograma)
+    );
+    let theadP = `<thead><tr><th></th><th>Programa</th><th>Facultad</th><th>Horas propio programa</th><th>Horas otro programa (misma facultad)</th><th>Horas otra facultad</th><th>% fuera de su programa</th><th>Principal destino externo</th></tr></thead>`;
+    let tbodyP = "<tbody>";
+    programasFiltrados.forEach(([nombre, reg])=>{
+      const destinos = Object.entries(reg.destino); // ya viene ordenado de mayor a menor horas
+      const principal = destinos.length ? `${destinos[0][0]} (${fmt(destinos[0][1],0)} h)` : "—";
+      const clase = reg.pct_fuera_de_programa >= 25 ? "alerta" : (reg.pct_fuera_de_programa > 0 ? "neutro" : "bien");
+      const facAttr = (reg.facultad||"").replace(/"/g,"&quot;");
+      const progAttr = nombre.replace(/"/g,"&quot;");
+      const toggle = destinos.length ? `<button class="expand-toggle" type="button" title="Ver desglose completo">▸</button>` : "";
+      tbodyP += `<tr class="fila-programa" data-facultad="${facAttr}" data-programa="${progAttr}"><td>${toggle}</td><td>${nombre}</td><td>${reg.facultad||""}</td><td>${fmt(reg.horas_propio_programa,0)}</td><td>${fmt(reg.horas_misma_facultad_otro_programa,0)}</td><td>${fmt(reg.horas_otra_facultad,0)}</td><td><span class="tag ${clase}">${fmtPct(reg.pct_fuera_de_programa)}</span></td><td>${principal}</td></tr>`;
+
+      if(destinos.length){
+        const totalFuera = destinos.reduce((s,[,h])=>s+h, 0) || 1e-9;
+        const filasDetalle = destinos.map(([dest,h])=>
+          `<tr class="${claseFilaDestino(dest,reg.facultad)}"><td>${dest}</td><td>${fmt(h,0)}</td><td>${fmtPct(h/totalFuera*100)}</td></tr>`
+        ).join("");
+        tbodyP += `<tr class="fila-detalle" data-facultad="${facAttr}" data-programa="${progAttr}" style="display:none;">
+          <td></td>
+          <td colspan="7">
+            <div style="padding:8px 4px 12px;">
+              <div style="font-size:11px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.3px;margin-bottom:6px;">Todos los programas a los que ${nombre} da horas fuera de sí mismo (${fmt(totalFuera,0)} horas en total)</div>
+              ${leyendaCruce}
+              <table class="dt"><thead><tr><th>Programa destino</th><th>Horas</th><th>% de las horas externas de este programa</th></tr></thead><tbody>${filasDetalle}</tbody></table>
+            </div>
+          </td>
+        </tr>`;
+      }
+    });
+    tbodyP += "</tbody>";
+    document.getElementById("tabla-cruce-programa").innerHTML = theadP+tbodyP;
+  }
+
+  // ---------------- Selects del filtro global ----------------
+  const selGSede = document.getElementById("f-global-sede");
+  const selGFacultad = document.getElementById("f-global-facultad");
+  const selGPrograma = document.getElementById("f-global-programa");
+  const avisoFiltro = document.getElementById("filtro-global-aviso");
+
+  // Los 3 archivos de origen no siempre escriben igual el nombre de una
+  // facultad o sede (mayúsculas/tildes distintas, ej. "Ciencias de la Salud"
+  // vs "Ciencias de la salud") — se agrupan por forma normalizada y se
+  // muestra una sola opción por cada una, quedándose con la primera grafía
+  // encontrada.
+  function valoresUnicos(campo){
+    const vistos = {};
+    Object.values(catalogoUnificado).forEach(i=>{
+      const v = i[campo];
+      if(!v) return;
+      const k = normalizarJS(v);
+      if(!vistos[k]) vistos[k] = v;
+    });
+    return Object.values(vistos).sort();
+  }
+  const facultadesGlobal = valoresUnicos("facultad");
+  const sedesGlobal = valoresUnicos("sede");
+  const programasGlobal = Object.keys(catalogoUnificado); // claves normalizadas; para mostrar se usa el nombre "bonito" recogido abajo
+  const nombresBonitos = {};
+  Object.values(DATA.periodos || {}).forEach(d=>{
+    const agregar = (obj)=>{ if(obj) Object.keys(obj).forEach(n=>{ nombresBonitos[normalizarJS(n)] = n; }); };
+    if(d.catalogo_programas) agregar(d.catalogo_programas);
+    if(d.proporcion_pe) agregar(d.proporcion_pe.por_programa);
+    if(d.practicas) agregar(d.practicas.por_programa);
+    if(d.cruce_facultades) agregar(d.cruce_facultades.por_programa);
+  });
+
+  selGSede.innerHTML = `<option value="">Todas las sedes</option>` + sedesGlobal.map(s=>`<option value="${s}">${s}</option>`).join("");
+  selGFacultad.innerHTML = `<option value="">Todas las facultades</option>` + facultadesGlobal.map(f=>`<option value="${f}">${f}</option>`).join("");
+
+  function poblarProgramaGlobal(){
+    const facSel = selGFacultad.value, sedeSel = selGSede.value;
+    const opciones = programasGlobal
+      .filter(k=>{
+        const info = catalogoUnificado[k];
+        return (!facSel || normalizarJS(info.facultad)===normalizarJS(facSel)) && (!sedeSel || normalizarJS(info.sede)===normalizarJS(sedeSel));
+      })
+      .map(k=>nombresBonitos[k] || k)
+      .sort();
+    const previo = selGPrograma.value;
+    selGPrograma.innerHTML = `<option value="">Todos los programas</option>` + opciones.map(p=>`<option value="${p}">${p}</option>`).join("");
+    selGPrograma.value = opciones.includes(previo) ? previo : "";
+  }
+  poblarProgramaGlobal();
+
+  const btnQuitarFiltros = document.getElementById("btn-quitar-filtros");
+
+  function aplicarFiltroGlobal(){
+    filtroGlobal = {facultad:selGFacultad.value, programa:selGPrograma.value, sede:selGSede.value};
+    reconstruirCacheFiltrado();
+    const vacio = filtroVacio(filtroGlobal);
+    if(vacio){
+      avisoFiltro.style.display = "none";
+    } else {
+      const partes = [];
+      if(filtroGlobal.sede) partes.push(`Sede: ${filtroGlobal.sede}`);
+      if(filtroGlobal.facultad) partes.push(`Facultad: ${filtroGlobal.facultad}`);
+      if(filtroGlobal.programa) partes.push(`Programa: ${filtroGlobal.programa}`);
+      avisoFiltro.textContent = `Filtro activo — todo el tablero muestra solo: ${partes.join(" · ")}.`;
+      avisoFiltro.style.display = "block";
+    }
+    btnQuitarFiltros.disabled = vacio;
+    render();
+  }
+  selGSede.addEventListener("change", ()=>{ poblarProgramaGlobal(); aplicarFiltroGlobal(); });
+  selGFacultad.addEventListener("change", ()=>{ poblarProgramaGlobal(); aplicarFiltroGlobal(); });
+  selGPrograma.addEventListener("change", aplicarFiltroGlobal);
+  btnQuitarFiltros.addEventListener("click", ()=>{
+    selGSede.value = "";
+    selGFacultad.value = "";
+    poblarProgramaGlobal();
+    selGPrograma.value = "";
+    aplicarFiltroGlobal();
+  });
+  btnQuitarFiltros.disabled = true;
+
   selActual.addEventListener("change", render);
   selComparar.addEventListener("change", render);
   window.__render = render;
   render();
+}
+
+// ---------------- CRUCE: expandir/colapsar filas de detalle ----------------
+// Ninguna de las dos tablas (facultad, programa) se vuelve a crear en cada
+// render (solo su innerHTML), así que un único listener delegado en el
+// panel entero cubre ambas y sigue funcionando después de que se
+// reconstruyan con nuevos datos o filtros.
+const panelCruce = document.getElementById("panel-cruce");
+if(panelCruce){
+  panelCruce.addEventListener("click", (e)=>{
+    const fila = e.target.closest("tr.fila-programa");
+    if(!fila) return;
+    const btn = fila.querySelector(".expand-toggle");
+    if(!btn) return;
+    const detalle = fila.nextElementSibling;
+    if(!detalle || !detalle.classList.contains("fila-detalle")) return;
+    const abierto = detalle.style.display !== "none";
+    detalle.style.display = abierto ? "none" : "table-row";
+    btn.textContent = abierto ? "▸" : "▾";
+  });
 }
 
 // ---------------- TABS ----------------
