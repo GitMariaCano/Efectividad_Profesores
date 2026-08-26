@@ -107,6 +107,9 @@ header.top p{font-size:12.5px;color:rgba(255,255,255,.8);margin-top:3px;}
 .kpi-change.positive{color:var(--positive);}
 .kpi-change.negative{color:var(--negative);}
 .kpi-change.neutral{color:var(--neutral);}
+.kpi-card.destacada{border-width:2px;box-shadow:0 3px 10px rgba(20,30,50,.1);}
+.kpi-card.destacada-azul{border-color:var(--azul);background:linear-gradient(135deg,#e6f5fb 0%,#ffffff 60%);}
+.kpi-card.destacada-fucsia{border-color:var(--fucsia);background:linear-gradient(135deg,#fdebf1 0%,#ffffff 60%);}
 
 .grid-2{display:grid;grid-template-columns:1.3fr 1fr;gap:var(--gap);margin-bottom:var(--gap);}
 .grid-2b{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap);margin-bottom:var(--gap);}
@@ -201,58 +204,34 @@ footer.bottom{text-align:center;font-size:12px;color:var(--text-secondary);paddi
 
   <!-- RESUMEN -->
   <div class="panel active" id="panel-resumen">
+    <div class="kpi-row" id="kpi-resumen-destacadas" style="margin-bottom:14px;"></div>
     <div class="kpi-row" id="kpi-resumen"></div>
     <div class="grid-2b">
       <div class="card">
         <h3>Distribución de horas por función misional</h3>
-        <div class="card-sub">Horas totales por periodo, institución — se muestran todos los periodos disponibles</div>
+        <div class="card-sub">Horas totales por periodo, institución — incluye horas de práctica repartidas a docencia/extensión, y Diplomado/Cualificación fusionados en Extensión/Investigación — se muestran todos los periodos disponibles</div>
         <canvas id="chart-resumen-horas"></canvas>
       </div>
       <div class="card">
-        <h3>Evolución %Docencia / %Gestión / %Otros</h3>
-        <div class="card-sub">Cálculo para cuadros maestros, institución</div>
-        <canvas id="chart-resumen-evolucion"></canvas>
+        <h3>Relación profesor-estudiante vs máximo</h3>
+        <div class="card-sub">Institución, todos los periodos disponibles</div>
+        <canvas id="chart-resumen-pe"></canvas>
       </div>
-    </div>
-    <div class="card">
-      <h3>Relación profesor-estudiante vs ideal</h3>
-      <div class="card-sub">Institución, todos los periodos disponibles</div>
-      <canvas id="chart-resumen-pe"></canvas>
     </div>
   </div>
 
   <!-- FUNCIONES MISIONALES -->
   <div class="panel" id="panel-misionales">
     <div class="kpi-row" id="kpi-misionales-horas" style="margin-bottom:14px;"></div>
-    <div class="kpi-row" id="kpi-misionales"></div>
-    <div class="grid-2b">
-      <div class="card">
-        <h3>Horas por función misional y facultad</h3>
-        <div class="card-sub" id="sub-mis-facultad">Periodo actual</div>
-        <canvas id="chart-mis-facultad" style="max-height:420px;"></canvas>
-      </div>
-      <div class="card">
-        <h3>% Docencia / %Gestión / %Otros por facultad</h3>
-        <div class="card-sub" id="sub-mis-cuadro">Cálculo para cuadros maestros, periodo actual</div>
-        <canvas id="chart-mis-cuadro"></canvas>
-      </div>
-    </div>
     <div class="card" style="margin-bottom:var(--gap);">
       <h3>Horas por función misional y facultad, en %</h3>
-      <div class="card-sub" id="sub-mis-facultad-pct">Misma información de arriba pero como % del total de horas de cada facultad — al haber tanta diferencia en el número de docentes por facultad, esta vista permite comparar la distribución interna sin que el tamaño de la facultad la oculte</div>
+      <div class="card-sub" id="sub-mis-facultad-pct">Misma información de arriba pero como % del total de horas de cada facultad — al haber tanta diferencia en el número de docentes por facultad, esta vista permite comparar la distribución interna sin que el tamaño de la facultad la oculte. Diplomado/Especialización se suma a Extensión, Cualificación docente se suma a Investigación, y las horas de práctica se reparten a Docencia/Extensión.</div>
       <canvas id="chart-mis-facultad-pct" style="max-height:420px;"></canvas>
     </div>
-    <div class="grid-2b">
-      <div class="card">
-        <h3>Evolución de horas totales por facultad</h3>
-        <div class="card-sub">Todos los periodos disponibles con datos de funciones misionales</div>
-        <canvas id="chart-mis-evol-horas"></canvas>
-      </div>
-      <div class="card">
-        <h3>Evolución de %Docencia por facultad</h3>
-        <div class="card-sub">Todos los periodos disponibles, cálculo para cuadros maestros</div>
-        <canvas id="chart-mis-evol-pct"></canvas>
-      </div>
+    <div class="card" style="margin-bottom:var(--gap);">
+      <h3>Evolución de horas totales por facultad</h3>
+      <div class="card-sub">Todos los periodos disponibles con datos de funciones misionales</div>
+      <canvas id="chart-mis-evol-horas"></canvas>
     </div>
     <div class="card" style="margin-bottom:var(--gap);">
       <h3>Detalle por programa</h3>
@@ -261,7 +240,7 @@ footer.bottom{text-align:center;font-size:12px;color:var(--text-secondary);paddi
     </div>
     <div class="card">
       <h3>Superávit / déficit de profesores y uso del tiempo</h3>
-      <div class="card-sub">Cruza la relación profesor-estudiante (¿sobran o faltan profesores frente a la relación ideal?) con cómo se reparten las horas de esos docentes. Un programa con superávit de profesores debería reflejar ese margen en más investigación, extensión o apoyo a otros programas — no solo acumularlo en apoyo administrativo.</div>
+      <div class="card-sub">Cruza la relación profesor-estudiante (¿sobran o faltan profesores frente a la relación máxima?) con cómo se reparten las horas de esos docentes. Un programa con superávit de profesores debería reflejar ese margen en más investigación, extensión o apoyo a otros programas — no solo acumularlo en apoyo administrativo.</div>
       <div class="kpi-row" id="superavit-kpi" style="margin-bottom:14px;"></div>
       <div class="table-wrap"><table class="dt" id="tabla-superavit"></table></div>
     </div>
@@ -274,7 +253,7 @@ footer.bottom{text-align:center;font-size:12px;color:var(--text-secondary);paddi
     <div class="grid-2b">
       <div class="card">
         <h3>Relación profesor-estudiante por facultad</h3>
-        <div class="card-sub">Línea punteada = relación ideal</div>
+        <div class="card-sub">Línea punteada = relación máxima</div>
         <canvas id="chart-pe-facultad"></canvas>
       </div>
       <div class="card">
@@ -285,7 +264,7 @@ footer.bottom{text-align:center;font-size:12px;color:var(--text-secondary);paddi
     </div>
     <div class="card" style="margin-bottom:var(--gap);">
       <h3>Evolución de la relación profesor-estudiante por facultad</h3>
-      <div class="card-sub">Todos los periodos disponibles · línea punteada = relación ideal de cada periodo</div>
+      <div class="card-sub">Todos los periodos disponibles · línea punteada = relación máxima de cada periodo</div>
       <canvas id="chart-pe-evolucion"></canvas>
     </div>
     <div class="card">
@@ -300,7 +279,7 @@ footer.bottom{text-align:center;font-size:12px;color:var(--text-secondary);paddi
     <div class="kpi-row" id="kpi-practicas-variacion"></div>
     <div class="grid-2b">
       <div class="card">
-        <h3>Estudiantes en práctica: salud vs. no salud</h3>
+        <h3>Estudiantes en práctica por facultad</h3>
         <div class="card-sub">Comparativo entre periodos disponibles en el archivo de prácticas</div>
         <canvas id="chart-prac-salud"></canvas>
       </div>
@@ -406,7 +385,7 @@ function etiquetasPctApiladas(minVisible=4){
   };
 }
 function d3esIdeal(dataset){
-  return dataset.label === "Ideal";
+  return dataset.label === "Máximo";
 }
 // Para gráficos de línea con varias series: en vez de alternar arriba/abajo
 // según la posición del dataset (lo que choca cuando dos facultades tienen
@@ -503,6 +482,58 @@ function deltaTag(actual, previo, invertido=false, unidad=""){
 // tablas) no necesita saber que existe un filtro: solo hay que hacer que
 // lean de datosActivos() en vez de DATA.periodos directamente.
 const CATS_HORAS_KEYS = ["docencia","investigacion","extension","apoyo_admin","diplomado","cualificacion"];
+
+// ---------------- Fusión de categorías + reparto de horas de práctica ----------------
+// Para varias vistas (Resumen, tarjetas de horas de Funciones Misionales,
+// gráfica de horas+% por facultad, tabla "Detalle por programa"), las 6
+// categorías de horas se muestran fusionadas en 4: Diplomado se suma a
+// Extensión, Cualificación docente se suma a Investigación. La tarjeta de
+// horas de Cualificación (punto 7) sigue mostrando su propio valor SIN
+// fusionar, aparte de esta fusión.
+const CATS_FUSION = [
+  {key:"docencia", label:"Docencia", color:"#0090BD"},
+  {key:"investigacion", label:"Investigación", color:"#45AC34"},
+  {key:"extension", label:"Extensión y Proy. Social", color:"#5D6770"},
+  {key:"apoyo_admin", label:"Apoyo administrativo", color:"#D5035E"},
+];
+function fusionarCategorias(bolsaFM, practicaSplit){
+  practicaSplit = practicaSplit || {aDocencia:0, aExtension:0};
+  return {
+    docencia: (bolsaFM.docencia||0) + practicaSplit.aDocencia,
+    investigacion: (bolsaFM.investigacion||0) + (bolsaFM.cualificacion||0),
+    extension: (bolsaFM.extension||0) + (bolsaFM.diplomado||0) + practicaSplit.aExtension,
+    apoyo_admin: bolsaFM.apoyo_admin||0,
+  };
+}
+// Regla de reparto de horas de práctica hacia funciones misionales (solo para
+// alimentar gráficas/KPIs de funciones misionales — no modifica los datos
+// crudos de `practicas`): programas de la facultad de Ciencias de la Salud
+// (es_salud=true) reparten sus horas de práctica mitad a Docencia, mitad a
+// Extensión; el resto de programas (Empresariales, Ingeniería) van 100% a
+// Docencia.
+function practicaSplitPorFacultadMap(practicas){
+  const map = {};
+  if(!practicas) return map;
+  Object.values(practicas.por_programa||{}).forEach(reg=>{
+    const f = (reg.facultad||"").toString().trim();
+    if(!f) return;
+    if(!map[f]) map[f] = {aDocencia:0, aExtension:0};
+    const h = reg.horas_requeridas||0;
+    if(reg.es_salud){ map[f].aDocencia += h/2; map[f].aExtension += h/2; }
+    else { map[f].aDocencia += h; }
+  });
+  return map;
+}
+function practicaSplitParaFacultad(map, facultadFM){
+  const clave = buscarClaveParecida(facultadFM, map);
+  return clave ? map[clave] : {aDocencia:0, aExtension:0};
+}
+function horasPracticaInstitucion(practicas){
+  const map = practicaSplitPorFacultadMap(practicas);
+  let aDocencia=0, aExtension=0;
+  Object.values(map).forEach(b=>{ aDocencia+=b.aDocencia; aExtension+=b.aExtension; });
+  return {aDocencia, aExtension};
+}
 
 function filtroVacio(f){ return !f.facultad && !f.programa && !f.sede; }
 function pasaFiltro(nombre, facultad, sede, filtro){
@@ -749,9 +780,21 @@ if(periodosDisponibles.length === 0){
   function kpiCard(label, valor, sub, cambioHtml, claseValor){
     return `<div class="kpi-card"><div class="kpi-label">${label}</div><div class="kpi-value${claseValor?" "+claseValor:""}">${valor}</div>${sub?`<div class="kpi-sub">${sub}</div>`:""}${cambioHtml||""}</div>`;
   }
+  // Tarjeta destacada (borde/fondo con la paleta institucional) para
+  // comparativos que se quieren resaltar de un vistazo — ej. Docentes TC-MT
+  // y Profesores (IND+11 meses) entre periodos, en Resumen general.
+  function kpiCardDestacada(label, valor, sub, cambioHtml, tono){
+    return `<div class="kpi-card destacada destacada-${tono}"><div class="kpi-label">${label}</div><div class="kpi-value">${valor}</div>${sub?`<div class="kpi-sub">${sub}</div>`:""}${cambioHtml||""}</div>`;
+  }
+  function pctVarGeneric(actual, previo){
+    if(previo===null||previo===undefined||actual===null||actual===undefined) return null;
+    if(previo === 0) return null;
+    return (actual - previo) / previo * 100;
+  }
 
   // ---------------- RESUMEN ----------------
   function renderResumen(pActual, pComparar, dA, dC){
+    const kpiDestacadasEl = document.getElementById("kpi-resumen-destacadas");
     const kpiEl = document.getElementById("kpi-resumen");
     const fmA = dA && dA.funciones_misionales ? dA.funciones_misionales.institucion : null;
     const fmC = dC && dC.funciones_misionales ? dC.funciones_misionales.institucion : null;
@@ -760,23 +803,63 @@ if(periodosDisponibles.length === 0){
     const prA = dA && dA.practicas ? dA.practicas : null;
     const prC = dC && dC.practicas ? dC.practicas : null;
 
+    // Docentes TC-MT y Profesores (IND+11 meses): tarjetas destacadas, en su
+    // propia fila (primer nivel, más prominente), para comparar de un
+    // vistazo el tamaño de la planta entre los dos periodos elegidos.
+    // Formato: valor actual - valor anterior (los dos números, no solo la
+    // diferencia), y el % de variación con "vs periodo anterior" al lado.
+    let htmlDestacadas = "";
+    const docA = fmA?fmA.num_docentes:null, docC = fmC?fmC.num_docentes:null;
+    const pctDoc = pctVarGeneric(docA, docC);
+    htmlDestacadas += kpiCardDestacada(`Docentes TC-MT ${pActual}`, docA!==null?fmt(docA,0):"—",
+      (docA!==null&&docC!==null)?`${fmt(docA,0)} - ${fmt(docC,0)}`:"",
+      pctDoc!==null?`<span class="kpi-change ${pctDoc>0?"positive":(pctDoc<0?"negative":"neutral")}">${pctDoc>=0?"+":""}${fmt(pctDoc,1)}% vs periodo anterior</span>`:"",
+      "azul");
+    const profA = peA?peA.profesores_actuales:null, profC = peC?peC.profesores_actuales:null;
+    const pctProf = pctVarGeneric(profA, profC);
+    htmlDestacadas += kpiCardDestacada(`Profesores (IND + 11 meses) ${pActual}`, profA!==null?fmt(profA,1):"—",
+      (profA!==null&&profC!==null)?`${fmt(profA,1)} - ${fmt(profC,1)}`:"",
+      pctProf!==null?`<span class="kpi-change ${pctProf>0?"positive":(pctProf<0?"negative":"neutral")}">${pctProf>=0?"+":""}${fmt(pctProf,1)}% vs periodo anterior</span>`:"",
+      "fucsia");
+    kpiDestacadasEl.innerHTML = htmlDestacadas;
+
+    // Segundo nivel: el resto de KPIs generales de Resumen.
     let html = "";
     html += kpiCard(`Horas totales (misionales) ${pActual}`, fmA?fmt(fmA.horas_totales,0):"—", fmA?`${fmA.num_docentes} docentes`:"", fmA&&fmC?deltaTag(fmA.horas_totales, fmC.horas_totales):"");
     html += kpiCard(`Horas de práctica ${pActual}`, prA?fmt(prA.horas_requeridas,0):"—", "acompañamiento estimado", prA&&prC?deltaTag(prA.horas_requeridas, prC.horas_requeridas):"");
     const horasTotalCombinadoA = (fmA && prA) ? fmA.horas_totales + prA.horas_requeridas : null;
     const horasTotalCombinadoC = (fmC && prC) ? fmC.horas_totales + prC.horas_requeridas : null;
     html += kpiCard(`Horas totales (misionales + práctica) ${pActual}`, horasTotalCombinadoA!==null?fmt(horasTotalCombinadoA,0):"—", "misionales + acompañamiento de prácticas", (horasTotalCombinadoA!==null&&horasTotalCombinadoC!==null)?deltaTag(horasTotalCombinadoA, horasTotalCombinadoC):"");
-    html += kpiCard(`% Docencia (interno) ${pActual}`, fmA?fmtPct(fmA.porcentajes.docencia):"—", "sobre horas totales asignadas", fmA&&fmC?deltaTag(fmA.porcentajes.docencia, fmC.porcentajes.docencia,false,"pp"):"");
-    html += kpiCard(`Relación profesor-estudiante ${pActual}`, peA?fmt(peA.relacion_pe,1):"—", peA?`ideal institucional: ${fmt(dA.proporcion_pe.ideal,0)} · entre más bajo, mejor`:"", peA&&peC?deltaTag(peA.relacion_pe, peC.relacion_pe,true):"");
+    html += kpiCard(`Relación profesor-estudiante ${pActual}`, peA?fmt(peA.relacion_pe,1):"—", peA?`máximo institucional: ${fmt(dA.proporcion_pe.ideal,0)} · entre más bajo, mejor`:"", peA&&peC?deltaTag(peA.relacion_pe, peC.relacion_pe,true):"");
     html += kpiCard(`Estudiantes en práctica ${pActual}`, prA?fmt(prA.total_estudiantes,0):"—", prA?`${fmt(prA.salud_estudiantes,0)} salud · ${fmt(prA.no_salud_estudiantes,0)} otros`:"", prA&&prC?deltaTag(prA.total_estudiantes, prC.total_estudiantes):"");
     kpiEl.innerHTML = html;
 
-    // Horas por periodo (todas las funciones misionales disponibles, orden cronológico)
+    // Horas por periodo (todas las funciones misionales disponibles, orden
+    // cronológico), categorías fusionadas (Diplomado→Extensión, Cualificación
+    // →Investigación) + horas de práctica repartidas a Docencia/Extensión
+    // según la regla salud (50/50) vs. otras facultades (100% docencia).
+    // Las etiquetas de datos muestran "horas (%)" del total fusionado de cada periodo.
     const labels = periodosDisponibles.filter(p=>datosActivos()[p].funciones_misionales);
-    const datasets = CATS.map(c=>({
+    const fusionPorPeriodo = {};
+    labels.forEach(p=>{
+      const d = datosActivos()[p];
+      const split = horasPracticaInstitucion(d.practicas);
+      const fus = fusionarCategorias(d.funciones_misionales.institucion, split);
+      const total = CATS_FUSION.reduce((s,c)=>s+fus[c.key],0) || 1e-9;
+      fusionPorPeriodo[p] = {fus, total};
+    });
+    const datasets = CATS_FUSION.map(c=>({
       label:c.label, backgroundColor:c.color,
-      data: labels.map(p=>datosActivos()[p].funciones_misionales.institucion[c.key]),
-      datalabels: etiquetasHorasApiladas(80)
+      data: labels.map(p=>fusionPorPeriodo[p].fus[c.key]),
+      datalabels: {
+        display: ctx => (ctx.dataset.data[ctx.dataIndex]||0) >= 80,
+        color: colorEtiqueta, font:{size:10, weight:600},
+        formatter: (v,ctx) => {
+          const p = labels[ctx.dataIndex];
+          const pct = fusionPorPeriodo[p].total ? v/fusionPorPeriodo[p].total*100 : 0;
+          return `${fmt(v,0)} (${fmtPct(pct,0)})`;
+        }
+      }
     }));
     charts.resumenHoras = new Chart(document.getElementById("chart-resumen-horas"), {
       type:"bar",
@@ -784,24 +867,12 @@ if(periodosDisponibles.length === 0){
       options:{responsive:true,maintainAspectRatio:false,scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true}},plugins:{legend:{position:"bottom",labels:{boxWidth:11,font:{size:11}}}}}
     });
 
-    // evolución % cuadro maestro (todos los periodos disponibles)
-    const labelsCM = periodosDisponibles.filter(p=>datosActivos()[p].funciones_misionales);
-    charts.resumenEvolucion = new Chart(document.getElementById("chart-resumen-evolucion"), {
-      type:"line",
-      data:{labels:labelsCM, datasets:[
-        {label:"% Docencia", data:labelsCM.map(p=>datosActivos()[p].funciones_misionales.institucion.pct_doc_cm*100), borderColor:"#0090BD", backgroundColor:"#0090BD20", tension:.25, borderWidth:2, datalabels:{display:true,color:"#0090BD",align:"top",font:{size:10,weight:600},formatter:v=>fmtPct(v,0)}},
-        {label:"% Gestión", data:labelsCM.map(p=>datosActivos()[p].funciones_misionales.institucion.pct_gestion_cm*100), borderColor:"#D5035E", backgroundColor:"#D5035E20", tension:.25, borderWidth:2, datalabels:{display:true,color:"#D5035E",align:"bottom",font:{size:10,weight:600},formatter:v=>fmtPct(v,0)}},
-        {label:"% Otros", data:labelsCM.map(p=>datosActivos()[p].funciones_misionales.institucion.pct_otros_cm*100), borderColor:"#5D6770", backgroundColor:"#5D677020", tension:.25, borderWidth:2, datalabels:{display:true,color:"#5D6770",align:"top",font:{size:10,weight:600},formatter:v=>fmtPct(v,0)}},
-      ]},
-      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom",labels:{boxWidth:11,font:{size:11}}}},scales:{y:{beginAtZero:true,ticks:{callback:v=>fmtPct(v,0)}}}}
-    });
-
     const labelsPE = periodosDisponibles.filter(p=>datosActivos()[p].proporcion_pe);
     charts.resumenPE = new Chart(document.getElementById("chart-resumen-pe"), {
       type:"bar",
       data:{labels:labelsPE, datasets:[
         {label:"Relación real", data:labelsPE.map(p=>datosActivos()[p].proporcion_pe.institucion.relacion_pe), backgroundColor:"#0090BD", datalabels:{display:true,color:"#ffffff",font:{size:10,weight:600},formatter:v=>fmt(v,1)}},
-        {label:"Ideal", data:labelsPE.map(p=>datosActivos()[p].proporcion_pe.ideal), backgroundColor:"#c9cfdb", type:"line", borderColor:"#5D6770", borderDash:[6,4], fill:false, borderWidth:2, pointRadius:0, datalabels:{display:false}}
+        {label:"Máximo", data:labelsPE.map(p=>datosActivos()[p].proporcion_pe.ideal), backgroundColor:"#c9cfdb", type:"line", borderColor:"#5D6770", borderDash:[6,4], fill:false, borderWidth:2, pointRadius:0, order:0, datalabels:{display:false}}
       ]},
       options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom",labels:{boxWidth:11,font:{size:11}}}},scales:{y:{beginAtZero:true}}}
     });
@@ -809,45 +880,54 @@ if(periodosDisponibles.length === 0){
 
   // ---------------- FUNCIONES MISIONALES ----------------
   function renderMisionales(pActual, pComparar, dA, dC){
-    const kpiEl = document.getElementById("kpi-misionales");
     const kpiHorasEl = document.getElementById("kpi-misionales-horas");
     const fmA = dA && dA.funciones_misionales;
     const fmC = dC && dC.funciones_misionales;
     if(!fmA){
-      kpiEl.innerHTML = `<div class="empty-msg">No hay datos de funciones misionales para ${pActual}.</div>`;
-      kpiHorasEl.innerHTML = "";
+      kpiHorasEl.innerHTML = `<div class="empty-msg">No hay datos de funciones misionales para ${pActual}.</div>`;
       document.getElementById("tabla-misionales").innerHTML = "";
-      if(charts.misFacultad) charts.misFacultad.destroy();
-      if(charts.misCuadro) charts.misCuadro.destroy();
+      if(charts.misFacultadPct) charts.misFacultadPct.destroy();
       return;
     }
     const inst = fmA.institucion;
+    const instC = fmC ? fmC.institucion : null;
 
-    // Fila de tarjetas con el valor EN HORAS (además del % de abajo) de las
-    // 4 funciones misionales principales, con su propio comparativo contra
-    // el periodo anterior — para que se vea de un vistazo si, por ejemplo,
-    // Docencia bajó en horas aunque el total institucional haya subido por
-    // Apoyo administrativo (caso real que preguntó el usuario).
+    // Fila de tarjetas con el valor EN HORAS de las 4 funciones misionales
+    // fusionadas (Diplomado→Extensión, Cualificación→Investigación), con su
+    // propio comparativo contra el periodo anterior — para que se vea de un
+    // vistazo si, por ejemplo, Docencia bajó en horas aunque el total
+    // institucional haya subido por Apoyo administrativo. Se agrega además
+    // una tarjeta con las horas de Cualificación docente SIN fusionar (su
+    // propio valor), aunque esas mismas horas ya cuenten dentro de
+    // Investigación en esta fila y en las demás vistas.
+    // El reparto de horas de práctica (50/50 docencia/extensión para
+    // programas de salud, 100% docencia para el resto) se suma aquí con la
+    // MISMA función que usan las gráficas de esta pestaña
+    // (horasPracticaInstitucion / fusionarCategorias), para que las
+    // tarjetas y las gráficas muestren exactamente la misma cifra.
     const LABELS_HORAS = {docencia:"Horas de docencia", investigacion:"Horas de investigación", extension:"Horas de extensión", apoyo_admin:"Horas de apoyo administrativo"};
-    const CATS_PRINCIPALES = CATS.filter(c=>["docencia","investigacion","extension","apoyo_admin"].includes(c.key));
+    const splitA = horasPracticaInstitucion(dA && dA.practicas);
+    const splitC = horasPracticaInstitucion(dC && dC.practicas);
+    const fusA = fusionarCategorias(inst, splitA);
+    const fusC = instC ? fusionarCategorias(instC, splitC) : null;
+    const totalFusA = CATS_FUSION.reduce((s,c)=>s+fusA[c.key],0) || 1e-9;
     let htmlHoras = "";
-    CATS_PRINCIPALES.forEach(c=>{
-      const horasPrev = fmC ? fmC.institucion[c.key] : null;
+    CATS_FUSION.forEach(c=>{
+      const horasPrev = fusC ? fusC[c.key] : null;
       htmlHoras += kpiCard(
         `${LABELS_HORAS[c.key]} ${pActual}`,
-        fmt(inst[c.key],0),
-        `${fmtPct(inst.porcentajes[c.key])} de las horas totales`,
-        fmC?deltaTag(inst[c.key], horasPrev):""
+        fmt(fusA[c.key],0),
+        `${fmtPct(fusA[c.key]/totalFusA*100)} de las horas totales (incluye práctica)`,
+        fusC?deltaTag(fusA[c.key], horasPrev):""
       );
     });
+    htmlHoras += kpiCard(
+      `Horas de Cualificación docente ${pActual}`,
+      fmt(inst.cualificacion,0),
+      `${fmtPct(inst.cualificacion/totalFusA*100)} de las horas totales · ya incluidas en Investigación arriba`,
+      instC?deltaTag(inst.cualificacion, instC.cualificacion):""
+    );
     kpiHorasEl.innerHTML = htmlHoras;
-
-    let html = "";
-    CATS.forEach(c=>{
-      const prevPct = fmC ? fmC.institucion.porcentajes[c.key] : null;
-      html += kpiCard(`${c.label} ${pActual}`, fmtPct(inst.porcentajes[c.key]), `${fmt(inst[c.key],0)} horas`, fmC?deltaTag(inst.porcentajes[c.key], prevPct,false,"pp"):"");
-    });
-    kpiEl.innerHTML = html;
 
     const facultades = Object.keys(fmA.por_facultad).sort();
     // Si hay periodo de comparación, cada facultad aparece dos veces (su fila
@@ -861,75 +941,43 @@ if(periodosDisponibles.length === 0){
     });
     const etiquetasFilasFM = filasFM.map(r => fmC ? `${r.facultad} (${r.periodo})` : r.facultad);
 
-    document.getElementById("sub-mis-facultad").textContent = fmC ? `${pActual} vs ${pComparar} — el color más claro es el periodo de comparación` : "Periodo actual";
     document.getElementById("sub-mis-facultad-pct").textContent = fmC
-      ? `Misma información, como % del total de horas de cada facultad, comparando ${pActual} vs ${pComparar} — el color más claro es el periodo de comparación`
-      : "Misma información de arriba pero como % del total de horas de cada facultad — al haber tanta diferencia en el número de docentes por facultad, esta vista permite comparar la distribución interna sin que el tamaño de la facultad la oculte";
+      ? `Misma información, como % del total de horas (fusionadas) de cada facultad, comparando ${pActual} vs ${pComparar} — el color más claro es el periodo de comparación`
+      : "Misma información de arriba pero como % del total de horas (fusionadas) de cada facultad — al haber tanta diferencia en el número de docentes por facultad, esta vista permite comparar la distribución interna sin que el tamaño de la facultad la oculte";
 
-    charts.misFacultad = new Chart(document.getElementById("chart-mis-facultad"), {
-      type:"bar",
-      data:{labels:etiquetasFilasFM, datasets:CATS.map(c=>({
-        label:c.label,
-        backgroundColor:filasFM.map(r=>r.esComparacion ? c.color+"70" : c.color),
-        data:filasFM.map(r=>r.datos[c.key]),
-        datalabels:etiquetasHorasApiladas(150)
-      }))},
-      options:{responsive:true,maintainAspectRatio:false,indexAxis:"y",scales:{x:{stacked:true,beginAtZero:true},y:{stacked:true}},plugins:{legend:{position:"bottom",labels:{boxWidth:11,font:{size:11}}}}}
+    // Reparto de horas de práctica por facultad (regla salud 50/50 vs. 100%
+    // docencia en las demás), para el periodo actual y el de comparación.
+    const practicaMapA = practicaSplitPorFacultadMap(dA && dA.practicas);
+    const practicaMapC = practicaSplitPorFacultadMap(dC && dC.practicas);
+    const filasFusion = filasFM.map(r=>{
+      const split = practicaSplitParaFacultad(r.esComparacion ? practicaMapC : practicaMapA, r.facultad);
+      const fus = fusionarCategorias(r.datos, split);
+      const total = CATS_FUSION.reduce((s,c)=>s+fus[c.key],0) || 1e-9;
+      return {fus, total};
     });
 
-    // Misma información, pero en % del total de horas de cada facultad (barra
-    // 100% apilada), para comparar la distribución interna sin que el
-    // desbalance en cantidad de docentes por facultad oculte la proporción.
+    // Misma información, en % del total de horas (fusionadas + práctica) de
+    // cada facultad (barra 100% apilada); las etiquetas muestran horas y %.
     charts.misFacultadPct = new Chart(document.getElementById("chart-mis-facultad-pct"), {
       type:"bar",
-      data:{labels:etiquetasFilasFM, datasets:CATS.map(c=>({
+      data:{labels:etiquetasFilasFM, datasets:CATS_FUSION.map(c=>({
         label:c.label,
         backgroundColor:filasFM.map(r=>r.esComparacion ? c.color+"70" : c.color),
-        data:filasFM.map(r=>r.datos.porcentajes[c.key]),
-        datalabels:etiquetasPctApiladas(4)
+        data:filasFusion.map(r=>r.fus[c.key]/r.total*100),
+        datalabels:{
+          display: ctx => (ctx.dataset.data[ctx.dataIndex]||0) >= 4,
+          color: colorEtiqueta, font:{size:10, weight:600},
+          formatter: (v,ctx) => {
+            const horas = filasFusion[ctx.dataIndex].fus[c.key];
+            return `${fmt(horas,0)} (${fmtPct(v,0)})`;
+          }
+        }
       }))},
       options:{responsive:true,maintainAspectRatio:false,indexAxis:"y",scales:{
         x:{stacked:true,beginAtZero:true,max:100,ticks:{callback:v=>fmtPct(v,0)}},
         y:{stacked:true}
       },plugins:{legend:{position:"bottom",labels:{boxWidth:11,font:{size:11}}},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${fmtPct(ctx.parsed.x,1)}`}}}}
     });
-
-    const tieneCM = facultades.length && (fmA.por_facultad[facultades[0]].pct_doc_cm !== undefined);
-    document.getElementById("sub-mis-cuadro").textContent = tieneCM
-      ? (fmC ? `Cálculo para cuadros maestros, comparando ${pActual} vs ${pComparar} — el color más claro es el periodo de comparación` : "Cálculo para cuadros maestros, periodo actual")
-      : "No disponible para este periodo";
-    if(tieneCM){
-      const metricasCM = [
-        {key:"pct_doc_cm", label:"% Docencia", color:"#0090BD"},
-        {key:"pct_gestion_cm", label:"% Gestión", color:"#D5035E"},
-        {key:"pct_otros_cm", label:"% Otros", color:"#5D6770"},
-      ];
-      const datasetsCuadro = [];
-      metricasCM.forEach(m=>{
-        datasetsCuadro.push({
-          label: fmC ? `${m.label} (${pActual})` : m.label,
-          backgroundColor: m.color,
-          data: facultades.map(f=>fmA.por_facultad[f][m.key]*100),
-          datalabels:{display:ctx=>(ctx.dataset.data[ctx.dataIndex]||0)>=3,color:"#ffffff",font:{size:10,weight:600},formatter:v=>fmtPct(v,0)}
-        });
-        if(fmC){
-          datasetsCuadro.push({
-            label: `${m.label} (${pComparar})`,
-            backgroundColor: m.color+"70",
-            data: facultades.map(f=>{
-              const b = fmC.por_facultad[f];
-              return (b && b[m.key]!==undefined) ? b[m.key]*100 : null;
-            }),
-            datalabels:{display:ctx=>(ctx.dataset.data[ctx.dataIndex]||0)>=3,color:"#2b3338",font:{size:10,weight:600},formatter:v=>v==null?"":fmtPct(v,0)}
-          });
-        }
-      });
-      charts.misCuadro = new Chart(document.getElementById("chart-mis-cuadro"), {
-        type:"bar",
-        data:{labels:facultades, datasets:datasetsCuadro},
-        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom",labels:{boxWidth:11,font:{size:11}}}},scales:{y:{beginAtZero:true,ticks:{callback:v=>fmtPct(v,0)}}}}
-      });
-    }
 
     // Evolución a través de TODOS los periodos disponibles (no solo los 2
     // elegidos en los filtros de arriba), por facultad.
@@ -947,31 +995,23 @@ if(periodosDisponibles.length === 0){
       }))},
       options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom",labels:{boxWidth:11,font:{size:11}}}},scales:{y:{beginAtZero:true}}}
     });
-    charts.misEvolPct = new Chart(document.getElementById("chart-mis-evol-pct"), {
-      type:"line",
-      data:{labels:periodosConMisionales, datasets:facultadesTodas.map((f,i)=>({
-        label:f, borderColor:colorFacultad(f), backgroundColor:colorFacultad(f)+"20", borderWidth:2, tension:.25,
-        data:periodosConMisionales.map(p=>{
-          const bf = datosActivos()[p].funciones_misionales.por_facultad[f];
-          return bf ? bf.pct_doc_cm*100 : null;
-        }),
-        datalabels:etiquetasLineaMultiple(colorFacultad(f), v=>fmtPct(v,0))
-      }))},
-      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom",labels:{boxWidth:11,font:{size:11}}}},scales:{y:{beginAtZero:true,ticks:{callback:v=>fmtPct(v,0)}}}}
-    });
 
-    // tabla por programa
+    // tabla por programa — categorías fusionadas (4 columnas en vez de 6)
     const programas = Object.keys(fmA.por_programa).sort();
-    let thead = `<thead><tr><th>Programa</th><th>Horas totales</th>${CATS.map(c=>`<th>${c.label} (%)</th>`).join("")}${fmC?"<th>Δ % Docencia</th>":""}</tr></thead>`;
+    let thead = `<thead><tr><th>Programa</th><th>Horas totales</th>${CATS_FUSION.map(c=>`<th>${c.label} (%)</th>`).join("")}${fmC?"<th>Δ % Docencia</th>":""}</tr></thead>`;
     let tbody = "<tbody>";
     programas.forEach(p=>{
       const reg = fmA.por_programa[p];
       const regC = fmC && fmC.por_programa[p] ? fmC.por_programa[p] : null;
+      const fusReg = fusionarCategorias(reg, {aDocencia:0, aExtension:0});
+      const totalReg = reg.horas_totales || 1e-9;
       tbody += `<tr><td>${p}</td><td>${fmt(reg.horas_totales,0)}</td>`;
-      CATS.forEach(c=>{ tbody += `<td>${fmtPct(reg.porcentajes[c.key])}</td>`; });
+      CATS_FUSION.forEach(c=>{ tbody += `<td>${fmtPct(fusReg[c.key]/totalReg*100)}</td>`; });
       if(fmC){
         if(regC){
-          const d = reg.porcentajes.docencia - regC.porcentajes.docencia;
+          const fusRegC = fusionarCategorias(regC, {aDocencia:0, aExtension:0});
+          const totalRegC = regC.horas_totales || 1e-9;
+          const d = (fusReg.docencia/totalReg*100) - (fusRegC.docencia/totalRegC*100);
           const clase = d>0.05?"bien":(d<-0.05?"alerta":"neutro");
           tbody += `<td><span class="tag ${clase}" title="pp = puntos porcentuales">${d>=0?"+":""}${fmt(d,1)} pp</span></td>`;
         } else {
@@ -1024,12 +1064,12 @@ if(periodosDisponibles.length === 0){
     const nDeficit = filas.filter(f=>f.diferencia > UMBRAL).length;
     const nBalanceado = filas.length - nSuperavit - nDeficit;
     kpiEl.innerHTML = [
-      kpiCard(`Programas con superávit de profesores ${pActual}`, fmt(nSuperavit,0), "más profesores de los que pide la relación ideal"),
-      kpiCard(`Programas con déficit de profesores ${pActual}`, fmt(nDeficit,0), "menos profesores de los que pide la relación ideal"),
+      kpiCard(`Programas con superávit de profesores ${pActual}`, fmt(nSuperavit,0), "más profesores de los que pide la relación máxima"),
+      kpiCard(`Programas con déficit de profesores ${pActual}`, fmt(nDeficit,0), "menos profesores de los que pide la relación máxima"),
       kpiCard(`Programas balanceados ${pActual}`, fmt(nBalanceado,0), `diferencia menor a ${UMBRAL} profesores`),
     ].join("");
 
-    let thead = `<thead><tr><th>Programa</th><th>Facultad</th><th>Profesores actuales</th><th>Diferencia vs ideal</th><th>% Docencia</th><th>% Investigación</th><th>% Extensión</th><th>% Apoyo admin.</th><th>% horas fuera de su programa</th></tr></thead>`;
+    let thead = `<thead><tr><th>Programa</th><th>Facultad</th><th>Profesores actuales</th><th>Diferencia vs máximo</th><th>% Docencia</th><th>% Investigación</th><th>% Extensión</th><th>% Apoyo admin.</th><th>% horas fuera de su programa</th></tr></thead>`;
     let tbody = "<tbody>";
     filas.forEach(f=>{
       const esSuperavit = f.diferencia < -UMBRAL;
@@ -1061,14 +1101,14 @@ if(periodosDisponibles.length === 0){
       return;
     }
     let html = "";
-    html += kpiCard(`Relación real (institución) ${pActual}`, fmt(peA.institucion.relacion_pe,1), `ideal: ${fmt(peA.ideal,0)} · entre más bajo, mejor`, peC?deltaTag(peA.institucion.relacion_pe, peC.institucion.relacion_pe,true):"");
+    const subRelacion = peC ? `${fmt(peA.institucion.relacion_pe,1)} vs ${fmt(peC.institucion.relacion_pe,1)} periodo anterior` : "entre más bajo, mejor";
+    html += kpiCard(`Relación real (institución) ${pActual}`, fmt(peA.institucion.relacion_pe,1), subRelacion, peC?deltaTag(peA.institucion.relacion_pe, peC.institucion.relacion_pe,true):"");
     html += kpiCard(`Estudiantes ${pActual}`, fmt(peA.institucion.estudiantes,0), "", peC?deltaTag(peA.institucion.estudiantes, peC.institucion.estudiantes):"");
     html += kpiCard(`Profesores (IND + 11 meses) ${pActual}`, fmt(peA.institucion.profesores_actuales,1), "", peC?deltaTag(peA.institucion.profesores_actuales, peC.institucion.profesores_actuales):"");
-    html += kpiCard(`Brecha de profesores para el ideal ${pActual}`, fmt(peA.institucion.diferencia_profesores,1), peA.institucion.diferencia_profesores>0?"faltan profesores":"holgura frente al ideal", peC?deltaTag(peA.institucion.diferencia_profesores, peC.institucion.diferencia_profesores,true):"");
     kpiEl.innerHTML = html;
 
-    // Segunda fila: % de variación de estudiantes frente al periodo de
-    // comparación, a nivel institución y por facultad.
+    // Segunda fila: % de variación de estudiantes y de profesores frente al
+    // periodo de comparación, a nivel institución y por facultad (estudiantes).
     const kpiVarEl = document.getElementById("kpi-pe-variacion");
     const facultadesVar = Object.keys(peA.por_facultad).sort();
     function pctVariacion(actual, previo){
@@ -1084,6 +1124,13 @@ if(periodosDisponibles.length === 0){
         varInst===null?"—":`${varInst>=0?"+":""}${fmt(varInst,1)}%`,
         `${fmt(peA.institucion.estudiantes,0)} vs ${fmt(peC.institucion.estudiantes,0)} periodo anterior`,
         varInst===null?"":`<span class="kpi-change ${varInst>0?"positive":(varInst<0?"negative":"neutral")}">vs ${pComparar}</span>`
+      );
+      const varProf = pctVariacion(peA.institucion.profesores_actuales, peC.institucion.profesores_actuales);
+      htmlVar += kpiCard(
+        `% variación profesores (institución) ${pActual}`,
+        varProf===null?"—":`${varProf>=0?"+":""}${fmt(varProf,1)}%`,
+        `${fmt(peA.institucion.profesores_actuales,1)} vs ${fmt(peC.institucion.profesores_actuales,1)} periodo anterior`,
+        varProf===null?"":`<span class="kpi-change ${varProf>0?"positive":(varProf<0?"negative":"neutral")}">vs ${pComparar}</span>`
       );
       facultadesVar.forEach(f=>{
         const bA = peA.por_facultad[f];
@@ -1102,24 +1149,28 @@ if(periodosDisponibles.length === 0){
     }
 
     const facultades = Object.keys(peA.por_facultad).sort();
+    // Punto 12: la línea punteada de "Máximo" debe verse POR ENCIMA de las
+    // barras. En Chart.js los datasets con `order` menor se dibujan después
+    // (encima) de los de `order` mayor, así que la línea lleva order:0 y las
+    // barras order:1.
     charts.peFacultad = new Chart(document.getElementById("chart-pe-facultad"), {
       type:"bar",
       data:{labels:facultades, datasets:[
-        {label:"Relación real", backgroundColor:facultades.map(colorFacultad), data:facultades.map(f=>peA.por_facultad[f].relacion_pe), datalabels:{display:true,color:colorEtiqueta,font:{size:10,weight:600},formatter:v=>fmt(v,1)}},
-        {label:"Ideal", type:"line", data:facultades.map(()=>peA.ideal), borderColor:"#5D6770", borderDash:[6,4], borderWidth:2, pointRadius:0, fill:false, datalabels:{display:false}}
+        {label:"Relación real", order:1, backgroundColor:facultades.map(colorFacultad), data:facultades.map(f=>peA.por_facultad[f].relacion_pe), datalabels:{display:true,color:colorEtiqueta,font:{size:10,weight:600},formatter:v=>fmt(v,1)}},
+        {label:"Máximo", type:"line", order:0, data:facultades.map(()=>peA.ideal), borderColor:"#5D6770", borderDash:[6,4], borderWidth:2, pointRadius:0, fill:false, datalabels:{display:false}}
       ]},
       options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom",labels:{boxWidth:11,font:{size:11}}}},scales:{y:{beginAtZero:true}}}
     });
 
     // Entre más baja la relación profesor-estudiante, mejor (menos estudiantes
-    // por profesor). Por eso los programas por debajo del ideal se marcan en
-    // azul (bien) y los que superan el ideal en fucsia (alerta).
+    // por profesor). Por eso los programas por debajo del máximo se marcan en
+    // azul (bien) y los que lo superan en fucsia (alerta).
     const programas = Object.entries(peA.por_programa).sort((a,b)=>a[1].relacion_pe-b[1].relacion_pe);
     charts.peProgramas = new Chart(document.getElementById("chart-pe-programa"), {
       type:"bar",
       data:{labels:programas.map(p=>p[0]), datasets:[
-        {label:"Relación real", data:programas.map(p=>p[1].relacion_pe), backgroundColor:programas.map(p=>p[1].relacion_pe > peA.ideal ? "#D5035E" : "#0090BD"), datalabels:{display:true,color:colorEtiqueta,font:{size:10,weight:600},formatter:v=>fmt(v,1)}},
-        {label:"Ideal", type:"line", data:programas.map(()=>peA.ideal), borderColor:"#5D6770", borderDash:[6,4], borderWidth:2, pointRadius:0, fill:false, datalabels:{display:false}}
+        {label:"Relación real", order:1, data:programas.map(p=>p[1].relacion_pe), backgroundColor:programas.map(p=>p[1].relacion_pe > peA.ideal ? "#D5035E" : "#0090BD"), datalabels:{display:true,color:colorEtiqueta,font:{size:10,weight:600},formatter:v=>fmt(v,1)}},
+        {label:"Máximo", type:"line", order:0, data:programas.map(()=>peA.ideal), borderColor:"#5D6770", borderDash:[6,4], borderWidth:2, pointRadius:0, fill:false, datalabels:{display:false}}
       ]},
       options:{responsive:true,maintainAspectRatio:false,indexAxis:"y",plugins:{legend:{position:"bottom",labels:{boxWidth:11,font:{size:11}}}},scales:{x:{beginAtZero:true}}}
     });
@@ -1138,16 +1189,16 @@ if(periodosDisponibles.length === 0){
           }),
           datalabels:etiquetasLineaMultiple(colorFacultad(f), v=>fmt(v,1))
         })),
-        {label:"Ideal", borderColor:"#5D6770", borderDash:[6,4], borderWidth:2, pointRadius:0, fill:false, data:periodosConPE.map(p=>datosActivos()[p].proporcion_pe.ideal), datalabels:{display:false}}
+        {label:"Máximo", borderColor:"#5D6770", borderDash:[6,4], borderWidth:2, pointRadius:0, fill:false, data:periodosConPE.map(p=>datosActivos()[p].proporcion_pe.ideal), datalabels:{display:false}}
       ]},
       options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom",labels:{boxWidth:11,font:{size:11}}}},scales:{y:{beginAtZero:true}}}
     });
 
-    let thead = `<thead><tr><th>Programa</th><th>Facultad</th><th>Sede</th><th>Estudiantes</th><th>Profesores</th><th>Relación P/E</th><th>Brecha vs ideal</th></tr></thead>`;
+    let thead = `<thead><tr><th>Programa</th><th>Facultad</th><th>Sede</th><th>Estudiantes</th><th>Profesores</th><th>Relación P/E</th><th>Brecha vs máximo</th></tr></thead>`;
     let tbody = "<tbody>";
     programas.forEach(([nombre, reg])=>{
       // relación baja = pocos estudiantes por profesor = mejor atención = bien;
-      // relación por encima del ideal = sobrecarga del docente = alerta.
+      // relación por encima del máximo = sobrecarga del docente = alerta.
       const estado = reg.relacion_pe > peA.ideal ? "alerta" : "bien";
       tbody += `<tr><td>${nombre}</td><td>${reg.facultad}</td><td>${reg.sede}</td><td>${fmt(reg.estudiantes,0)}</td><td>${fmt(reg.profesores_actuales,1)}</td><td>${fmt(reg.relacion_pe,1)}</td><td><span class="tag ${estado}">${fmt(reg.diferencia_profesores,1)}</span></td></tr>`;
     });
@@ -1210,14 +1261,26 @@ if(periodosDisponibles.length === 0){
       kpiVarPrEl.innerHTML = "";
     }
 
-    // comparación salud/no-salud entre TODOS los periodos que tengan datos de prácticas (no solo actual/comparación)
+    // comparación por facultad entre TODOS los periodos que tengan datos de
+    // prácticas (no solo actual/comparación) — antes agrupaba solo por
+    // salud/no salud; ahora cada facultad es su propia serie.
     const labelsPr = periodosDisponibles.filter(p=>datosActivos()[p].practicas);
+    const facultadesPrTodas = [...new Set(labelsPr.flatMap(p=>
+      Object.values(datosActivos()[p].practicas.por_programa).map(r=>(r.facultad||"").toString().trim()||"(sin especificar)")
+    ))].sort();
     charts.pracSalud = new Chart(document.getElementById("chart-prac-salud"), {
       type:"bar",
-      data:{labels:labelsPr, datasets:[
-        {label:"Programas de salud", backgroundColor:"#0090BD", data:labelsPr.map(p=>datosActivos()[p].practicas.salud_estudiantes), datalabels:{display:true,color:"#ffffff",font:{size:10,weight:600},formatter:v=>fmt(v,0)}},
-        {label:"Programas no salud", backgroundColor:"#45AC34", data:labelsPr.map(p=>datosActivos()[p].practicas.no_salud_estudiantes), datalabels:{display:true,color:"#ffffff",font:{size:10,weight:600},formatter:v=>fmt(v,0)}},
-      ]},
+      data:{labels:labelsPr, datasets:facultadesPrTodas.map(f=>({
+        label:f, backgroundColor:colorFacultad(f),
+        data:labelsPr.map(p=>{
+          let sum = 0;
+          Object.values(datosActivos()[p].practicas.por_programa).forEach(r=>{
+            if(((r.facultad||"").toString().trim()||"(sin especificar)") === f) sum += r.estudiantes||0;
+          });
+          return sum;
+        }),
+        datalabels:{display:ctx=>(ctx.dataset.data[ctx.dataIndex]||0)>0,color:colorEtiqueta,font:{size:10,weight:600},formatter:v=>fmt(v,0)}
+      }))},
       options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom",labels:{boxWidth:11,font:{size:11}}}},scales:{y:{beginAtZero:true}}}
     });
 
@@ -1231,12 +1294,12 @@ if(periodosDisponibles.length === 0){
       options:{responsive:true,maintainAspectRatio:false,indexAxis:"y",plugins:{legend:{position:"bottom",labels:{boxWidth:11,font:{size:11}}}},scales:{x:{beginAtZero:true}}}
     });
 
-    let thead = `<thead><tr><th>Programa</th><th>Facultad</th><th>Sede</th><th>Tipo</th><th>Estudiantes</th><th>Horas estimadas</th>${prC?"<th>Δ estudiantes</th>":""}</tr></thead>`;
+    let thead = `<thead><tr><th>Programa</th><th>Facultad</th><th>Sede</th><th>Estudiantes</th><th>Horas estimadas</th>${prC?"<th>Δ estudiantes</th>":""}</tr></thead>`;
     let tbody = "<tbody>";
     programas.forEach(p=>{
       const reg = prA.por_programa[p];
       const regC = prC && prC.por_programa[p];
-      tbody += `<tr><td>${p}</td><td>${reg.facultad||""}</td><td>${reg.sede||""}</td><td>${reg.es_salud?"Salud":"No salud"}</td><td>${fmt(reg.estudiantes,0)}</td><td>${fmt(reg.horas_requeridas,0)}</td>`;
+      tbody += `<tr><td>${p}</td><td>${reg.facultad||""}</td><td>${reg.sede||""}</td><td>${fmt(reg.estudiantes,0)}</td><td>${fmt(reg.horas_requeridas,0)}</td>`;
       if(prC){
         if(regC){
           const d = reg.estudiantes - regC.estudiantes;
